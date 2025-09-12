@@ -1,0 +1,813 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Maestro Digit Lab - Votre Vision, Notre Technologie</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary-orange: #FF7A59;
+            --primary-brown: #8B4513;
+            --dark-brown: #5D4037;
+            --light-orange: #FFE0B2;
+            --dark-orange: #E64A19;
+            --cream: #FBE9E7;
+            --white: #FFFFFF;
+            --black: #333333;
+            --gradient-orange: linear-gradient(135deg, var(--primary-orange) 0%, var(--dark-orange) 100%);
+            --gradient-brown: linear-gradient(135deg, var(--primary-brown) 0%, var(--dark-brown) 100%);
+            --shadow: 0 5px 15px rgba(139, 69, 19, 0.2);
+            --shadow-hover: 0 10px 25px rgba(139, 69, 19, 0.4);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: var(--cream);
+            color: var(--black);
+            overflow-x: hidden;
+        }
+
+        /* Animations clés */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+
+        @keyframes slideInFromLeft {
+            0% { transform: translateX(-100px); opacity: 0; }
+            100% { transform: translateX(0); opacity: 1; }
+        }
+
+        @keyframes slideInFromRight {
+            0% { transform: translateX(100px); opacity: 0; }
+            100% { transform: translateX(0); opacity: 1; }
+        }
+
+        @keyframes glow {
+            0% { box-shadow: 0 0 5px var(--primary-orange); }
+            50% { box-shadow: 0 0 20px var(--primary-orange); }
+            100% { box-shadow: 0 0 5px var(--primary-orange); }
+        }
+
+        @keyframes float {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+            100% { transform: translateY(0px); }
+        }
+
+        /* Header et Navigation */
+        header {
+            background: var(--gradient-brown);
+            padding: 20px 0;
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+            box-shadow: var(--shadow);
+        }
+
+        .container {
+            width: 90%;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            animation: slideInFromLeft 0.8s ease-out;
+        }
+
+        .logo-text {
+            color: var(--white);
+            font-size: 1.8rem;
+            font-weight: bold;
+            margin-left: 10px;
+        }
+
+        .logo-icon {
+            color: var(--primary-orange);
+            font-size: 2rem;
+        }
+
+        .nav-links {
+            display: flex;
+            list-style: none;
+        }
+
+        .nav-links li {
+            margin: 0 15px;
+        }
+
+        .nav-links a {
+            color: var(--white);
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            position: relative;
+            padding: 5px 0;
+        }
+
+        .nav-links a:hover {
+            color: var(--primary-orange);
+        }
+
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            bottom: 0;
+            left: 0;
+            background-color: var(--primary-orange);
+            transition: width 0.3s ease;
+        }
+
+        .nav-links a:hover::after {
+            width: 100%;
+        }
+
+        .cta-button {
+            background: var(--gradient-orange);
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 50px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            animation: pulse 2s infinite;
+        }
+
+        .cta-button:hover {
+            animation: none;
+            transform: translateY(-3px);
+            box-shadow: var(--shadow-hover);
+        }
+
+        /* Hero Section */
+        .hero {
+            padding: 160px 0 100px 0;
+            background: var(--gradient-brown);
+            color: var(--white);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320"><path fill="%23E64A19" fill-opacity="0.2" d="M0,128L48,117.3C96,107,192,85,288,112C384,139,480,213,576,224C672,235,768,181,864,181.3C960,181,1056,235,1152,234.7C1248,235,1344,181,1392,154.7L1440,128L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z"></path></svg>');
+            background-size: cover;
+            background-position: center;
+            animation: float 8s ease-in-out infinite;
+        }
+
+        .hero-content {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            position: relative;
+            z-index: 1;
+        }
+
+        .hero h1 {
+            font-size: 3.5rem;
+            margin-bottom: 20px;
+            animation: fadeIn 1s ease-out;
+        }
+
+        .hero p {
+            font-size: 1.5rem;
+            margin-bottom: 30px;
+            max-width: 700px;
+            animation: fadeIn 1.2s ease-out;
+        }
+
+        .hero-buttons {
+            display: flex;
+            gap: 20px;
+            animation: fadeIn 1.4s ease-out;
+        }
+
+        .secondary-button {
+            background: transparent;
+            color: var(--white);
+            border: 2px solid var(--primary-orange);
+            padding: 12px 25px;
+            border-radius: 50px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .secondary-button:hover {
+            background: var(--primary-orange);
+            transform: translateY(-3px);
+            box-shadow: var(--shadow-hover);
+        }
+
+        /* Services Section */
+        .services {
+            padding: 100px 0;
+            background-color: var(--white);
+        }
+
+        .section-title {
+            text-align: center;
+            margin-bottom: 60px;
+            position: relative;
+        }
+
+        .section-title h2 {
+            font-size: 2.5rem;
+            color: var(--primary-brown);
+            margin-bottom: 15px;
+            animation: slideInFromLeft 0.8s ease-out;
+        }
+
+        .section-title::after {
+            content: '';
+            position: absolute;
+            width: 80px;
+            height: 4px;
+            background: var(--gradient-orange);
+            bottom: -15px;
+            left: 50%;
+            transform: translateX(-50%);
+            border-radius: 2px;
+        }
+
+        .services-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+        }
+
+        .service-card {
+            background: var(--white);
+            border-radius: 15px;
+            overflow: hidden;
+            transition: all 0.4s ease;
+            box-shadow: var(--shadow);
+            animation: fadeIn 1s ease-out;
+        }
+
+        .service-card:hover {
+            transform: translateY(-10px);
+            box-shadow: var(--shadow-hover);
+        }
+
+        .service-icon {
+            background: var(--gradient-orange);
+            height: 120px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 2.5rem;
+            color: var(--white);
+        }
+
+        .service-content {
+            padding: 25px;
+        }
+
+        .service-content h3 {
+            font-size: 1.5rem;
+            margin-bottom: 15px;
+            color: var(--dark-brown);
+        }
+
+        .service-content p {
+            color: var(--black);
+            margin-bottom: 20px;
+        }
+
+        .service-link {
+            color: var(--primary-orange);
+            text-decoration: none;
+            font-weight: 600;
+            display: inline-flex;
+            align-items: center;
+            transition: all 0.3s ease;
+        }
+
+        .service-link i {
+            margin-left: 5px;
+            transition: transform 0.3s ease;
+        }
+
+        .service-link:hover i {
+            transform: translateX(5px);
+        }
+
+        /* About Section */
+        .about {
+            padding: 100px 0;
+            background: var(--cream);
+        }
+
+        .about-content {
+            display: flex;
+            align-items: center;
+            gap: 50px;
+        }
+
+        .about-text {
+            flex: 1;
+            animation: slideInFromLeft 0.8s ease-out;
+        }
+
+        .about-text h2 {
+            font-size: 2.5rem;
+            color: var(--primary-brown);
+            margin-bottom: 20px;
+        }
+
+        .about-text p {
+            margin-bottom: 15px;
+            line-height: 1.6;
+        }
+
+        .about-image {
+            flex: 1;
+            animation: slideInFromRight 0.8s ease-out;
+        }
+
+        .about-image-placeholder {
+            background: var(--gradient-brown);
+            height: 400px;
+            border-radius: 15px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: var(--white);
+            font-size: 1.5rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .about-image-placeholder::before {
+            content: '';
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320"><path fill="%23FF7A59" fill-opacity="0.3" d="M0,128L48,117.3C96,107,192,85,288,112C384,139,480,213,576,224C672,235,768,181,864,181.3C960,181,1056,235,1152,234.7C1248,235,1344,181,1392,154.7L1440,128L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z"></path></svg>');
+            background-size: cover;
+            background-position: center;
+            animation: float 8s ease-in-out infinite;
+        }
+
+        /* Testimonials */
+        .testimonials {
+            padding: 100px 0;
+            background: var(--gradient-brown);
+            color: var(--white);
+        }
+
+        .testimonials-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            margin-top: 50px;
+        }
+
+        .testimonial-card {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 15px;
+            padding: 30px;
+            transition: all 0.4s ease;
+            animation: fadeIn 1s ease-out;
+        }
+
+        .testimonial-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+        }
+
+        .testimonial-text {
+            font-style: italic;
+            margin-bottom: 20px;
+            line-height: 1.6;
+        }
+
+        .testimonial-author {
+            display: flex;
+            align-items: center;
+        }
+
+        .author-avatar {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: var(--gradient-orange);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-right: 15px;
+            font-weight: bold;
+        }
+
+        .author-details h4 {
+            margin-bottom: 5px;
+        }
+
+        /* Footer */
+        footer {
+            background: var(--dark-brown);
+            color: var(--white);
+            padding: 70px 0 20px;
+        }
+
+        .footer-content {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 40px;
+            margin-bottom: 50px;
+        }
+
+        .footer-column h3 {
+            font-size: 1.5rem;
+            margin-bottom: 20px;
+            position: relative;
+            padding-bottom: 10px;
+        }
+
+        .footer-column h3::after {
+            content: '';
+            position: absolute;
+            left: 0;
+            bottom: 0;
+            width: 40px;
+            height: 3px;
+            background: var(--primary-orange);
+        }
+
+        .footer-links {
+            list-style: none;
+        }
+
+        .footer-links li {
+            margin-bottom: 12px;
+        }
+
+        .footer-links a {
+            color: var(--cream);
+            text-decoration: none;
+            transition: all 0.3s ease;
+            display: inline-block;
+        }
+
+        .footer-links a:hover {
+            color: var(--primary-orange);
+            transform: translateX(5px);
+        }
+
+        .social-icons {
+            display: flex;
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .social-icons a {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.1);
+            color: var(--white);
+            transition: all 0.3s ease;
+        }
+
+        .social-icons a:hover {
+            background: var(--primary-orange);
+            transform: translateY(-3px);
+        }
+
+        .copyright {
+            text-align: center;
+            padding-top: 20px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            font-size: 0.9rem;
+        }
+
+        /* Responsive */
+        @media (max-width: 992px) {
+            .about-content {
+                flex-direction: column;
+            }
+            
+            .hero h1 {
+                font-size: 2.8rem;
+            }
+            
+            .hero p {
+                font-size: 1.2rem;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .navbar {
+                flex-direction: column;
+                gap: 20px;
+            }
+            
+            .hero h1 {
+                font-size: 2.2rem;
+            }
+            
+            .hero-buttons {
+                flex-direction: column;
+                gap: 15px;
+            }
+            
+            .section-title h2 {
+                font-size: 2rem;
+            }
+        }
+
+        /* Animation utilities */
+        .animate-on-scroll {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.8s ease, transform 0.8s ease;
+        }
+
+        .is-visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <div class="container">
+            <nav class="navbar">
+                <div class="logo">
+                    <i class="fas fa-crown logo-icon"></i>
+                    <span class="logo-text">Maestro Digit Lab</span>
+                </div>
+                <ul class="nav-links">
+                    <li><a href="#">Accueil</a></li>
+                    <li><a href="#">Services</a></li>
+                    <li><a href="#">À propos</a></li>
+                    <li><a href="#">Témoignages</a></li>
+                    <li><a href="#">Contact</a></li>
+                </ul>
+                <button class="cta-button">Commencer</button>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="container">
+            <div class="hero-content">
+                <h1>Boostez Votre Présence en Ligne</h1>
+                <p>Votre Vision, Notre Technologie - Des solutions de boostage social média sur mesure pour propulser votre visibilité</p>
+                <div class="hero-buttons">
+                    <button class="cta-button">Nos services</button>
+                    <button class="secondary-button">Contactez-nous</button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Services Section -->
+    <section class="services">
+        <div class="container">
+            <div class="section-title">
+                <h2>Nos Services de Boostage</h2>
+            </div>
+            <div class="services-grid">
+                <div class="service-card animate-on-scroll">
+                    <div class="service-icon">
+                        <i class="fab fa-instagram"></i>
+                    </div>
+                    <div class="service-content">
+                        <h3>Boost Instagram</h3>
+                        <p>Augmentation de followers, likes et commentaires réels et engagés pour votre compte Instagram.</p>
+                        <a href="#" class="service-link">Découvrir <i class="fas fa-arrow-right"></i></a>
+                    </div>
+                </div>
+                <div class="service-card animate-on-scroll">
+                    <div class="service-icon">
+                        <i class="fab fa-tiktok"></i>
+                    </div>
+                    <div class="service-content">
+                        <h3>Boost TikTok</h3>
+                        <p>Visibilité accrue sur TikTok avec des followers, likes et partages qui augmentent votre portée.</p>
+                        <a href="#" class="service-link">Découvrir <i class="fas fa-arrow-right"></i></a>
+                    </div>
+                </div>
+                <div class="service-card animate-on-scroll">
+                    <div class="service-icon">
+                        <i class="fab fa-youtube"></i>
+                    </div>
+                    <div class="service-content">
+                        <h3>Boost YouTube</h3>
+                        <p>Développez votre chaîne YouTube avec des abonnés, vues et likes authentiques.</p>
+                        <a href="#" class="service-link">Découvrir <i class="fas fa-arrow-right"></i></a>
+                    </div>
+                </div>
+                <div class="service-card animate-on-scroll">
+                    <div class="service-icon">
+                        <i class="fab fa-twitter"></i>
+                    </div>
+                    <div class="service-content">
+                        <h3>Boost Twitter</h3>
+                        <p>Augmentez votre influence sur Twitter avec des followers, retweets et likes ciblés.</p>
+                        <a href="#" class="service-link">Découvrir <i class="fas fa-arrow-right"></i></a>
+                    </div>
+                </div>
+                <div class="service-card animate-on-scroll">
+                    <div class="service-icon">
+                        <i class="fab fa-facebook"></i>
+                    </div>
+                    <div class="service-content">
+                        <h3>Boost Facebook</h3>
+                        <p>Renforcez votre présence Facebook avec des likes, partages et commentaires.</p>
+                        <a href="#" class="service-link">Découvrir <i class="fas fa-arrow-right"></i></a>
+                    </div>
+                </div>
+                <div class="service-card animate-on-scroll">
+                    <div class="service-icon">
+                        <i class="fas fa-globe"></i>
+                    </div>
+                    <div class="service-content">
+                        <h3>Services Web</h3>
+                        <p>Optimisation SEO, développement de sites web et solutions digitales complètes.</p>
+                        <a href="#" class="service-link">Découvrir <i class="fas fa-arrow-right"></i></a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- About Section -->
+    <section class="about">
+        <div class="container">
+            <div class="about-content">
+                <div class="about-text">
+                    <h2>Une Plateforme Camerounaise d'Excellence</h2>
+                    <p>Fondée en 2025, Maestro Digit Lab est née de la passion pour la transformation digitale et le potentiel illimité des médias sociaux en Afrique et au-delà.</p>
+                    <p>Notre équipe combine expertise technologique et créativité pour offrir des services de boostage qui amplifient véritablement votre présence en ligne.</p>
+                    <p>"Votre Vision, Notre Technologie" n'est pas simplement un slogan, c'est notre engagement à traduire vos ambitions en résultats tangibles.</p>
+                    <button class="cta-button">En savoir plus sur nous</button>
+                </div>
+                <div class="about-image">
+                    <div class="about-image-placeholder">
+                        <i class="fas fa-play-circle"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Testimonials Section -->
+    <section class="testimonials">
+        <div class="container">
+            <div class="section-title">
+                <h2>Ce Que Disent Nos Clients</h2>
+            </div>
+            <div class="testimonials-grid">
+                <div class="testimonial-card animate-on-scroll">
+                    <div class="testimonial-text">
+                        "Maestro Digit Lab a transformé notre présence sur les réseaux sociaux. En un mois, nos followers Instagram ont augmenté de 300% avec un engagement authentique."
+                    </div>
+                    <div class="testimonial-author">
+                        <div class="author-avatar">AM</div>
+                        <div class="author-details">
+                            <h4>Amélie Mbakop</h4>
+                            <p>Entrepreneure, Yaoundé</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="testimonial-card animate-on-scroll">
+                    <div class="testimonial-text">
+                        "Le boost TikTok a été incroyable pour ma carrière musicale. Maintenant, mes vidéos sont vues par des milliers de personnes et j'ai signé avec un label."
+                    </div>
+                    <div class="testimonial-author">
+                        <div class="author-avatar">KD</div>
+                        <div class="author-details">
+                            <h4>Kévin Djamba</h4>
+                            <p>Artiste Musicien, Douala</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="testimonial-card animate-on-scroll">
+                    <div class="testimonial-text">
+                        "Service professionnel et résultats rapides. Leur approche éthique du boostage m'a rassuré et les chiffres parlent d'eux-mêmes."
+                    </div>
+                    <div class="testimonial-author">
+                        <div class="author-avatar">SM</div>
+                        <div class="author-details">
+                            <h4>Sarah Menga</h4>
+                            <p>Gérante de Boutique, Bafoussam</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-column">
+                    <h3>Maestro Digit Lab</h3>
+                    <p>Votre partenaire de confiance pour le boostage sur les réseaux sociaux et solutions digitales depuis 2025.</p>
+                    <div class="social-icons">
+                        <a href="#"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#"><i class="fab fa-instagram"></i></a>
+                        <a href="#"><i class="fab fa-twitter"></i></a>
+                        <a href="#"><i class="fab fa-linkedin-in"></i></a>
+                        <a href="#"><i class="fab fa-tiktok"></i></a>
+                    </div>
+                </div>
+                <div class="footer-column">
+                    <h3>Services</h3>
+                    <ul class="footer-links">
+                        <li><a href="#">Boost Instagram</a></li>
+                        <li><a href="#">Boost TikTok</a></li>
+                        <li><a href="#">Boost YouTube</a></li>
+                        <li><a href="#">Boost Twitter</a></li>
+                        <li><a href="#">Solutions Web</a></li>
+                    </ul>
+                </div>
+                <div class="footer-column">
+                    <h3>Liens Rapides</h3>
+                    <ul class="footer-links">
+                        <li><a href="#">À propos de nous</a></li>
+                        <li><a href="#">Comment ça marche</a></li>
+                        <li><a href="#">Témoignages</a></li>
+                        <li><a href="#">Blog</a></li>
+                        <li><a href="#">Politique de confidentialité</a></li>
+                    </ul>
+                </div>
+                <div class="footer-column">
+                    <h3>Contact</h3>
+                    <ul class="footer-links">
+                        <li><i class="fas fa-map-marker-alt"></i> Yaoundé, Cameroon</li>
+                        <li><i class="fas fa-phone"></i> +237 6XX XXX XXX</li>
+                        <li><i class="fas fa-envelope"></i> info@maestrodigitlab.cm</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="copyright">
+                <p>&copy; 2025 Maestro Digit Lab. Tous droits réservés. | Plateforme camerounaise de boostage social media</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Animation au défilement
+        document.addEventListener('DOMContentLoaded', function() {
+            const animatedElements = document.querySelectorAll('.animate-on-scroll');
+            
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('is-visible');
+                    }
+                });
+            }, {
+                threshold: 0.1
+            });
+            
+            animatedElements.forEach(element => {
+                observer.observe(element);
+            });
+        });
+    </script>
+</body>
+</html>
