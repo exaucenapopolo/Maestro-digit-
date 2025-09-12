@@ -6,6 +6,7 @@
     <title>Maestro Digit Lab - Votre Vision, Notre Technologie</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
+        /* VARIABLES DE COULEURS */
         :root {
             --primary-orange: #FF7A59;
             --primary-brown: #8B4513;
@@ -21,11 +22,17 @@
             --shadow-hover: 0 10px 25px rgba(139, 69, 19, 0.4);
         }
 
+        /* STYLES GÉNÉRAUX */
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        /* NOUVEAUTÉ : DÉFILEMENT DOUX */
+        html {
+            scroll-behavior: smooth;
         }
 
         body {
@@ -34,55 +41,45 @@
             overflow-x: hidden;
         }
 
-        /* Animations clés */
+        .container {
+            width: 90%;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        /* ANIMATIONS */
         @keyframes fadeIn {
             from { opacity: 0; transform: translateY(20px); }
             to { opacity: 1; transform: translateY(0); }
         }
-
         @keyframes pulse {
-            0% { transform: scale(1); }
-            50% { transform: scale(1.05); }
-            100% { transform: scale(1); }
+            0% { transform: scale(1); box-shadow: 0 0 0 0 rgba(255, 122, 89, 0.7); }
+            70% { transform: scale(1.05); box-shadow: 0 0 0 10px rgba(255, 122, 89, 0); }
+            100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(255, 122, 89, 0); }
         }
-
         @keyframes slideInFromLeft {
-            0% { transform: translateX(-100px); opacity: 0; }
-            100% { transform: translateX(0); opacity: 1; }
+            from { transform: translateX(-100px); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
         }
-
         @keyframes slideInFromRight {
-            0% { transform: translateX(100px); opacity: 0; }
-            100% { transform: translateX(0); opacity: 1; }
+            from { transform: translateX(100px); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
         }
-
-        @keyframes glow {
-            0% { box-shadow: 0 0 5px var(--primary-orange); }
-            50% { box-shadow: 0 0 20px var(--primary-orange); }
-            100% { box-shadow: 0 0 5px var(--primary-orange); }
-        }
-
         @keyframes float {
             0% { transform: translateY(0px); }
             50% { transform: translateY(-10px); }
             100% { transform: translateY(0px); }
         }
 
-        /* Header et Navigation */
+        /* HEADER ET NAVIGATION */
         header {
             background: var(--gradient-brown);
-            padding: 20px 0;
+            padding: 15px 0;
             position: fixed;
             width: 100%;
             top: 0;
             z-index: 1000;
             box-shadow: var(--shadow);
-        }
-
-        .container {
-            width: 90%;
-            max-width: 1200px;
-            margin: 0 auto;
         }
 
         .navbar {
@@ -96,14 +93,12 @@
             align-items: center;
             animation: slideInFromLeft 0.8s ease-out;
         }
-
         .logo-text {
             color: var(--white);
             font-size: 1.8rem;
             font-weight: bold;
             margin-left: 10px;
         }
-
         .logo-icon {
             color: var(--primary-orange);
             font-size: 2rem;
@@ -112,39 +107,30 @@
         .nav-links {
             display: flex;
             list-style: none;
+            align-items: center;
         }
-
-        .nav-links li {
-            margin: 0 15px;
-        }
-
+        .nav-links li { margin: 0 15px; }
         .nav-links a {
             color: var(--white);
             text-decoration: none;
             font-weight: 500;
-            transition: all 0.3s ease;
+            transition: color 0.3s ease;
             position: relative;
             padding: 5px 0;
         }
-
-        .nav-links a:hover {
-            color: var(--primary-orange);
-        }
-
+        .nav-links a:hover { color: var(--primary-orange); }
         .nav-links a::after {
             content: '';
             position: absolute;
             width: 0;
             height: 2px;
             bottom: 0;
-            left: 0;
+            left: 50%;
+            transform: translateX(-50%);
             background-color: var(--primary-orange);
             transition: width 0.3s ease;
         }
-
-        .nav-links a:hover::after {
-            width: 100%;
-        }
+        .nav-links a:hover::after { width: 100%; }
 
         .cta-button {
             background: var(--gradient-orange);
@@ -156,36 +142,35 @@
             cursor: pointer;
             transition: all 0.3s ease;
             animation: pulse 2s infinite;
+            text-decoration: none;
         }
-
         .cta-button:hover {
-            animation: none;
+            animation-play-state: paused;
             transform: translateY(-3px);
             box-shadow: var(--shadow-hover);
         }
 
-        /* Hero Section */
+        /* NOUVEAUTÉ : MENU HAMBURGER */
+        .burger {
+            display: none;
+            cursor: pointer;
+        }
+        .burger div {
+            width: 25px;
+            height: 3px;
+            background-color: var(--white);
+            margin: 5px;
+            transition: all 0.3s ease;
+        }
+
+        /* HERO SECTION */
         .hero {
-            padding: 160px 0 100px 0;
+            padding: 180px 0 120px 0;
             background: var(--gradient-brown);
             color: var(--white);
             position: relative;
             overflow: hidden;
         }
-
-        .hero::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320"><path fill="%23E64A19" fill-opacity="0.2" d="M0,128L48,117.3C96,107,192,85,288,112C384,139,480,213,576,224C672,235,768,181,864,181.3C960,181,1056,235,1152,234.7C1248,235,1344,181,1392,154.7L1440,128L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z"></path></svg>');
-            background-size: cover;
-            background-position: center;
-            animation: float 8s ease-in-out infinite;
-        }
-
         .hero-content {
             display: flex;
             flex-direction: column;
@@ -194,62 +179,45 @@
             position: relative;
             z-index: 1;
         }
-
         .hero h1 {
             font-size: 3.5rem;
             margin-bottom: 20px;
             animation: fadeIn 1s ease-out;
         }
-
         .hero p {
             font-size: 1.5rem;
             margin-bottom: 30px;
             max-width: 700px;
             animation: fadeIn 1.2s ease-out;
         }
-
         .hero-buttons {
             display: flex;
             gap: 20px;
             animation: fadeIn 1.4s ease-out;
         }
-
         .secondary-button {
             background: transparent;
             color: var(--white);
             border: 2px solid var(--primary-orange);
-            padding: 12px 25px;
-            border-radius: 50px;
-            font-weight: bold;
-            cursor: pointer;
-            transition: all 0.3s ease;
         }
-
         .secondary-button:hover {
             background: var(--primary-orange);
-            transform: translateY(-3px);
-            box-shadow: var(--shadow-hover);
         }
 
-        /* Services Section */
-        .services {
+        /* SECTIONS COMMUNES */
+        section {
             padding: 100px 0;
-            background-color: var(--white);
         }
-
         .section-title {
             text-align: center;
             margin-bottom: 60px;
             position: relative;
         }
-
         .section-title h2 {
             font-size: 2.5rem;
             color: var(--primary-brown);
             margin-bottom: 15px;
-            animation: slideInFromLeft 0.8s ease-out;
         }
-
         .section-title::after {
             content: '';
             position: absolute;
@@ -262,26 +230,32 @@
             border-radius: 2px;
         }
 
+        /* SERVICES SECTION */
+        .services { background-color: var(--white); }
         .services-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
             gap: 30px;
         }
 
+        /* AMÉLIORATION : ANIMATIONS DES CARTES DE SERVICE */
         .service-card {
             background: var(--white);
             border-radius: 15px;
             overflow: hidden;
-            transition: all 0.4s ease;
+            transition: transform 0.4s ease, box-shadow 0.4s ease;
             box-shadow: var(--shadow);
-            animation: fadeIn 1s ease-out;
+            border: 2px solid transparent;
         }
-
         .service-card:hover {
-            transform: translateY(-10px);
+            transform: translateY(-12px);
             box-shadow: var(--shadow-hover);
+            border-color: var(--primary-orange);
         }
-
+        .service-card:hover .service-icon i {
+            transform: scale(1.1);
+            text-shadow: 0 0 15px rgba(255, 255, 255, 0.8);
+        }
         .service-icon {
             background: var(--gradient-orange);
             height: 120px;
@@ -291,136 +265,73 @@
             font-size: 2.5rem;
             color: var(--white);
         }
-
-        .service-content {
-            padding: 25px;
+        .service-icon i {
+            transition: transform 0.4s ease, text-shadow 0.4s ease;
         }
-
+        .service-content { padding: 25px; }
         .service-content h3 {
             font-size: 1.5rem;
             margin-bottom: 15px;
             color: var(--dark-brown);
         }
-
-        .service-content p {
-            color: var(--black);
-            margin-bottom: 20px;
-        }
-
+        .service-content p { color: var(--black); margin-bottom: 20px; }
         .service-link {
             color: var(--primary-orange);
             text-decoration: none;
             font-weight: 600;
             display: inline-flex;
             align-items: center;
-            transition: all 0.3s ease;
+            transition: color 0.3s ease;
         }
+        .service-link i { margin-left: 5px; transition: transform 0.3s ease; }
+        .service-card:hover .service-link i { transform: translateX(8px); }
 
-        .service-link i {
-            margin-left: 5px;
-            transition: transform 0.3s ease;
-        }
-
-        .service-link:hover i {
-            transform: translateX(5px);
-        }
-
-        /* About Section */
-        .about {
-            padding: 100px 0;
-            background: var(--cream);
-        }
-
+        /* ABOUT SECTION */
+        .about { background: var(--cream); }
         .about-content {
             display: flex;
             align-items: center;
             gap: 50px;
         }
-
-        .about-text {
-            flex: 1;
-            animation: slideInFromLeft 0.8s ease-out;
-        }
-
+        .about-text { flex: 1; }
         .about-text h2 {
             font-size: 2.5rem;
             color: var(--primary-brown);
             margin-bottom: 20px;
         }
-
-        .about-text p {
-            margin-bottom: 15px;
-            line-height: 1.6;
-        }
-
-        .about-image {
-            flex: 1;
-            animation: slideInFromRight 0.8s ease-out;
-        }
-
-        .about-image-placeholder {
-            background: var(--gradient-brown);
-            height: 400px;
-            border-radius: 15px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            color: var(--white);
-            font-size: 1.5rem;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .about-image-placeholder::before {
-            content: '';
-            position: absolute;
+        .about-text p { margin-bottom: 15px; line-height: 1.6; }
+        .about-image { flex: 1; }
+        .about-image img {
             width: 100%;
-            height: 100%;
-            background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320"><path fill="%23FF7A59" fill-opacity="0.3" d="M0,128L48,117.3C96,107,192,85,288,112C384,139,480,213,576,224C672,235,768,181,864,181.3C960,181,1056,235,1152,234.7C1248,235,1344,181,1392,154.7L1440,128L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z"></path></svg>');
-            background-size: cover;
-            background-position: center;
-            animation: float 8s ease-in-out infinite;
+            height: auto;
+            border-radius: 15px;
+            box-shadow: var(--shadow);
         }
 
-        /* Testimonials */
+        /* TESTIMONIALS SECTION */
         .testimonials {
-            padding: 100px 0;
             background: var(--gradient-brown);
             color: var(--white);
         }
-
         .testimonials-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
             gap: 30px;
             margin-top: 50px;
         }
-
         .testimonial-card {
             background: rgba(255, 255, 255, 0.1);
             backdrop-filter: blur(10px);
             border-radius: 15px;
             padding: 30px;
-            transition: all 0.4s ease;
-            animation: fadeIn 1s ease-out;
+            transition: transform 0.4s ease, box-shadow 0.4s ease;
         }
-
         .testimonial-card:hover {
             transform: translateY(-5px);
             box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
         }
-
-        .testimonial-text {
-            font-style: italic;
-            margin-bottom: 20px;
-            line-height: 1.6;
-        }
-
-        .testimonial-author {
-            display: flex;
-            align-items: center;
-        }
-
+        .testimonial-text { font-style: italic; margin-bottom: 20px; line-height: 1.6; }
+        .testimonial-author { display: flex; align-items: center; }
         .author-avatar {
             width: 50px;
             height: 50px;
@@ -432,32 +343,54 @@
             margin-right: 15px;
             font-weight: bold;
         }
+        .author-details h4 { margin-bottom: 5px; }
 
-        .author-details h4 {
-            margin-bottom: 5px;
+        /* NOUVEAUTÉ : SECTION CONTACT */
+        .contact {
+            background-color: var(--white);
+        }
+        .contact-form {
+            max-width: 600px;
+            margin: 0 auto;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+        .contact-form input,
+        .contact-form textarea {
+            width: 100%;
+            padding: 15px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-size: 1rem;
+        }
+        .contact-form input:focus,
+        .contact-form textarea:focus {
+            outline: none;
+            border-color: var(--primary-orange);
+        }
+        .contact-form button {
+            align-self: center;
         }
 
-        /* Footer */
+        /* FOOTER */
         footer {
             background: var(--dark-brown);
             color: var(--white);
             padding: 70px 0 20px;
         }
-
         .footer-content {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
             gap: 40px;
             margin-bottom: 50px;
         }
-
         .footer-column h3 {
             font-size: 1.5rem;
             margin-bottom: 20px;
             position: relative;
             padding-bottom: 10px;
         }
-
         .footer-column h3::after {
             content: '';
             position: absolute;
@@ -467,33 +400,19 @@
             height: 3px;
             background: var(--primary-orange);
         }
-
-        .footer-links {
-            list-style: none;
-        }
-
-        .footer-links li {
-            margin-bottom: 12px;
-        }
-
+        .footer-links { list-style: none; }
+        .footer-links li { margin-bottom: 12px; }
         .footer-links a {
             color: var(--cream);
             text-decoration: none;
             transition: all 0.3s ease;
             display: inline-block;
         }
-
         .footer-links a:hover {
             color: var(--primary-orange);
             transform: translateX(5px);
         }
-
-        .social-icons {
-            display: flex;
-            gap: 15px;
-            margin-top: 20px;
-        }
-
+        .social-icons { display: flex; gap: 15px; margin-top: 20px; }
         .social-icons a {
             display: flex;
             justify-content: center;
@@ -505,12 +424,10 @@
             color: var(--white);
             transition: all 0.3s ease;
         }
-
         .social-icons a:hover {
             background: var(--primary-orange);
             transform: translateY(-3px);
         }
-
         .copyright {
             text-align: center;
             padding-top: 20px;
@@ -518,48 +435,124 @@
             font-size: 0.9rem;
         }
 
-        /* Responsive */
+        /* NOUVEAUTÉ : MODALE DE CONNEXION */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            z-index: 2000;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.3s ease, visibility 0.3s ease;
+        }
+        .modal-overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+        .modal-container {
+            background: var(--white);
+            padding: 40px;
+            border-radius: 15px;
+            width: 90%;
+            max-width: 400px;
+            position: relative;
+            transform: scale(0.9);
+            transition: transform 0.3s ease;
+        }
+        .modal-overlay.active .modal-container {
+            transform: scale(1);
+        }
+        .modal-close {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: #aaa;
+        }
+        .modal-container h2 {
+            text-align: center;
+            color: var(--dark-brown);
+            margin-bottom: 20px;
+        }
+        .modal-form {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+        .modal-form input {
+            padding: 12px;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+        }
+        .modal-form button {
+            margin-top: 10px;
+        }
+        #auth-error {
+            color: red;
+            text-align: center;
+            font-size: 0.9em;
+            display: none;
+        }
+        
+
+        /* RESPONSIVE DESIGN */
         @media (max-width: 992px) {
-            .about-content {
+            .about-content { flex-direction: column; }
+            .hero h1 { font-size: 2.8rem; }
+            .hero p { font-size: 1.2rem; }
+
+            /* AMÉLIORATION : STYLES DU MENU MOBILE */
+            .nav-links {
+                position: absolute;
+                right: 0px;
+                height: 92vh;
+                top: 8vh;
+                background-color: var(--dark-brown);
+                display: flex;
                 flex-direction: column;
+                align-items: center;
+                justify-content: space-around;
+                width: 60%;
+                transform: translateX(100%);
+                transition: transform 0.5s ease-in;
             }
-            
-            .hero h1 {
-                font-size: 2.8rem;
+            .nav-links li {
+                opacity: 0;
             }
-            
-            .hero p {
-                font-size: 1.2rem;
+            .burger {
+                display: block;
             }
         }
+        .nav-active {
+            transform: translateX(0%);
+        }
+        @keyframes navLinkFade {
+            from { opacity: 0; transform: translateX(50px); }
+            to { opacity: 1; transform: translateX(0px); }
+        }
+        .toggle .line1 { transform: rotate(-45deg) translate(-5px, 6px); }
+        .toggle .line2 { opacity: 0; }
+        .toggle .line3 { transform: rotate(45deg) translate(-5px, -6px); }
 
         @media (max-width: 768px) {
-            .navbar {
-                flex-direction: column;
-                gap: 20px;
-            }
-            
-            .hero h1 {
-                font-size: 2.2rem;
-            }
-            
-            .hero-buttons {
-                flex-direction: column;
-                gap: 15px;
-            }
-            
-            .section-title h2 {
-                font-size: 2rem;
-            }
+            .hero h1 { font-size: 2.2rem; }
+            .hero-buttons { flex-direction: column; gap: 15px; }
+            .section-title h2 { font-size: 2rem; }
         }
 
-        /* Animation utilities */
+        /* ANIMATION AU DÉFILEMENT */
         .animate-on-scroll {
             opacity: 0;
-            transform: translateY(20px);
-            transition: opacity 0.8s ease, transform 0.8s ease;
+            transform: translateY(30px);
+            transition: opacity 0.8s ease-out, transform 0.8s ease-out;
         }
-
         .is-visible {
             opacity: 1;
             transform: translateY(0);
@@ -567,101 +560,91 @@
     </style>
 </head>
 <body>
-    <!-- Header -->
     <header>
         <div class="container">
             <nav class="navbar">
-                <div class="logo">
+                <a href="#" class="logo">
                     <i class="fas fa-crown logo-icon"></i>
                     <span class="logo-text">Maestro Digit Lab</span>
-                </div>
+                </a>
                 <ul class="nav-links">
-                    <li><a href="#">Accueil</a></li>
-                    <li><a href="#">Services</a></li>
-                    <li><a href="#">À propos</a></li>
-                    <li><a href="#">Témoignages</a></li>
-                    <li><a href="#">Contact</a></li>
+                    <li><a href="#hero">Accueil</a></li>
+                    <li><a href="#services">Services</a></li>
+                    <li><a href="#about">À propos</a></li>
+                    <li><a href="#testimonials">Témoignages</a></li>
+                    <li><a href="#contact">Contact</a></li>
+                    <li><a href="#" class="cta-button" id="login-button">Connexion</a></li>
                 </ul>
-                <button class="cta-button">Commencer</button>
+                <div class="burger">
+                    <div class="line1"></div>
+                    <div class="line2"></div>
+                    <div class="line3"></div>
+                </div>
             </nav>
         </div>
     </header>
 
-    <!-- Hero Section -->
-    <section class="hero">
+    <section class="hero" id="hero">
         <div class="container">
             <div class="hero-content">
-                <h1>Boostez Votre Présence en Ligne</h1>
-                <p>Votre Vision, Notre Technologie - Des solutions de boostage social média sur mesure pour propulser votre visibilité</p>
-                <div class="hero-buttons">
-                    <button class="cta-button">Nos services</button>
-                    <button class="secondary-button">Contactez-nous</button>
+                <h1 class="animate-on-scroll">Boostez Votre Présence en Ligne</h1>
+                <p class="animate-on-scroll">Votre Vision, Notre Technologie - Des solutions de boostage social média sur mesure pour propulser votre visibilité.</p>
+                <div class="hero-buttons animate-on-scroll">
+                    <a href="#services" class="cta-button">Nos services</a>
+                    <a href="#contact" class="cta-button secondary-button">Contactez-nous</a>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- Services Section -->
-    <section class="services">
+    <section class="services" id="services">
         <div class="container">
             <div class="section-title">
-                <h2>Nos Services de Boostage</h2>
+                <h2 class="animate-on-scroll">Nos Services de Boostage</h2>
             </div>
             <div class="services-grid">
                 <div class="service-card animate-on-scroll">
-                    <div class="service-icon">
-                        <i class="fab fa-instagram"></i>
-                    </div>
+                    <div class="service-icon"><i class="fab fa-instagram"></i></div>
                     <div class="service-content">
                         <h3>Boost Instagram</h3>
-                        <p>Augmentation de followers, likes et commentaires réels et engagés pour votre compte Instagram.</p>
+                        <p>Augmentation de followers, likes et commentaires réels et engagés.</p>
                         <a href="#" class="service-link">Découvrir <i class="fas fa-arrow-right"></i></a>
                     </div>
                 </div>
                 <div class="service-card animate-on-scroll">
-                    <div class="service-icon">
-                        <i class="fab fa-tiktok"></i>
-                    </div>
+                    <div class="service-icon"><i class="fab fa-tiktok"></i></div>
                     <div class="service-content">
                         <h3>Boost TikTok</h3>
-                        <p>Visibilité accrue sur TikTok avec des followers, likes et partages qui augmentent votre portée.</p>
+                        <p>Visibilité accrue avec des followers, likes et partages qui augmentent votre portée.</p>
                         <a href="#" class="service-link">Découvrir <i class="fas fa-arrow-right"></i></a>
                     </div>
                 </div>
                 <div class="service-card animate-on-scroll">
-                    <div class="service-icon">
-                        <i class="fab fa-youtube"></i>
-                    </div>
+                    <div class="service-icon"><i class="fab fa-youtube"></i></div>
                     <div class="service-content">
                         <h3>Boost YouTube</h3>
-                        <p>Développez votre chaîne YouTube avec des abonnés, vues et likes authentiques.</p>
+                        <p>Développez votre chaîne avec des abonnés, vues et likes authentiques.</p>
                         <a href="#" class="service-link">Découvrir <i class="fas fa-arrow-right"></i></a>
                     </div>
                 </div>
                 <div class="service-card animate-on-scroll">
-                    <div class="service-icon">
-                        <i class="fab fa-twitter"></i>
-                    </div>
+                    <div class="service-icon"><i class="fab fa-twitter"></i></div>
                     <div class="service-content">
                         <h3>Boost Twitter</h3>
-                        <p>Augmentez votre influence sur Twitter avec des followers, retweets et likes ciblés.</p>
+                        <p>Augmentez votre influence avec des followers, retweets et likes ciblés.</p>
                         <a href="#" class="service-link">Découvrir <i class="fas fa-arrow-right"></i></a>
                     </div>
                 </div>
                 <div class="service-card animate-on-scroll">
-                    <div class="service-icon">
-                        <i class="fab fa-facebook"></i>
-                    </div>
+                    <div class="service-icon"><i class="fab fa-facebook"></i></div>
                     <div class="service-content">
                         <h3>Boost Facebook</h3>
-                        <p>Renforcez votre présence Facebook avec des likes, partages et commentaires.</p>
+                        <p>Renforcez votre présence avec des likes, partages et commentaires.</p>
                         <a href="#" class="service-link">Découvrir <i class="fas fa-arrow-right"></i></a>
                     </div>
                 </div>
                 <div class="service-card animate-on-scroll">
-                    <div class="service-icon">
-                        <i class="fas fa-globe"></i>
-                    </div>
+                    <div class="service-icon"><i class="fas fa-globe"></i></div>
                     <div class="service-content">
                         <h3>Services Web</h3>
                         <p>Optimisation SEO, développement de sites web et solutions digitales complètes.</p>
@@ -672,66 +655,53 @@
         </div>
     </section>
 
-    <!-- About Section -->
-    <section class="about">
+    <section class="about" id="about">
         <div class="container">
             <div class="about-content">
-                <div class="about-text">
+                <div class="about-text animate-on-scroll">
                     <h2>Une Plateforme Camerounaise d'Excellence</h2>
                     <p>Fondée en 2025, Maestro Digit Lab est née de la passion pour la transformation digitale et le potentiel illimité des médias sociaux en Afrique et au-delà.</p>
                     <p>Notre équipe combine expertise technologique et créativité pour offrir des services de boostage qui amplifient véritablement votre présence en ligne.</p>
                     <p>"Votre Vision, Notre Technologie" n'est pas simplement un slogan, c'est notre engagement à traduire vos ambitions en résultats tangibles.</p>
-                    <button class="cta-button">En savoir plus sur nous</button>
+                    <a href="#" class="cta-button">En savoir plus</a>
                 </div>
-                <div class="about-image">
-                    <div class="about-image-placeholder">
-                        <i class="fas fa-play-circle"></i>
-                    </div>
+                <div class="about-image animate-on-scroll">
+                    <img src="https://plus.unsplash.com/premium_photo-1661399432997-8a39a97573d8?q=80&w=2070&auto=format&fit=crop" alt="Équipe travaillant sur un projet digital">
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- Testimonials Section -->
-    <section class="testimonials">
+    <section class="testimonials" id="testimonials">
         <div class="container">
             <div class="section-title">
-                <h2>Ce Que Disent Nos Clients</h2>
+                <h2 class="animate-on-scroll" style="color: var(--white);">Ce Que Disent Nos Clients</h2>
             </div>
             <div class="testimonials-grid">
                 <div class="testimonial-card animate-on-scroll">
-                    <div class="testimonial-text">
-                        "Maestro Digit Lab a transformé notre présence sur les réseaux sociaux. En un mois, nos followers Instagram ont augmenté de 300% avec un engagement authentique."
-                    </div>
+                    <div class="testimonial-text">"Maestro Digit Lab a transformé notre présence. En un mois, nos followers Instagram ont augmenté de 300% avec un engagement authentique."</div>
                     <div class="testimonial-author">
                         <div class="author-avatar">AM</div>
                         <div class="author-details">
-                            <h4>Amélie Mbakop</h4>
-                            <p>Entrepreneure, Yaoundé</p>
+                            <h4>Amélie Mbakop</h4><p>Entrepreneure, Yaoundé</p>
                         </div>
                     </div>
                 </div>
                 <div class="testimonial-card animate-on-scroll">
-                    <div class="testimonial-text">
-                        "Le boost TikTok a été incroyable pour ma carrière musicale. Maintenant, mes vidéos sont vues par des milliers de personnes et j'ai signé avec un label."
-                    </div>
+                    <div class="testimonial-text">"Le boost TikTok a été incroyable. Mes vidéos sont vues par des milliers de personnes et j'ai signé avec un label."</div>
                     <div class="testimonial-author">
                         <div class="author-avatar">KD</div>
                         <div class="author-details">
-                            <h4>Kévin Djamba</h4>
-                            <p>Artiste Musicien, Douala</p>
+                            <h4>Kévin Djamba</h4><p>Artiste Musicien, Douala</p>
                         </div>
                     </div>
                 </div>
                 <div class="testimonial-card animate-on-scroll">
-                    <div class="testimonial-text">
-                        "Service professionnel et résultats rapides. Leur approche éthique du boostage m'a rassuré et les chiffres parlent d'eux-mêmes."
-                    </div>
+                    <div class="testimonial-text">"Service professionnel et résultats rapides. Leur approche éthique du boostage m'a rassuré et les chiffres parlent d'eux-mêmes."</div>
                     <div class="testimonial-author">
                         <div class="author-avatar">SM</div>
                         <div class="author-details">
-                            <h4>Sarah Menga</h4>
-                            <p>Gérante de Boutique, Bafoussam</p>
+                            <h4>Sarah Menga</h4><p>Gérante de Boutique, Bafoussam</p>
                         </div>
                     </div>
                 </div>
@@ -739,7 +709,20 @@
         </div>
     </section>
 
-    <!-- Footer -->
+    <section class="contact" id="contact">
+        <div class="container">
+            <div class="section-title">
+                <h2 class="animate-on-scroll">Contactez-nous</h2>
+            </div>
+            <form class="contact-form animate-on-scroll">
+                <input type="text" name="name" placeholder="Votre Nom" required>
+                <input type="email" name="email" placeholder="Votre Email" required>
+                <textarea name="message" rows="5" placeholder="Votre Message" required></textarea>
+                <button type="submit" class="cta-button">Envoyer le Message</button>
+            </form>
+        </div>
+    </section>
+
     <footer>
         <div class="container">
             <div class="footer-content">
@@ -757,25 +740,21 @@
                 <div class="footer-column">
                     <h3>Services</h3>
                     <ul class="footer-links">
-                        <li><a href="#">Boost Instagram</a></li>
-                        <li><a href="#">Boost TikTok</a></li>
-                        <li><a href="#">Boost YouTube</a></li>
-                        <li><a href="#">Boost Twitter</a></li>
-                        <li><a href="#">Solutions Web</a></li>
+                        <li><a href="#services">Boost Instagram</a></li>
+                        <li><a href="#services">Boost TikTok</a></li>
+                        <li><a href="#services">Boost YouTube</a></li>
                     </ul>
                 </div>
                 <div class="footer-column">
                     <h3>Liens Rapides</h3>
                     <ul class="footer-links">
-                        <li><a href="#">À propos de nous</a></li>
-                        <li><a href="#">Comment ça marche</a></li>
-                        <li><a href="#">Témoignages</a></li>
-                        <li><a href="#">Blog</a></li>
-                        <li><a href="#">Politique de confidentialité</a></li>
+                        <li><a href="#about">À propos</a></li>
+                        <li><a href="#testimonials">Témoignages</a></li>
+                        <li><a href="#contact">Contact</a></li>
                     </ul>
                 </div>
                 <div class="footer-column">
-                    <h3>Contact</h3>
+                    <h3>Contact Info</h3>
                     <ul class="footer-links">
                         <li><i class="fas fa-map-marker-alt"></i> Yaoundé, Cameroon</li>
                         <li><i class="fas fa-phone"></i> +237 6XX XXX XXX</li>
@@ -784,30 +763,113 @@
                 </div>
             </div>
             <div class="copyright">
-                <p>&copy; 2025 Maestro Digit Lab. Tous droits réservés. | Plateforme camerounaise de boostage social media</p>
+                <p>&copy; 2025 Maestro Digit Lab. Tous droits réservés.</p>
             </div>
         </div>
     </footer>
 
+    <div class="modal-overlay" id="auth-modal">
+        <div class="modal-container">
+            <i class="fas fa-times modal-close" id="modal-close-button"></i>
+            <h2>Connexion</h2>
+            <form class="modal-form" id="login-form">
+                <input type="email" id="email" placeholder="Email" required>
+                <input type="password" id="password" placeholder="Mot de passe" required>
+                <p id="auth-error">Email ou mot de passe incorrect.</p>
+                <button type="submit" class="cta-button">Se connecter</button>
+            </form>
+        </div>
+    </div>
+
     <script>
-        // Animation au défilement
-        document.addEventListener('DOMContentLoaded', function() {
-            const animatedElements = document.querySelectorAll('.animate-on-scroll');
-            
-            const observer = new IntersectionObserver((entries) => {
-                entries.forEach(entry => {
-                    if (entry.isIntersecting) {
-                        entry.target.classList.add('is-visible');
-                    }
-                });
-            }, {
-                threshold: 0.1
+    document.addEventListener('DOMContentLoaded', function() {
+
+        // --- GESTION DU MENU MOBILE ---
+        const burger = document.querySelector('.burger');
+        const nav = document.querySelector('.nav-links');
+        const navLinks = document.querySelectorAll('.nav-links li');
+
+        burger.addEventListener('click', () => {
+            // Toggle Nav
+            nav.classList.toggle('nav-active');
+
+            // Animate Links
+            navLinks.forEach((link, index) => {
+                if (link.style.animation) {
+                    link.style.animation = '';
+                } else {
+                    link.style.animation = `navLinkFade 0.5s ease forwards ${index / 7 + 0.3}s`;
+                }
             });
-            
-            animatedElements.forEach(element => {
-                observer.observe(element);
-            });
+            // Burger Animation
+            burger.classList.toggle('toggle');
         });
+
+        // --- ANIMATION AU DÉFILEMENT ---
+        const animatedElements = document.querySelectorAll('.animate-on-scroll');
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('is-visible');
+                    observer.unobserve(entry.target); // Optionnel: ne l'animer qu'une fois
+                }
+            });
+        }, {
+            threshold: 0.15
+        });
+        animatedElements.forEach(element => {
+            observer.observe(element);
+        });
+
+        // --- GESTION DE LA MODALE DE CONNEXION ---
+        const loginButton = document.getElementById('login-button');
+        const authModal = document.getElementById('auth-modal');
+        const closeModalButton = document.getElementById('modal-close-button');
+        const loginForm = document.getElementById('login-form');
+        const authError = document.getElementById('auth-error');
+
+        // Ouvre la modale
+        loginButton.addEventListener('click', (e) => {
+            e.preventDefault(); // Empêche le lien de suivre le href="#"
+            authModal.classList.add('active');
+        });
+
+        // Ferme la modale
+        const closeModal = () => {
+            authModal.classList.remove('active');
+            authError.style.display = 'none'; // Cache l'erreur en fermant
+        };
+        closeModalButton.addEventListener('click', closeModal);
+        authModal.addEventListener('click', (e) => {
+            if (e.target === authModal) { // Ferme si on clique sur le fond gris
+                closeModal();
+            }
+        });
+
+        // --- SIMULATION DE CONNEXION ---
+        loginForm.addEventListener('submit', (e) => {
+            e.preventDefault(); // Empêche le formulaire de recharger la page
+            
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+
+            // ATTENTION : Ceci est une simulation pour le test.
+            // Dans un vrai site, il faudrait envoyer ces infos à un serveur.
+            // Identifiants de test : admin@test.com / password123
+            if (email === 'admin@test.com' && password === 'password123') {
+                
+                // 1. Simuler la session en la sauvegardant dans le navigateur
+                localStorage.setItem('userIsLoggedIn', 'true');
+                
+                // 2. Rediriger vers le tableau de bord
+                window.location.href = 'dashboard.html';
+
+            } else {
+                // Afficher une erreur
+                authError.style.display = 'block';
+            }
+        });
+    });
     </script>
 </body>
 </html>
