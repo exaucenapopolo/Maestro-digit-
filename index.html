@@ -30,7 +30,6 @@
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         }
 
-        /* NOUVEAUTÉ : DÉFILEMENT DOUX */
         html {
             scroll-behavior: smooth;
         }
@@ -88,20 +87,26 @@
             align-items: center;
         }
 
+        /* NOUVEAUTÉ : STYLE DU LOGO TEXTUEL */
         .logo {
             display: flex;
             align-items: center;
             animation: slideInFromLeft 0.8s ease-out;
+            text-decoration: none;
         }
         .logo-text {
             color: var(--white);
             font-size: 1.8rem;
             font-weight: bold;
             margin-left: 10px;
+            font-family: 'Georgia', serif; /* POLICE DIFFÉRENTE */
+            letter-spacing: 1px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
         }
         .logo-icon {
             color: var(--primary-orange);
             font-size: 2rem;
+            text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.2);
         }
 
         .nav-links {
@@ -141,8 +146,11 @@
             font-weight: bold;
             cursor: pointer;
             transition: all 0.3s ease;
-            animation: pulse 2s infinite;
             text-decoration: none;
+        }
+        /* NOUVEAUTÉ : ANIMATION DES BOUTONS DE LA BANNIÈRE */
+        .hero-button {
+            animation: pulse 2s infinite;
         }
         .cta-button:hover {
             animation-play-state: paused;
@@ -150,26 +158,49 @@
             box-shadow: var(--shadow-hover);
         }
 
-        /* NOUVEAUTÉ : MENU HAMBURGER */
+        /* NOUVEAUTÉ : MENU HAMBURGER AMÉLIORÉ */
         .burger {
             display: none;
             cursor: pointer;
+            z-index: 100;
         }
         .burger div {
-            width: 25px;
+            width: 28px;
             height: 3px;
             background-color: var(--white);
-            margin: 5px;
+            margin: 6px;
             transition: all 0.3s ease;
         }
 
         /* HERO SECTION */
         .hero {
             padding: 180px 0 120px 0;
-            background: var(--gradient-brown);
             color: var(--white);
             position: relative;
             overflow: hidden;
+        }
+        /* NOUVEAUTÉ : FOND DE LA BANNIÈRE AVEC IMAGE */
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: url('https://images.unsplash.com/photo-1519389950473-47ba0277781c?q=80&w=2070&auto=format&fit=crop') no-repeat center center/cover;
+            opacity: 0.6; /* OPACITÉ POUR VOIR L'IMAGE ET LE TEXTE */
+            z-index: 0;
+        }
+        .hero::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: var(--gradient-brown);
+            opacity: 0.7; /* OPACITÉ DU DÉGRADÉ POUR GARDER LA COULEUR */
+            z-index: 0;
         }
         .hero-content {
             display: flex;
@@ -183,18 +214,21 @@
             font-size: 3.5rem;
             margin-bottom: 20px;
             animation: fadeIn 1s ease-out;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
         }
         .hero p {
             font-size: 1.5rem;
             margin-bottom: 30px;
             max-width: 700px;
             animation: fadeIn 1.2s ease-out;
+            text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.4);
         }
         .hero-buttons {
             display: flex;
             gap: 20px;
             animation: fadeIn 1.4s ease-out;
         }
+        /* NOUVEAUTÉ : STYLE DU SECOND BOUTON */
         .secondary-button {
             background: transparent;
             color: var(--white);
@@ -237,8 +271,6 @@
             grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
             gap: 30px;
         }
-
-        /* AMÉLIORATION : ANIMATIONS DES CARTES DE SERVICE */
         .service-card {
             background: var(--white);
             border-radius: 15px;
@@ -345,7 +377,7 @@
         }
         .author-details h4 { margin-bottom: 5px; }
 
-        /* NOUVEAUTÉ : SECTION CONTACT */
+        /* CONTACT SECTION */
         .contact {
             background-color: var(--white);
         }
@@ -435,7 +467,7 @@
             font-size: 0.9rem;
         }
 
-        /* NOUVEAUTÉ : MODALE DE CONNEXION */
+        /* MODALE DE CONNEXION */
         .modal-overlay {
             position: fixed;
             top: 0;
@@ -501,14 +533,13 @@
             display: none;
         }
         
-
         /* RESPONSIVE DESIGN */
         @media (max-width: 992px) {
             .about-content { flex-direction: column; }
             .hero h1 { font-size: 2.8rem; }
             .hero p { font-size: 1.2rem; }
 
-            /* AMÉLIORATION : STYLES DU MENU MOBILE */
+            /* STYLES DU MENU MOBILE */
             .nav-links {
                 position: absolute;
                 right: 0px;
@@ -522,12 +553,23 @@
                 width: 60%;
                 transform: translateX(100%);
                 transition: transform 0.5s ease-in;
+                box-shadow: -5px 0 15px rgba(0, 0, 0, 0.3); /* OMBRE AJOUTÉE */
             }
             .nav-links li {
                 opacity: 0;
+                width: 100%; /* S'ÉTEND POUR UN MEILLEUR TOUCHER */
+                text-align: center;
+                padding: 15px 0;
+            }
+            .nav-links li a {
+                padding: 10px;
             }
             .burger {
                 display: block;
+            }
+            .hero-buttons {
+                flex-direction: column;
+                gap: 15px;
             }
         }
         .nav-active {
@@ -537,14 +579,14 @@
             from { opacity: 0; transform: translateX(50px); }
             to { opacity: 1; transform: translateX(0px); }
         }
-        .toggle .line1 { transform: rotate(-45deg) translate(-5px, 6px); }
+        .toggle .line1 { transform: rotate(-45deg) translate(-7px, 7px); }
         .toggle .line2 { opacity: 0; }
-        .toggle .line3 { transform: rotate(45deg) translate(-5px, -6px); }
+        .toggle .line3 { transform: rotate(45deg) translate(-7px, -7px); }
 
         @media (max-width: 768px) {
             .hero h1 { font-size: 2.2rem; }
-            .hero-buttons { flex-direction: column; gap: 15px; }
             .section-title h2 { font-size: 2rem; }
+            .about-text { text-align: center; }
         }
 
         /* ANIMATION AU DÉFILEMENT */
@@ -563,17 +605,17 @@
     <header>
         <div class="container">
             <nav class="navbar">
-                <a href="#" class="logo">
+                <a href="index.html" class="logo">
                     <i class="fas fa-crown logo-icon"></i>
                     <span class="logo-text">Maestro Digit Lab</span>
                 </a>
                 <ul class="nav-links">
-                    <li><a href="#hero">Accueil</a></li>
-                    <li><a href="#services">Services</a></li>
-                    <li><a href="#about">À propos</a></li>
-                    <li><a href="#testimonials">Témoignages</a></li>
-                    <li><a href="#contact">Contact</a></li>
-                    <li><a href="#" class="cta-button" id="login-button">Connexion</a></li>
+                    <li><a href="index.html">Accueil</a></li>
+                    <li><a href="services.html">Services</a></li>
+                    <li><a href="about.html">À propos</a></li>
+                    <li><a href="testimonials.html">Témoignages</a></li>
+                    <li><a href="contact.html">Contact</a></li>
+                    <li><a href="dashboard.html" class="cta-button">Commencer maintenant</a></li>
                 </ul>
                 <div class="burger">
                     <div class="line1"></div>
@@ -590,8 +632,8 @@
                 <h1 class="animate-on-scroll">Boostez Votre Présence en Ligne</h1>
                 <p class="animate-on-scroll">Votre Vision, Notre Technologie - Des solutions de boostage social média sur mesure pour propulser votre visibilité.</p>
                 <div class="hero-buttons animate-on-scroll">
-                    <a href="#services" class="cta-button">Nos services</a>
-                    <a href="#contact" class="cta-button secondary-button">Contactez-nous</a>
+                    <a href="dashboard.html" class="cta-button hero-button">Commencer maintenant</a>
+                    <a href="services.html" class="cta-button secondary-button hero-button">Nos services</a>
                 </div>
             </div>
         </div>
@@ -608,7 +650,7 @@
                     <div class="service-content">
                         <h3>Boost Instagram</h3>
                         <p>Augmentation de followers, likes et commentaires réels et engagés.</p>
-                        <a href="#" class="service-link">Découvrir <i class="fas fa-arrow-right"></i></a>
+                        <a href="services.html" class="service-link">Découvrir <i class="fas fa-arrow-right"></i></a>
                     </div>
                 </div>
                 <div class="service-card animate-on-scroll">
@@ -616,7 +658,7 @@
                     <div class="service-content">
                         <h3>Boost TikTok</h3>
                         <p>Visibilité accrue avec des followers, likes et partages qui augmentent votre portée.</p>
-                        <a href="#" class="service-link">Découvrir <i class="fas fa-arrow-right"></i></a>
+                        <a href="services.html" class="service-link">Découvrir <i class="fas fa-arrow-right"></i></a>
                     </div>
                 </div>
                 <div class="service-card animate-on-scroll">
@@ -624,7 +666,7 @@
                     <div class="service-content">
                         <h3>Boost YouTube</h3>
                         <p>Développez votre chaîne avec des abonnés, vues et likes authentiques.</p>
-                        <a href="#" class="service-link">Découvrir <i class="fas fa-arrow-right"></i></a>
+                        <a href="services.html" class="service-link">Découvrir <i class="fas fa-arrow-right"></i></a>
                     </div>
                 </div>
                 <div class="service-card animate-on-scroll">
@@ -632,7 +674,7 @@
                     <div class="service-content">
                         <h3>Boost Twitter</h3>
                         <p>Augmentez votre influence avec des followers, retweets et likes ciblés.</p>
-                        <a href="#" class="service-link">Découvrir <i class="fas fa-arrow-right"></i></a>
+                        <a href="services.html" class="service-link">Découvrir <i class="fas fa-arrow-right"></i></a>
                     </div>
                 </div>
                 <div class="service-card animate-on-scroll">
@@ -640,7 +682,7 @@
                     <div class="service-content">
                         <h3>Boost Facebook</h3>
                         <p>Renforcez votre présence avec des likes, partages et commentaires.</p>
-                        <a href="#" class="service-link">Découvrir <i class="fas fa-arrow-right"></i></a>
+                        <a href="services.html" class="service-link">Découvrir <i class="fas fa-arrow-right"></i></a>
                     </div>
                 </div>
                 <div class="service-card animate-on-scroll">
@@ -648,7 +690,15 @@
                     <div class="service-content">
                         <h3>Services Web</h3>
                         <p>Optimisation SEO, développement de sites web et solutions digitales complètes.</p>
-                        <a href="#" class="service-link">Découvrir <i class="fas fa-arrow-right"></i></a>
+                        <a href="services.html" class="service-link">Découvrir <i class="fas fa-arrow-right"></i></a>
+                    </div>
+                </div>
+                <div class="service-card animate-on-scroll">
+                    <div class="service-icon"><i class="fas fa-plus-circle"></i></div>
+                    <div class="service-content">
+                        <h3>Plusieurs autres services</h3>
+                        <p>Nous offrons aussi la création d'affiches, le boost de chansons et la création de chansons personnalisées.</p>
+                        <a href="services.html" class="service-link">Découvrir <i class="fas fa-arrow-right"></i></a>
                     </div>
                 </div>
             </div>
@@ -663,10 +713,10 @@
                     <p>Fondée en 2025, Maestro Digit Lab est née de la passion pour la transformation digitale et le potentiel illimité des médias sociaux en Afrique et au-delà.</p>
                     <p>Notre équipe combine expertise technologique et créativité pour offrir des services de boostage qui amplifient véritablement votre présence en ligne.</p>
                     <p>"Votre Vision, Notre Technologie" n'est pas simplement un slogan, c'est notre engagement à traduire vos ambitions en résultats tangibles.</p>
-                    <a href="#" class="cta-button">En savoir plus</a>
+                    <a href="about.html" class="cta-button">En savoir plus</a>
                 </div>
                 <div class="about-image animate-on-scroll">
-                    <img src="https://plus.unsplash.com/premium_photo-1661399432997-8a39a97573d8?q=80&w=2070&auto=format&fit=crop" alt="Équipe travaillant sur un projet digital">
+                    <img src="https://images.unsplash.com/photo-1542744173-8e7e9a8264e1?q=80&w=2070&auto=format&fit=crop" alt="Équipe travaillant sur un projet digital">
                 </div>
             </div>
         </div>
@@ -740,17 +790,17 @@
                 <div class="footer-column">
                     <h3>Services</h3>
                     <ul class="footer-links">
-                        <li><a href="#services">Boost Instagram</a></li>
-                        <li><a href="#services">Boost TikTok</a></li>
-                        <li><a href="#services">Boost YouTube</a></li>
+                        <li><a href="services.html">Boost Instagram</a></li>
+                        <li><a href="services.html">Boost TikTok</a></li>
+                        <li><a href="services.html">Boost YouTube</a></li>
                     </ul>
                 </div>
                 <div class="footer-column">
                     <h3>Liens Rapides</h3>
                     <ul class="footer-links">
-                        <li><a href="#about">À propos</a></li>
-                        <li><a href="#testimonials">Témoignages</a></li>
-                        <li><a href="#contact">Contact</a></li>
+                        <li><a href="about.html">À propos</a></li>
+                        <li><a href="testimonials.html">Témoignages</a></li>
+                        <li><a href="contact.html">Contact</a></li>
                     </ul>
                 </div>
                 <div class="footer-column">
@@ -767,19 +817,6 @@
             </div>
         </div>
     </footer>
-
-    <div class="modal-overlay" id="auth-modal">
-        <div class="modal-container">
-            <i class="fas fa-times modal-close" id="modal-close-button"></i>
-            <h2>Connexion</h2>
-            <form class="modal-form" id="login-form">
-                <input type="email" id="email" placeholder="Email" required>
-                <input type="password" id="password" placeholder="Mot de passe" required>
-                <p id="auth-error">Email ou mot de passe incorrect.</p>
-                <button type="submit" class="cta-button">Se connecter</button>
-            </form>
-        </div>
-    </div>
 
     <script>
     document.addEventListener('DOMContentLoaded', function() {
@@ -804,6 +841,19 @@
             // Burger Animation
             burger.classList.toggle('toggle');
         });
+        
+        // --- FERMETURE DU MENU AU CLIC SUR UN LIEN ---
+        navLinks.forEach(link => {
+            link.addEventListener('click', () => {
+                if (nav.classList.contains('nav-active')) {
+                    nav.classList.remove('nav-active');
+                    burger.classList.remove('toggle');
+                    navLinks.forEach((link) => {
+                        link.style.animation = '';
+                    });
+                }
+            });
+        });
 
         // --- ANIMATION AU DÉFILEMENT ---
         const animatedElements = document.querySelectorAll('.animate-on-scroll');
@@ -821,54 +871,6 @@
             observer.observe(element);
         });
 
-        // --- GESTION DE LA MODALE DE CONNEXION ---
-        const loginButton = document.getElementById('login-button');
-        const authModal = document.getElementById('auth-modal');
-        const closeModalButton = document.getElementById('modal-close-button');
-        const loginForm = document.getElementById('login-form');
-        const authError = document.getElementById('auth-error');
-
-        // Ouvre la modale
-        loginButton.addEventListener('click', (e) => {
-            e.preventDefault(); // Empêche le lien de suivre le href="#"
-            authModal.classList.add('active');
-        });
-
-        // Ferme la modale
-        const closeModal = () => {
-            authModal.classList.remove('active');
-            authError.style.display = 'none'; // Cache l'erreur en fermant
-        };
-        closeModalButton.addEventListener('click', closeModal);
-        authModal.addEventListener('click', (e) => {
-            if (e.target === authModal) { // Ferme si on clique sur le fond gris
-                closeModal();
-            }
-        });
-
-        // --- SIMULATION DE CONNEXION ---
-        loginForm.addEventListener('submit', (e) => {
-            e.preventDefault(); // Empêche le formulaire de recharger la page
-            
-            const email = document.getElementById('email').value;
-            const password = document.getElementById('password').value;
-
-            // ATTENTION : Ceci est une simulation pour le test.
-            // Dans un vrai site, il faudrait envoyer ces infos à un serveur.
-            // Identifiants de test : admin@test.com / password123
-            if (email === 'admin@test.com' && password === 'password123') {
-                
-                // 1. Simuler la session en la sauvegardant dans le navigateur
-                localStorage.setItem('userIsLoggedIn', 'true');
-                
-                // 2. Rediriger vers le tableau de bord
-                window.location.href = 'dashboard.html';
-
-            } else {
-                // Afficher une erreur
-                authError.style.display = 'block';
-            }
-        });
     });
     </script>
 </body>
