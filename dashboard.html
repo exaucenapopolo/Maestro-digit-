@@ -1,0 +1,666 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tableau de Bord - MaestroDigitLab</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-orange: #FF7A59;
+            --primary-brown: #8B4513;
+            --dark-brown: #5D4037;
+            --light-orange: #FFE0B2;
+            --dark-orange: #E64A19;
+            --cream: #FBE9E7;
+            --white: #FFFFFF;
+            --black: #333333;
+            --gray: #f5f5f5;
+            --dark-gray: #e0e0e0;
+            --gradient-orange: linear-gradient(135deg, var(--primary-orange) 0%, var(--dark-orange) 100%);
+            --gradient-brown: linear-gradient(135deg, var(--primary-brown) 0%, var(--dark-brown) 100%);
+            --shadow: 0 5px 15px rgba(139, 69, 19, 0.2);
+            --shadow-hover: 0 10px 25px rgba(139, 69, 19, 0.4);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        body {
+            background-color: var(--cream);
+            color: var(--black);
+            display: flex;
+            min-height: 100vh;
+        }
+
+        /* Sidebar */
+        .sidebar {
+            width: 250px;
+            background: var(--gradient-brown);
+            color: var(--white);
+            padding: 20px 0;
+            transition: all 0.3s ease;
+            position: fixed;
+            height: 100vh;
+            overflow-y: auto;
+        }
+
+        .sidebar-header {
+            display: flex;
+            align-items: center;
+            padding: 0 20px 20px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .sidebar-header img {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            margin-right: 10px;
+        }
+
+        .sidebar-header h2 {
+            font-size: 1.2rem;
+        }
+
+        .sidebar-menu {
+            list-style: none;
+            padding: 20px 0;
+        }
+
+        .sidebar-menu li {
+            margin-bottom: 5px;
+        }
+
+        .sidebar-menu a {
+            display: flex;
+            align-items: center;
+            padding: 12px 20px;
+            color: var(--white);
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+
+        .sidebar-menu a:hover, .sidebar-menu a.active {
+            background-color: rgba(255, 255, 255, 0.1);
+            border-left: 4px solid var(--primary-orange);
+        }
+
+        .sidebar-menu i {
+            margin-right: 10px;
+            font-size: 1.2rem;
+        }
+
+        /* Main Content */
+        .main-content {
+            flex: 1;
+            margin-left: 250px;
+            padding: 20px;
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid var(--dark-gray);
+        }
+
+        .header h1 {
+            font-size: 1.8rem;
+            color: var(--primary-brown);
+        }
+
+        .user-info {
+            display: flex;
+            align-items: center;
+        }
+
+        .user-info img {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            margin-right: 10px;
+        }
+
+        /* Dashboard Cards */
+        .dashboard-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .card {
+            background-color: var(--white);
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: var(--shadow);
+            display: flex;
+            align-items: center;
+        }
+
+        .card-icon {
+            width: 60px;
+            height: 60px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 15px;
+            font-size: 1.5rem;
+            color: var(--white);
+        }
+
+        .card-content h3 {
+            font-size: 1.8rem;
+            margin-bottom: 5px;
+        }
+
+        .card-content p {
+            color: var(--dark-brown);
+            font-size: 0.9rem;
+        }
+
+        /* Services Section */
+        .services-section {
+            background-color: var(--white);
+            border-radius: 10px;
+            padding: 25px;
+            box-shadow: var(--shadow);
+            margin-bottom: 30px;
+        }
+
+        .section-title {
+            font-size: 1.5rem;
+            color: var(--primary-brown);
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid var(--light-orange);
+        }
+
+        .services-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+        }
+
+        .service-card {
+            border: 1px solid var(--dark-gray);
+            border-radius: 10px;
+            padding: 20px;
+            transition: all 0.3s ease;
+        }
+
+        .service-card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-hover);
+            border-color: var(--primary-orange);
+        }
+
+        .service-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .service-icon {
+            width: 50px;
+            height: 50px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 15px;
+            font-size: 1.5rem;
+            color: var(--white);
+        }
+
+        .service-header h3 {
+            font-size: 1.2rem;
+            color: var(--dark-brown);
+        }
+
+        .service-form {
+            margin-top: 15px;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: 500;
+            color: var(--dark-brown);
+        }
+
+        .form-group input, .form-group select {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid var(--dark-gray);
+            border-radius: 5px;
+            font-size: 1rem;
+        }
+
+        .form-group input:focus, .form-group select:focus {
+            outline: none;
+            border-color: var(--primary-orange);
+        }
+
+        .order-button {
+            background: var(--gradient-orange);
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 5px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            width: 100%;
+        }
+
+        .order-button:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-hover);
+        }
+
+        /* Recent Orders */
+        .orders-section {
+            background-color: var(--white);
+            border-radius: 10px;
+            padding: 25px;
+            box-shadow: var(--shadow);
+        }
+
+        .orders-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .orders-table th, .orders-table td {
+            padding: 12px 15px;
+            text-align: left;
+            border-bottom: 1px solid var(--dark-gray);
+        }
+
+        .orders-table th {
+            background-color: var(--light-orange);
+            color: var(--dark-brown);
+        }
+
+        .orders-table tr:hover {
+            background-color: var(--gray);
+        }
+
+        .status {
+            padding: 5px 10px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 500;
+        }
+
+        .status.completed {
+            background-color: #e6f7ee;
+            color: #0bb07b;
+        }
+
+        .status.pending {
+            background-color: #fef7e4;
+            color: #f7bf2f;
+        }
+
+        .status.processing {
+            background-color: #e6efff;
+            color: #2d6ae0;
+        }
+
+        /* Responsive */
+        @media (max-width: 992px) {
+            .sidebar {
+                width: 80px;
+                text-align: center;
+            }
+            
+            .sidebar-header h2, .sidebar-menu span {
+                display: none;
+            }
+            
+            .sidebar-menu i {
+                margin-right: 0;
+                font-size: 1.5rem;
+            }
+            
+            .main-content {
+                margin-left: 80px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .dashboard-cards {
+                grid-template-columns: 1fr;
+            }
+            
+            .services-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .sidebar {
+                width: 0;
+                overflow: hidden;
+            }
+            
+            .main-content {
+                margin-left: 0;
+            }
+            
+            .header {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            
+            .user-info {
+                margin-top: 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Sidebar -->
+    <div class="sidebar">
+        <div class="sidebar-header">
+            <img src="https://ui-avatars.com/api/?name=MaestroDigitLab&background=FF7A59&color=fff" alt="Logo">
+            <h2>MaestroDigitLab</h2>
+        </div>
+        
+        <ul class="sidebar-menu">
+            <li><a href="#" class="active"><i class="fas fa-home"></i> <span>Tableau de bord</span></a></li>
+            <li><a href="#"><i class="fas fa-shopping-cart"></i> <span>Commandes</span></a></li>
+            <li><a href="services.html"><i class="fas fa-concierge-bell"></i> <span>Services</span></a></li>
+            <li><a href="#"><i class="fas fa-wallet"></i> <span>Portefeuille</span></a></li>
+            <li><a href="#"><i class="fas fa-chart-line"></i> <span>Statistiques</span></a></li>
+            <li><a href="#"><i class="fas fa-cog"></i> <span>Paramètres</span></a></li>
+            <li><a href="#"><i class="fas fa-question-circle"></i> <span>Aide</span></a></li>
+            <li><a href="#"><i class="fas fa-sign-out-alt"></i> <span>Déconnexion</span></a></li>
+        </ul>
+    </div>
+
+    <!-- Main Content -->
+    <div class="main-content">
+        <div class="header">
+            <h1>Tableau de Bord</h1>
+            <div class="user-info">
+                <img src="https://ui-avatars.com/api/?name=Utilisateur&background=8B4513&color=fff" alt="Utilisateur">
+                <div>
+                    <h3>John Doe</h3>
+                    <p>Solde: 25 000 FCFA</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Dashboard Cards -->
+        <div class="dashboard-cards">
+            <div class="card">
+                <div class="card-icon" style="background-color: #FF7A59;">
+                    <i class="fas fa-shopping-cart"></i>
+                </div>
+                <div class="card-content">
+                    <h3>12</h3>
+                    <p>Commandes en cours</p>
+                </div>
+            </div>
+            
+            <div class="card">
+                <div class="card-icon" style="background-color: #4CAF50;">
+                    <i class="fas fa-check-circle"></i>
+                </div>
+                <div class="card-content">
+                    <h3>48</h3>
+                    <p>Commandes terminées</p>
+                </div>
+            </div>
+            
+            <div class="card">
+                <div class="card-icon" style="background-color: #2196F3;">
+                    <i class="fas fa-coins"></i>
+                </div>
+                <div class="card-content">
+                    <h3>175 000 FCFA</h3>
+                    <p>Dépenses totales</p>
+                </div>
+            </div>
+            
+            <div class="card">
+                <div class="card-icon" style="background-color: #9C27B0;">
+                    <i class="fas fa-star"></i>
+                </div>
+                <div class="card-content">
+                    <h3>4.8/5</h3>
+                    <p>Note moyenne</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Services Section -->
+        <div class="services-section">
+            <h2 class="section-title">Services de Boostage</h2>
+            
+            <div class="services-grid">
+                <!-- Instagram Service -->
+                <div class="service-card">
+                    <div class="service-header">
+                        <div class="service-icon" style="background: linear-gradient(45deg, #f09433, #e6683c, #dc2743, #cc2366, #bc1888);">
+                            <i class="fab fa-instagram"></i>
+                        </div>
+                        <h3>Boost Instagram</h3>
+                    </div>
+                    <p>Augmentez vos followers, likes et commentaires sur Instagram avec nos services de qualité.</p>
+                    
+                    <div class="service-form">
+                        <div class="form-group">
+                            <label for="instagram-link">Lien du profil/post</label>
+                            <input type="text" id="instagram-link" placeholder="https://instagram.com/votre-compte">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="instagram-quantity">Quantité</label>
+                            <select id="instagram-quantity">
+                                <option value="100">100 followers/likes</option>
+                                <option value="500">500 followers/likes</option>
+                                <option value="1000">1000 followers/likes</option>
+                                <option value="5000">5000 followers/likes</option>
+                            </select>
+                        </div>
+                        
+                        <button class="order-button">Commander - à partir de 2000 FCFA</button>
+                    </div>
+                </div>
+                
+                <!-- TikTok Service -->
+                <div class="service-card">
+                    <div class="service-header">
+                        <div class="service-icon" style="background-color: #000000;">
+                            <i class="fab fa-tiktok"></i>
+                        </div>
+                        <h3>Boost TikTok</h3>
+                    </div>
+                    <p>Augmentez vos followers, likes et vues sur TikTok pour une visibilité accrue.</p>
+                    
+                    <div class="service-form">
+                        <div class="form-group">
+                            <label for="tiktok-link">Lien du profil/vidéo</label>
+                            <input type="text" id="tiktok-link" placeholder="https://tiktok.com/@votre-compte">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="tiktok-quantity">Quantité</label>
+                            <select id="tiktok-quantity">
+                                <option value="100">100 followers/likes/vues</option>
+                                <option value="500">500 followers/likes/vues</option>
+                                <option value="1000">1000 followers/likes/vues</option>
+                                <option value="5000">5000 followers/likes/vues</option>
+                            </select>
+                        </div>
+                        
+                        <button class="order-button">Commander - à partir de 2500 FCFA</button>
+                    </div>
+                </div>
+                
+                <!-- YouTube Service -->
+                <div class="service-card">
+                    <div class="service-header">
+                        <div class="service-icon" style="background-color: #FF0000;">
+                            <i class="fab fa-youtube"></i>
+                        </div>
+                        <h3>Boost YouTube</h3>
+                    </div>
+                    <p>Développez votre chaîne YouTube avec des abonnés, vues et likes authentiques.</p>
+                    
+                    <div class="service-form">
+                        <div class="form-group">
+                            <label for="youtube-link">Lien de la chaîne/vidéo</label>
+                            <input type="text" id="youtube-link" placeholder="https://youtube.com/c/votre-chaine">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="youtube-quantity">Quantité</label>
+                            <select id="youtube-quantity">
+                                <option value="100">100 abonnés/likes/vues</option>
+                                <option value="500">500 abonnés/likes/vues</option>
+                                <option value="1000">1000 abonnés/likes/vues</option>
+                                <option value="5000">5000 abonnés/likes/vues</option>
+                            </select>
+                        </div>
+                        
+                        <button class="order-button">Commander - à partir de 3000 FCFA</button>
+                    </div>
+                </div>
+                
+                <!-- Autres Services -->
+                <div class="service-card">
+                    <div class="service-header">
+                        <div class="service-icon" style="background: var(--gradient-orange);">
+                            <i class="fas fa-plus"></i>
+                        </div>
+                        <h3>Autres Services</h3>
+                    </div>
+                    <p>Découvrez tous nos autres services de boostage et de marketing digital.</p>
+                    
+                    <div class="service-form">
+                        <p>Nous proposons également:</p>
+                        <ul style="margin-left: 20px; margin-bottom: 15px;">
+                            <li>Boost Facebook</li>
+                            <li>Boost Twitter</li>
+                            <li>Création de contenu</li>
+                            <li>Stratégie social media</li>
+                        </ul>
+                        
+                        <a href="services.html" class="order-button" style="text-decoration: none; text-align: center; display: block;">
+                            Voir tous les services
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Recent Orders -->
+        <div class="orders-section">
+            <h2 class="section-title">Commandes Récentes</h2>
+            
+            <table class="orders-table">
+                <thead>
+                    <tr>
+                        <th>ID Commande</th>
+                        <th>Service</th>
+                        <th>Lien</th>
+                        <th>Quantité</th>
+                        <th>Prix</th>
+                        <th>Statut</th>
+                        <th>Date</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>#MDL12345</td>
+                        <td><i class="fab fa-instagram"></i> Instagram Followers</td>
+                        <td>@moncompte</td>
+                        <td>1000</td>
+                        <td>15 000 FCFA</td>
+                        <td><span class="status completed">Terminé</span></td>
+                        <td>15/09/2023</td>
+                    </tr>
+                    <tr>
+                        <td>#MDL12346</td>
+                        <td><i class="fab fa-tiktok"></i> TikTok Likes</td>
+                        <td>@mondivertissement</td>
+                        <td>500</td>
+                        <td>7 500 FCFA</td>
+                        <td><span class="status processing">En cours</span></td>
+                        <td>16/09/2023</td>
+                    </tr>
+                    <tr>
+                        <td>#MDL12347</td>
+                        <td><i class="fab fa-youtube"></i> YouTube Vues</td>
+                        <td>mavideo123</td>
+                        <td>2000</td>
+                        <td>20 000 FCFA</td>
+                        <td><span class="status pending">En attente</span></td>
+                        <td>17/09/2023</td>
+                    </tr>
+                    <tr>
+                        <td>#MDL12348</td>
+                        <td><i class="fab fa-instagram"></i> Instagram Likes</td>
+                        <td>@monpost</td>
+                        <td>500</td>
+                        <td>5 000 FCFA</td>
+                        <td><span class="status completed">Terminé</span></td>
+                        <td>18/09/2023</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Gestion des formulaires de commande
+            const orderButtons = document.querySelectorAll('.order-button');
+            
+            orderButtons.forEach(button => {
+                button.addEventListener('click', function(e) {
+                    if (!this.getAttribute('href')) { // Empêche la redirection pour le bouton "Voir tous les services"
+                        e.preventDefault();
+                        
+                        const card = this.closest('.service-card');
+                        const service = card.querySelector('h3').textContent;
+                        const linkInput = card.querySelector('input[type="text"]');
+                        const quantitySelect = card.querySelector('select');
+                        
+                        if (linkInput && linkInput.value.trim() === '') {
+                            alert('Veuillez entrer un lien valide pour ' + service);
+                            linkInput.focus();
+                            return;
+                        }
+                        
+                        alert('Commande de ' + quantitySelect.value + ' pour ' + service + ' effectuée avec succès!');
+                        
+                        // Réinitialiser le formulaire
+                        if (linkInput) linkInput.value = '';
+                        if (quantitySelect) quantitySelect.selectedIndex = 0;
+                    }
+                });
+            });
+            
+            // Simulation de chargement des commandes
+            console.log('Tableau de bord chargé avec succès');
+        });
+    </script>
+</body>
+</html>
