@@ -18,6 +18,9 @@
         --card-shadow: 0 8px 30px rgba(0,0,0,0.08);
         --accent-yellow: #FFD64D;
         --glass: rgba(255,255,255,0.7);
+        --success: #4CAF50;
+        --warning: #FF9800;
+        --error: #F44336;
     }
     *{box-sizing:border-box}
     html,body{height:100%}
@@ -28,6 +31,7 @@
         color:#222;
         display:flex;
         min-height:100vh;
+        overflow-x: hidden;
     }
 
     /* SIDEBAR */
@@ -39,7 +43,9 @@
         position:fixed;
         height:100vh;
         overflow:auto;
-        transition:width .25s, transform .3s ease;
+        transition:width .25s;
+        z-index: 100;
+        box-shadow: 2px 0 10px rgba(0,0,0,0.1);
     }
     .brand{
         display:flex;align-items:center;gap:12px;margin-bottom:18px;
@@ -47,11 +53,8 @@
     .brand img{width:48px;height:48px;border-radius:10px;object-fit:cover}
     .brand h2{font-size:1.1rem;margin:0;font-weight:700}
     nav ul{list-style:none;padding:0;margin-top:6px}
-    nav a{
-        display:flex;align-items:center;gap:12px;padding:10px;border-radius:8px;color:inherit;text-decoration:none;font-weight:500;
-        transition: background-color .2s;
-    }
-    nav a:hover{background:rgba(255,255,255,0.06)}
+    nav a{display:flex;align-items:center;gap:12px;padding:10px;border-radius:8px;color:inherit;text-decoration:none;font-weight:500;transition: all 0.3s ease;}
+    nav a:hover{background:rgba(255,255,255,0.1); transform: translateX(5px);}
     nav a.active{background:rgba(0,0,0,0.12);border-left:4px solid var(--primary-orange)}
 
     /* MAIN */
@@ -59,7 +62,7 @@
         margin-left:240px;
         padding:28px;
         flex:1;
-        transition:margin-left .25s;
+        transition: margin-left 0.3s ease;
     }
 
     .header{
@@ -70,7 +73,8 @@
         margin-bottom:18px;
     }
     .header-left h1{font-size:1.6rem;color:var(--primary-brown);margin:0}
-    .user-info{display:flex;gap:14px;align-items:center;background:var(--glass);padding:8px 12px;border-radius:12px;box-shadow:var(--card-shadow);backdrop-filter: blur(5px);}
+    .user-info{display:flex;gap:14px;align-items:center;background:var(--glass);padding:8px 12px;border-radius:12px;box-shadow:var(--card-shadow); transition: all 0.3s ease;}
+    .user-info:hover {transform: translateY(-2px); box-shadow: 0 6px 15px rgba(0,0,0,0.1);}
     .user-info img{width:48px;height:48px;border-radius:50%}
     .user-info .name{font-weight:700;color:var(--accent-yellow);font-family:"Luckiest Guy", "Poppins",sans-serif}
     .user-info p{margin:0;font-size:.9rem;color:var(--muted)}
@@ -84,9 +88,12 @@
         border-radius:14px;
         padding:18px;
         box-shadow:var(--card-shadow);
-        transition: transform .2s ease, box-shadow .2s ease;
+        transition: all 0.3s ease;
     }
-    .card:hover{transform: translateY(-4px); box-shadow: 0 10px 35px rgba(0,0,0,0.1);}
+    .card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 12px 30px rgba(0,0,0,0.1);
+    }
 
     .balance-card .balance-amount{font-size:1.3rem;font-weight:700;color:var(--primary-brown)}
     .quick-order .title{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px}
@@ -106,63 +113,154 @@
 
     .price-box{
         display:flex;justify-content:space-between;align-items:center;padding:10px 12px;border-radius:8px;background:linear-gradient(90deg,#fff,#fff);border:1px dashed #eee;
+        animation: pulse 2s infinite;
+    }
+    @keyframes pulse {
+        0% { box-shadow: 0 0 0 0 rgba(255,122,89,0.2); }
+        70% { box-shadow: 0 0 0 10px rgba(255,122,89,0); }
+        100% { box-shadow: 0 0 0 0 rgba(255,122,89,0); }
     }
     .price-box .label{color:var(--muted);font-weight:600}
-    .price-box .value{font-weight:800;color:var(--primary-brown)}
+    .price-box .value{font-weight:800;color:var(--primary-brown); transition: all 0.3s ease;}
 
     .btn-row{display:flex;gap:10px;margin-top:6px}
     .btn{
         flex:1;padding:11px;border-radius:10px;border:none;font-weight:700;cursor:pointer;
-        transition: transform .2s, box-shadow .2s;
+        transition: all 0.3s ease;
+        position: relative;
+        overflow: hidden;
     }
-    .btn:active{transform: translateY(1px);}
+    .btn:after {
+        content: '';
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        width: 5px;
+        height: 5px;
+        background: rgba(255, 255, 255, 0.5);
+        opacity: 0;
+        border-radius: 100%;
+        transform: scale(1, 1) translate(-50%);
+        transform-origin: 50% 50%;
+    }
+    .btn:focus:not(:active)::after {
+        animation: ripple 1s ease-out;
+    }
+    @keyframes ripple {
+        0% {
+            transform: scale(0, 0);
+            opacity: 0.5;
+        }
+        100% {
+            transform: scale(30, 30);
+            opacity: 0;
+        }
+    }
     .btn-primary{background:linear-gradient(90deg,var(--primary-orange), #E64A19);color:#fff;box-shadow:0 8px 20px rgba(230,74,25,0.18)}
+    .btn-primary:hover{background:linear-gradient(90deg, #E64A19, var(--primary-orange)); transform: translateY(-2px); box-shadow:0 12px 25px rgba(230,74,25,0.25)}
     .btn-secondary{background:#fff;border:1px solid #eee;color:var(--primary-brown)}
+    .btn-secondary:hover{background:#f9f9f9; transform: translateY(-2px); box-shadow:0 8px 15px rgba(0,0,0,0.1)}
 
     /* "Voir tous les services" under the form */
     .all-services{
         margin-top:12px;display:block;text-decoration:none;text-align:center;padding:12px;border-radius:10px;background:transparent;border:2px dashed #f0c6b4;color:var(--primary-brown);font-weight:700;
-        transition: background-color .2s;
+        transition: all 0.3s ease;
     }
-    .all-services:hover{background-color: #fcece5;}
+    .all-services:hover {
+        background: rgba(240, 198, 180, 0.2);
+        transform: translateY(-2px);
+    }
 
     /* Recent orders */
     .section-title{font-size:1.15rem;color:var(--primary-brown);margin-bottom:12px;font-weight:700}
     table.orders{width:100%;border-collapse:collapse;background:var(--white);border-radius:10px;overflow:hidden;box-shadow:var(--card-shadow)}
     table.orders thead th{background:#FFF3E8;padding:12px;text-align:left;color:var(--primary-brown)}
     table.orders td, table.orders th{padding:12px;border-bottom:1px solid #F2F2F2}
-    .status{padding:6px 10px;border-radius:999px;font-weight:700;font-size:.85rem}
+    .status{padding:6px 10px;border-radius:999px;font-weight:700;font-size:.85rem; display: inline-block;}
     .status.completed{background:#E6F7EE;color:#0BB07B}
     .status.processing{background:#E6F2FF;color:#2D6AE0}
     .status.pending{background:#FFF7E6;color:#F7BF2F}
-    
-    /* Animations */
-    .fade-in {
-        animation: fadeIn 0.8s cubic-bezier(0.2, 0.8, 0.2, 1) both;
+
+    /* Toast notification */
+    .toast {
+        position: fixed;
+        top: 20px;
+        right: 20px;
+        padding: 15px 20px;
+        border-radius: 8px;
+        color: white;
+        z-index: 1000;
+        opacity: 0;
+        transform: translateY(-20px);
+        transition: all 0.3s ease;
+        box-shadow: 0 5px 15px rgba(0,0,0,0.2);
     }
-    @keyframes fadeIn {
-        from { opacity: 0; transform: translateY(20px); }
-        to { opacity: 1; transform: translateY(0); }
+    .toast.success { background-color: var(--success); }
+    .toast.error { background-color: var(--error); }
+    .toast.show {
+        opacity: 1;
+        transform: translateY(0);
     }
-    .fade-in-1 { animation-delay: 0.2s; }
-    .fade-in-2 { animation-delay: 0.4s; }
-    .fade-in-3 { animation-delay: 0.6s; }
-    
+
+    /* Loading spinner */
+    .spinner {
+        display: inline-block;
+        width: 20px;
+        height: 20px;
+        border: 3px solid rgba(255,255,255,0.3);
+        border-radius: 50%;
+        border-top-color: #fff;
+        animation: spin 1s ease-in-out infinite;
+    }
+    @keyframes spin {
+        to { transform: rotate(360deg); }
+    }
+
+    /* small helpers */
+    .muted{color:var(--muted);font-size:.95rem}
+    .fade-in{animation:fadeIn .35s ease both}
+    @keyframes fadeIn{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+
     /* responsive */
     @media(max-width:720px){
-        .sidebar{
-            width:100%; height: auto; position: relative; padding: 16px;
-            transform: translateX(0) !important;
-        }
+        .sidebar{display:none}
         .main{margin-left:0;padding:16px}
         .header{flex-direction:column;align-items:flex-start;gap:12px}
+        .inline-row{flex-direction:column;}
     }
-    
+
+    /* Menu toggle for mobile */
+    .menu-toggle {
+        display: none;
+        position: fixed;
+        top: 15px;
+        left: 15px;
+        z-index: 101;
+        background: var(--primary-brown);
+        color: white;
+        border: none;
+        border-radius: 50%;
+        width: 40px;
+        height: 40px;
+        box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+        cursor: pointer;
+    }
+    @media(max-width:720px){
+        .menu-toggle { display: block; }
+        .sidebar.show { display: block; width: 80%; }
+    }
+
 </style>
 </head>
 <body>
 
-<aside class="sidebar fade-in-1">
+<!-- Menu toggle for mobile -->
+<button class="menu-toggle" id="menuToggle">
+    <i class="fas fa-bars"></i>
+</button>
+
+<!-- SIDEBAR -->
+<aside class="sidebar" id="sidebar">
     <div class="brand">
         <img src="https://ui-avatars.com/api/?name=MaestroDigitLab&background=FF7A59&color=fff" alt="logo">
         <div>
@@ -183,6 +281,7 @@
     </nav>
 </aside>
 
+<!-- MAIN -->
 <main class="main">
     <header class="header">
         <div class="header-left">
@@ -199,8 +298,10 @@
         </div>
     </header>
 
+    <!-- TOP AREA: balance / quick order -->
     <section class="top-area">
-        <div class="card balance-card fade-in fade-in-2">
+        <!-- Balance & quick actions -->
+        <div class="card balance-card fade-in">
             <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px">
                 <div>
                     <div style="font-size:.9rem;color:var(--muted)">Solde disponible</div>
@@ -218,7 +319,8 @@
             </div>
         </div>
 
-        <div class="card quick-order fade-in fade-in-3" id="orderCard">
+        <!-- Order form -->
+        <div class="card quick-order fade-in" id="orderCard">
             <div class="title">
                 <div>
                     <strong>Formulaire de commande</strong>
@@ -228,29 +330,34 @@
             </div>
 
             <form id="orderForm" autocomplete="off">
+                <!-- Platform -->
                 <div class="field">
                     <label for="platform">Plateforme</label>
                     <select id="platform" required>
+                        <option value="facebook">Facebook</option>
                         <option value="instagram">Instagram</option>
                         <option value="tiktok">TikTok</option>
                         <option value="youtube">YouTube</option>
-                        <option value="facebook">Facebook</option>
+                        <option value="autre">Autre</option>
                     </select>
                 </div>
 
+                <!-- Service -->
                 <div class="field">
                     <label for="service">Service</label>
                     <select id="service" required>
-                        </select>
+                        <!-- rempli par JS -->
+                    </select>
                 </div>
 
                 <div class="inline-row">
                     <div class="field">
-                        <label for="quantity" id="quantityLabel">Quantité</label>
-                        <input id="quantity" type="number" min="1" value="100" required>
+                        <label for="quantity">Quantité</label>
+                        <input id="quantity" type="number" min="1" value="1000" required>
+                        <div class="muted" id="quantityHelp">Saisissez la quantité désirée</div>
                     </div>
 
-                    <div class="field" id="qualityField">
+                    <div class="field">
                         <label for="quality">Qualité</label>
                         <select id="quality">
                             <option value="standard">Standard</option>
@@ -263,13 +370,6 @@
                     <label for="link">Lien / Identifiant (profil / post / vidéo)</label>
                     <input id="link" type="text" placeholder="https://..." required>
                 </div>
-                
-                <div class="field" id="commentsField" style="display: none;">
-                    <label for="comments">Commentaires (un par ligne)</label>
-                    <textarea id="comments" rows="3" placeholder="Super vidéo !
-J'adore ce concept
-On peut faire une collab?"></textarea>
-                </div>
 
                 <div class="price-box">
                     <div class="label">Prix estimé</div>
@@ -277,7 +377,10 @@ On peut faire une collab?"></textarea>
                 </div>
 
                 <div class="btn-row">
-                    <button type="submit" class="btn btn-primary">Passer la commande</button>
+                    <button type="submit" class="btn btn-primary" id="submitBtn">
+                        <span id="submitText">Passer la commande</span>
+                        <span id="submitSpinner" class="spinner" style="display:none"></span>
+                    </button>
                     <button type="button" id="resetForm" class="btn btn-secondary">Réinitialiser</button>
                 </div>
             </form>
@@ -286,6 +389,7 @@ On peut faire une collab?"></textarea>
         </div>
     </section>
 
+    <!-- RECENT ORDERS -->
     <section class="card fade-in">
         <div class="section-title">Commandes Récentes</div>
 
@@ -303,42 +407,119 @@ On peut faire une collab?"></textarea>
                 </tr>
             </thead>
             <tbody>
-                </tbody>
+                <!-- Rempli par JS (localStorage) -->
+            </tbody>
         </table>
     </section>
 </main>
 
+<!-- Toast notification -->
+<div class="toast" id="toast"></div>
+
 <script>
-/* ====== Données de tarification (basées sur vos tarifs) ======
-   basePrice = prix par unité (FCFA)
-   Les prix par unité ont été calculés à partir de vos tarifs par lot.
-*/
+/* ====== Données de tarification avec paliers ====== */
 const pricing = {
     facebook: {
-        "Followers": 2.1,  // 2100 FCFA / 1000
-        "Likes publication / Vues": 1.5, // 1500 FCFA / 1000
-        "J'aime pour votre page": 2.8, // 2800 FCFA / 1000
-        "Commentaires": 85, // 850 FCFA / 10
-        "Partages / Avis": 0.8, // 800 FCFA / 1000
-        "Membres pour votre groupe": 2, // 2000 FCFA / 1000
+        "Followers": [
+            { quantity: 1000, price: 2100 },
+            { quantity: 5000, price: 9500 },
+            { quantity: 10000, price: 19200 }
+        ],
+        "Likes publication et vues de vidéos ou réel": [
+            { quantity: 1000, price: 1500 },
+            { quantity: 5000, price: 6500 },
+            { quantity: 10000, price: 11500 }
+        ],
+        "J’aime pour votre page": [
+            { quantity: 1000, price: 2800 },
+            { quantity: 5000, price: 7000 },
+            { quantity: 10000, price: 11000 }
+        ],
+        "Commentaires": [
+            { quantity: 10, price: 850 }
+        ],
+        "Partage pour votre publication ou Avis pour votre page": [
+            { quantity: 1000, price: 800 },
+            { quantity: 5000, price: 4000 },
+            { quantity: 10000, price: 9000 }
+        ],
+        "Membres pour votre groupe": [
+            { quantity: 1000, price: 2000 },
+            { quantity: 5000, price: 9000 }
+        ]
     },
     tiktok: {
-        "Abonnés": 2.5, // 2500 FCFA / 1000
-        "Likes vidéo": 1.0, // 1000 FCFA / 1000
-        "Vues de vidéos": 0.8, // 800 FCFA / 1000
-        "Sauvegardes / Partages": 0.5, // 500 FCFA / 1000
-        "Commentaires personnalisés": 50 // 500 FCFA / 10
+        "Abonnees": [
+            { quantity: 1000, price: 2500 },
+            { quantity: 2000, price: 5000 },
+            { quantity: 5000, price: 9500 },
+            { quantity: 10000, price: 19500 }
+        ],
+        "Likes vidéo": [
+            { quantity: 1000, price: 1000 },
+            { quantity: 5000, price: 4500 },
+            { quantity: 10000, price: 8000 }
+        ],
+        "Vues de vidéos": [
+            { quantity: 1000, price: 800 },
+            { quantity: 5000, price: 3500 },
+            { quantity: 10000, price: 5000 }
+        ],
+        "Sauvegarde et partage de vidéos & j’aime pour votre direct": [
+            { quantity: 1000, price: 500 },
+            { quantity: 5000, price: 2000 },
+            { quantity: 10000, price: 3500 }
+        ],
+        "Commentaires personnalisés": [
+            { quantity: 10, price: 500 },
+            { quantity: 1000, price: 5000 }
+        ]
     },
     instagram: {
-        "Abonnés": 2.5, // 2500 FCFA / 1000
-        "Likes vidéo": 1.0, // 1000 FCFA / 1000
-        "Vues de vidéos": 0.5, // 500 FCFA / 1000
-        "Commentaires personnalisés": 30, // 300 FCFA / 10
-        "Vues de story": 0.5 // 500 FCFA / 1000
+        "Abonnees": [
+            { quantity: 1000, price: 2500 },
+            { quantity: 2000, price: 5000 },
+            { quantity: 5000, price: 9500 },
+            { quantity: 10000, price: 19500 }
+        ],
+        "Likes vidéo": [
+            { quantity: 1000, price: 1000 },
+            { quantity: 5000, price: 4500 },
+            { quantity: 10000, price: 8000 }
+        ],
+        "Vues de vidéos": [
+            { quantity: 1000, price: 500 },
+            { quantity: 5000, price: 2000 },
+            { quantity: 10000, price: 3000 }
+        ],
+        "Commentaires personnalisés": [
+            { quantity: 10, price: 300 },
+            { quantity: 1000, price: 3000 }
+        ],
+        "Vues de story": [
+            { quantity: 1000, price: 500 },
+            { quantity: 5000, price: 2000 },
+            { quantity: 10000, price: 4000 }
+        ]
     },
     youtube: {
-        "Abonnés": 5.0, // 5000 FCFA / 1000
-        "Vues / J'aime": 1.5, // 1500 FCFA / 1000
+        "Abonnees": [
+            { quantity: 1000, price: 5000 },
+            { quantity: 2000, price: 9500 },
+            { quantity: 5000, price: 24500 },
+            { quantity: 10000, price: 50000 }
+        ],
+        "Vues et j’aime la vidéo": [
+            { quantity: 1000, price: 1500 },
+            { quantity: 2000, price: 3000 },
+            { quantity: 5000, price: 7000 },
+            { quantity: 10000, price: 13500 }
+        ]
+    },
+    autre: {
+        "Service personnalisé": [
+            { quantity: 100, price: 1000 }
+        ]
     }
 };
 
@@ -346,19 +527,12 @@ const serviceMap = {
     facebook: Object.keys(pricing.facebook),
     tiktok: Object.keys(pricing.tiktok),
     instagram: Object.keys(pricing.instagram),
-    youtube: Object.keys(pricing.youtube)
+    youtube: Object.keys(pricing.youtube),
+    autre: Object.keys(pricing.autre)
 };
 
-const serviceMinMax = {
-    "Commentaires": {min: 10, step: 10, label: "Quantité (par 10)"},
-    "Commentaires personnalisés": {min: 10, step: 10, label: "Quantité (par 10)"},
-    "Membres pour votre groupe": {min: 1000, step: 100, label: "Quantité"},
-    "Partages / Avis": {min: 100, step: 100, label: "Quantité"},
-    default: {min: 100, step: 100, label: "Quantité"}
-}
-
 const formatFCFA = (n) => {
-    if (isNaN(n) || n === 0) return "-- FCFA";
+    if (isNaN(n)) return "-- FCFA";
     return new Intl.NumberFormat('fr-FR').format(Math.round(n)) + " FCFA";
 }
 
@@ -366,95 +540,132 @@ const formatFCFA = (n) => {
 const platformEl = document.getElementById('platform');
 const serviceEl = document.getElementById('service');
 const quantityEl = document.getElementById('quantity');
-const quantityLabelEl = document.getElementById('quantityLabel');
 const qualityEl = document.getElementById('quality');
-const qualityFieldEl = document.getElementById('qualityField');
 const linkEl = document.getElementById('link');
-const commentsFieldEl = document.getElementById('commentsField');
 const priceEl = document.getElementById('priceEstimate');
 const orderForm = document.getElementById('orderForm');
 const ordersTableBody = document.querySelector('#ordersTable tbody');
 const balanceAmountEl = document.getElementById('balanceAmount');
+const quantityHelp = document.getElementById('quantityHelp');
+const toastEl = document.getElementById('toast');
+const submitBtn = document.getElementById('submitBtn');
+const submitText = document.getElementById('submitText');
+const submitSpinner = document.getElementById('submitSpinner');
+const menuToggle = document.getElementById('menuToggle');
+const sidebar = document.getElementById('sidebar');
 
 let balance = 25000; // valeur initiale
 balanceAmountEl.textContent = formatFCFA(balance);
 
+// Afficher les paliers disponibles pour le service sélectionné
+function updateQuantityHelp() {
+    const platform = platformEl.value;
+    const service = serviceEl.value;
+    
+    if (pricing[platform] && pricing[platform][service]) {
+        const tiers = pricing[platform][service];
+        const tierQuantities = tiers.map(tier => tier.quantity.toLocaleString('fr-FR'));
+        quantityHelp.textContent = `Quantités disponibles: ${tierQuantities.join(', ')}`;
+    } else {
+        quantityHelp.textContent = 'Saisissez la quantité désirée';
+    }
+}
+
 // Populate services depending on platform
 function populateServices(platform){
     serviceEl.innerHTML = '';
-    const services = serviceMap[platform];
-    if (services) {
-        services.forEach(s => {
-            const opt = document.createElement('option');
-            opt.value = s;
-            opt.textContent = s;
-            serviceEl.appendChild(opt);
-        });
-    }
-    updateFormFields();
+    serviceMap[platform].forEach(s => {
+        const opt = document.createElement('option');
+        opt.value = s;
+        opt.textContent = s;
+        serviceEl.appendChild(opt);
+    });
+    updateQuantityHelp();
     updatePrice();
 }
 
-function updateFormFields() {
-    const service = serviceEl.value;
-    const isComments = service && service.includes('Commentaires');
+// Trouver le prix pour une quantité donnée selon les paliers
+function findPriceForQuantity(platform, service, quantity) {
+    if (!pricing[platform] || !pricing[platform][service]) return 0;
     
-    // Afficher/Masquer le champ des commentaires
-    commentsFieldEl.style.display = isComments ? 'flex' : 'none';
-    linkEl.required = !isComments;
-    comments.required = isComments;
-
-    // Ajuster le champ de quantité
-    const config = serviceMinMax[service] || serviceMinMax.default;
-    quantityLabelEl.textContent = config.label;
-    quantityEl.min = config.min;
-    quantityEl.step = config.step || 1;
-    if (Number(quantityEl.value) < config.min) {
-        quantityEl.value = config.min;
+    const tiers = pricing[platform][service];
+    
+    // Si la quantité demandée correspond exactement à un palier
+    const exactMatch = tiers.find(tier => tier.quantity === quantity);
+    if (exactMatch) return exactMatch.price;
+    
+    // Si la quantité est inférieure au plus petit palier
+    const minTier = tiers.reduce((min, tier) => tier.quantity < min.quantity ? tier : min, tiers[0]);
+    if (quantity < minTier.quantity) {
+        return (minTier.price / minTier.quantity) * quantity;
     }
     
-    // Certains services n'ont pas de "Haute qualité"
-    const hasQuality = service !== "Commentaires personnalisés" && service !== "Commentaires" && service !== "Partages / Avis" && service !== "Membres pour votre groupe";
-    qualityFieldEl.style.display = hasQuality ? 'flex' : 'none';
-    
-    // Forcer la qualité si elle n'est pas disponible
-    if (!hasQuality) {
-        qualityEl.value = 'standard';
+    // Si la quantité est supérieure au plus grand palier
+    const maxTier = tiers.reduce((max, tier) => tier.quantity > max.quantity ? tier : max, tiers[0]);
+    if (quantity > maxTier.quantity) {
+        return (maxTier.price / maxTier.quantity) * quantity;
     }
+    
+    // Trouver les paliers inférieur et supérieur pour interpolation
+    let lowerTier = null;
+    let upperTier = null;
+    
+    for (let i = 0; i < tiers.length - 1; i++) {
+        if (quantity >= tiers[i].quantity && quantity <= tiers[i+1].quantity) {
+            lowerTier = tiers[i];
+            upperTier = tiers[i+1];
+            break;
+        }
+    }
+    
+    if (!lowerTier || !upperTier) return 0;
+    
+    // Interpolation linéaire entre les deux paliers
+    const pricePerUnitLower = lowerTier.price / lowerTier.quantity;
+    const pricePerUnitUpper = upperTier.price / upperTier.quantity;
+    
+    // Utiliser une interpolation pondérée
+    const ratio = (quantity - lowerTier.quantity) / (upperTier.quantity - lowerTier.quantity);
+    const interpolatedPricePerUnit = pricePerUnitLower + (pricePerUnitUpper - pricePerUnitLower) * ratio;
+    
+    return interpolatedPricePerUnit * quantity;
 }
-
 
 // Price calculation
 function calculatePrice(){
     const platform = platformEl.value;
     const service = serviceEl.value;
-    
-    let qty;
-    if (service && service.includes('Commentaires')) {
-        const commentsText = document.getElementById('comments').value.trim();
-        qty = commentsText.split('\n').filter(line => line.length > 0).length;
-        quantityEl.value = qty;
-    } else {
-        qty = Number(quantityEl.value) || 0;
-    }
-    
+    const qty = Number(quantityEl.value) || 0;
     const quality = qualityEl.value;
 
-    let basePrice = 0;
-    if (pricing[platform] && pricing[platform][service] !== undefined) {
-        basePrice = pricing[platform][service];
-    } else {
-        basePrice = 1; // Prix par défaut si non trouvé
-    }
+    if (!platform || !service || qty <= 0) return 0;
 
+    const basePrice = findPriceForQuantity(platform, service, qty);
     const qualMultiplier = (quality === 'high') ? 2 : 1;
-    const price = basePrice * qty * qualMultiplier;
+    const price = basePrice * qualMultiplier;
+    
     return price;
 }
 
 function updatePrice(){
     const price = calculatePrice();
     priceEl.textContent = formatFCFA(price);
+    
+    // Animation du changement de prix
+    priceEl.style.transform = 'scale(1.1)';
+    setTimeout(() => {
+        priceEl.style.transform = 'scale(1)';
+    }, 300);
+}
+
+// Afficher une notification toast
+function showToast(message, type = 'success') {
+    toastEl.textContent = message;
+    toastEl.className = `toast ${type} show`;
+    
+    setTimeout(() => {
+        toastEl.classList.remove('show');
+    }, 3000);
 }
 
 // LocalStorage orders handling
@@ -488,8 +699,8 @@ function renderOrders(){
         tr.innerHTML = `
             <td>${o.id}</td>
             <td>${o.platform} • ${o.service}</td>
-            <td style="max-width:200px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${o.link || 'Commentaires'}</td>
-            <td>${o.quantity}</td>
+            <td style="max-width:200px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${o.link}</td>
+            <td>${o.quantity.toLocaleString('fr-FR')}</td>
             <td>${o.qualityLabel}</td>
             <td>${formatFCFA(o.price)}</td>
             <td><span class="status ${o.statusClass}">${o.statusLabel}</span></td>
@@ -509,15 +720,16 @@ function todayStr(){
 }
 
 // EVENTS
-platformEl.addEventListener('change', () => populateServices(platformEl.value));
+platformEl.addEventListener('change', () => {
+    populateServices(platformEl.value);
+    updateQuantityHelp();
+});
 serviceEl.addEventListener('change', () => {
-    updateFormFields();
     updatePrice();
+    updateQuantityHelp();
 });
 quantityEl.addEventListener('input', updatePrice);
 qualityEl.addEventListener('change', updatePrice);
-document.getElementById('comments').addEventListener('input', updatePrice);
-
 
 // quick order button scrolls to form and focuses link
 document.getElementById('quickOrderBtn').addEventListener('click', () => {
@@ -527,49 +739,50 @@ document.getElementById('quickOrderBtn').addEventListener('click', () => {
 
 // reset form
 document.getElementById('resetForm').addEventListener('click', () => {
-    orderForm.reset();
     populateServices(platformEl.value);
+    quantityEl.value = 1000;
+    qualityEl.value = 'standard';
+    linkEl.value = '';
     updatePrice();
 });
 
 // submit order
-orderForm.addEventListener('submit', function(e){
+orderForm.addEventListener('submit', async function(e){
     e.preventDefault();
 
     const platform = platformEl.value;
     const service = serviceEl.value;
-    let link = linkEl.value.trim();
+    const quantity = Number(quantityEl.value);
     const quality = qualityEl.value;
+    const link = linkEl.value.trim();
 
-    let quantity, commentsText;
-    if (service && service.includes('Commentaires')) {
-        commentsText = document.getElementById('comments').value.trim();
-        quantity = commentsText.split('\n').filter(line => line.length > 0).length;
-        if (quantity < 1) {
-             alert('Veuillez entrer au moins un commentaire.');
-            return;
-        }
-        link = ''; // Le lien n'est pas utilisé pour les commentaires
-    } else {
-        quantity = Number(quantityEl.value);
-        if (!link){
-            alert('Veuillez entrer un lien / identifiant valide.');
-            linkEl.focus();
-            return;
-        }
+    if (!link){
+        showToast('Veuillez entrer un lien / identifiant valide.', 'error');
+        linkEl.focus();
+        return;
     }
-    
     if (!quantity || quantity < 1){
-        alert('Veuillez entrer une quantité valide (> 0).');
+        showToast('Veuillez entrer une quantité valide (> 0).', 'error');
         quantityEl.focus();
         return;
     }
 
     const price = calculatePrice();
 
+    // Afficher l'indicateur de chargement
+    submitText.style.display = 'none';
+    submitSpinner.style.display = 'inline-block';
+    submitBtn.disabled = true;
+
+    // Simuler un délai de traitement
+    await new Promise(resolve => setTimeout(resolve, 1000));
+
     // Simple balance check (optionnel)
     if (price > balance){
         if(!confirm('Le prix est ' + formatFCFA(price) + ' mais ton solde est ' + formatFCFA(balance) + '. Continuer et créer la commande (paiement différé) ?')) {
+            submitText.style.display = 'inline-block';
+            submitSpinner.style.display = 'none';
+            submitBtn.disabled = false;
             return;
         }
     } else {
@@ -577,7 +790,7 @@ orderForm.addEventListener('submit', function(e){
         balance = Math.max(0, balance - price);
         balanceAmountEl.textContent = formatFCFA(balance);
     }
-    
+
     const order = {
         id: uid('#MDL'),
         platform: platform.charAt(0).toUpperCase() + platform.slice(1),
@@ -588,23 +801,45 @@ orderForm.addEventListener('submit', function(e){
         price,
         statusLabel: 'En cours',
         statusClass: 'processing',
-        date: todayStr(),
-        comments: commentsText || null
+        date: todayStr()
     };
 
     addOrder(order);
 
     // reset some fields
-    orderForm.reset();
-    populateServices(platformEl.value);
+    linkEl.value = '';
+    quantityEl.value = 1000;
+    qualityEl.value = 'standard';
     updatePrice();
 
     // feedback utilisateur
-    alert('Commande créée : ' + order.id + ' — Prix: ' + formatFCFA(order.price));
+    showToast(`Commande créée : ${order.id} — Prix: ${formatFCFA(order.price)}`);
+
+    // Réactiver le bouton
+    submitText.style.display = 'inline-block';
+    submitSpinner.style.display = 'none';
+    submitBtn.disabled = false;
+});
+
+// Toggle sidebar on mobile
+menuToggle.addEventListener('click', () => {
+    sidebar.classList.toggle('show');
+});
+
+// Close sidebar when clicking outside on mobile
+document.addEventListener('click', (e) => {
+    if (window.innerWidth <= 720 && 
+        !sidebar.contains(e.target) && 
+        !menuToggle.contains(e.target) && 
+        sidebar.classList.contains('show')) {
+        sidebar.classList.remove('show');
+    }
 });
 
 // INITIALIZE
+platformEl.value = 'instagram'; // Set default platform
 populateServices(platformEl.value);
+updatePrice();
 renderOrders();
 
 /* Console friendly message */
