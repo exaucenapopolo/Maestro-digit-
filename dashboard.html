@@ -1,276 +1,608 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-<meta charset="utf-8" />
-<meta name="viewport" content="width=device-width,initial-scale=1" />
-<title>Tableau de bord - MaestroDigitLab</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Tableau de bord - MaestroDigitLab</title>
 
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Luckiest+Guy&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Luckiest+Guy&display=swap" rel="stylesheet">
 
-<style>
-    :root{
-        --primary-orange:#FF7A59;
-        --primary-brown:#8B4513;
-        --cream:#FBE9E7;
-        --white:#FFFFFF;
-        --muted:#9E9E9E;
-        --card-shadow: 0 8px 30px rgba(0,0,0,0.08);
-        --accent-yellow: #FFD64D;
-        --glass: rgba(255,255,255,0.7);
-        --success: #4CAF50;
-        --warning: #FF9800;
-        --error: #F44336;
-    }
-    *{box-sizing:border-box}
-    html,body{height:100%}
-    body{
-        margin:0;
-        font-family:"Poppins",sans-serif;
-        background: linear-gradient(180deg, #FFFDF8 0%, var(--cream) 100%);
-        color:#222;
-        display:flex;
-        min-height:100vh;
-        overflow-x: hidden;
-    }
+    <style>
+        /*
+            ======================================
+            Fichier CSS pour le Tableau de Bord
+            Projet MaestroDigitLab
+            ======================================
+        */
 
-    /* SIDEBAR */
-    .sidebar{
-        width:240px;
-        background: linear-gradient(180deg,var(--primary-brown), #5D4037);
-        color:var(--white);
-        padding:22px;
-        position:fixed;
-        height:100vh;
-        overflow:auto;
-        transition:width .25s;
-        z-index: 100;
-        box-shadow: 2px 0 10px rgba(0,0,0,0.1);
-    }
-    .brand{
-        display:flex;align-items:center;gap:12px;margin-bottom:18px;
-    }
-    .brand img{width:48px;height:48px;border-radius:10px;object-fit:cover}
-    .brand h2{font-size:1.1rem;margin:0;font-weight:700}
-    nav ul{list-style:none;padding:0;margin-top:6px}
-    nav a{display:flex;align-items:center;gap:12px;padding:10px;border-radius:8px;color:inherit;text-decoration:none;font-weight:500;transition: all 0.3s ease;}
-    nav a:hover{background:rgba(255,255,255,0.1); transform: translateX(5px);}
-    nav a.active{background:rgba(0,0,0,0.12);border-left:4px solid var(--primary-orange)}
-
-    /* MAIN */
-    .main{
-        margin-left:240px;
-        padding:28px;
-        flex:1;
-        transition: margin-left 0.3s ease;
-    }
-
-    .header{
-        display:flex;
-        justify-content:space-between;
-        gap:16px;
-        align-items:center;
-        margin-bottom:18px;
-    }
-    .header-left h1{font-size:1.6rem;color:var(--primary-brown);margin:0}
-    .user-info{display:flex;gap:14px;align-items:center;background:var(--glass);padding:8px 12px;border-radius:12px;box-shadow:var(--card-shadow); transition: all 0.3s ease;}
-    .user-info:hover {transform: translateY(-2px); box-shadow: 0 6px 15px rgba(0,0,0,0.1);}
-    .user-info img{width:48px;height:48px;border-radius:50%}
-    .user-info .name{font-weight:700;color:var(--accent-yellow);font-family:"Luckiest Guy", "Poppins",sans-serif}
-    .user-info p{margin:0;font-size:.9rem;color:var(--muted)}
-
-    /* LAYOUT: top area contains quick cards + order area */
-    .top-area{display:grid;grid-template-columns:360px 1fr;gap:20px;margin-bottom:22px}
-    @media(max-width:980px){.top-area{grid-template-columns:1fr}}
-
-    .card{
-        background:var(--white);
-        border-radius:14px;
-        padding:18px;
-        box-shadow:var(--card-shadow);
-        transition: all 0.3s ease;
-    }
-    .card:hover {
-        transform: translateY(-5px);
-        box-shadow: 0 12px 30px rgba(0,0,0,0.1);
-    }
-
-    .balance-card .balance-amount{font-size:1.3rem;font-weight:700;color:var(--primary-brown)}
-    .quick-order .title{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px}
-    .quick-order .info{font-size:.9rem;color:var(--muted)}
-
-    /* Order form */
-    form#orderForm{display:grid;gap:12px}
-    .field{display:flex;flex-direction:column;gap:6px}
-    label{font-size:.9rem;color:var(--primary-brown);font-weight:600}
-    select,input[type="text"],input[type="number"]{
-        padding:10px 12px;border-radius:8px;border:1px solid #E8E8E8;font-size:1rem;
-        transition:border-color .15s, box-shadow .15s;
-    }
-    select:focus,input:focus{outline:none;border-color:var(--primary-orange);box-shadow:0 6px 18px rgba(255,122,89,0.12)}
-    .inline-row{display:flex;gap:10px}
-    .inline-row .field{flex:1}
-
-    .price-box{
-        display:flex;justify-content:space-between;align-items:center;padding:10px 12px;border-radius:8px;background:linear-gradient(90deg,#fff,#fff);border:1px dashed #eee;
-        animation: pulse 2s infinite;
-    }
-    @keyframes pulse {
-        0% { box-shadow: 0 0 0 0 rgba(255,122,89,0.2); }
-        70% { box-shadow: 0 0 0 10px rgba(255,122,89,0); }
-        100% { box-shadow: 0 0 0 0 rgba(255,122,89,0); }
-    }
-    .price-box .label{color:var(--muted);font-weight:600}
-    .price-box .value{font-weight:800;color:var(--primary-brown); transition: all 0.3s ease;}
-
-    .btn-row{display:flex;gap:10px;margin-top:6px}
-    .btn{
-        flex:1;padding:11px;border-radius:10px;border:none;font-weight:700;cursor:pointer;
-        transition: all 0.3s ease;
-        position: relative;
-        overflow: hidden;
-    }
-    .btn:after {
-        content: '';
-        position: absolute;
-        top: 50%;
-        left: 50%;
-        width: 5px;
-        height: 5px;
-        background: rgba(255, 255, 255, 0.5);
-        opacity: 0;
-        border-radius: 100%;
-        transform: scale(1, 1) translate(-50%);
-        transform-origin: 50% 50%;
-    }
-    .btn:focus:not(:active)::after {
-        animation: ripple 1s ease-out;
-    }
-    @keyframes ripple {
-        0% {
-            transform: scale(0, 0);
-            opacity: 0.5;
+        /* 1. VARIABLES & GÉNERAUX */
+        :root {
+            --primary-orange: #FF7A59;
+            --primary-brown: #8B4513;
+            --cream: #FBE9E7;
+            --white: #FFFFFF;
+            --muted: #9E9E9E;
+            --card-shadow: 0 8px 30px rgba(0, 0, 0, 0.08);
+            --accent-yellow: #FFD64D;
+            --glass: rgba(255, 255, 255, 0.7);
+            --success: #4CAF50;
+            --warning: #FF9800;
+            --error: #F44336;
+            --hover-shadow: 0 12px 30px rgba(0, 0, 0, 0.1);
+            --transition-duration: 0.3s;
         }
-        100% {
-            transform: scale(30, 30);
+
+        *, *::before, *::after {
+            box-sizing: border-box;
+        }
+
+        html, body {
+            height: 100%;
+        }
+
+        body {
+            margin: 0;
+            font-family: "Poppins", sans-serif;
+            background: linear-gradient(180deg, #FFFDF8 0%, var(--cream) 100%);
+            color: #222;
+            display: flex;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        /* 2. SIDEBAR (Barre latérale) */
+        .sidebar {
+            width: 240px;
+            background: linear-gradient(180deg, var(--primary-brown), #5D4037);
+            color: var(--white);
+            padding: 22px;
+            position: fixed;
+            height: 100vh;
+            overflow: auto;
+            transition: width var(--transition-duration) ease, transform var(--transition-duration) ease;
+            z-index: 100;
+            box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 18px;
+        }
+
+        .brand img {
+            width: 48px;
+            height: 48px;
+            border-radius: 10px;
+            object-fit: cover;
+        }
+
+        .brand h2 {
+            font-size: 1.1rem;
+            margin: 0;
+            font-weight: 700;
+        }
+
+        nav ul {
+            list-style: none;
+            padding: 0;
+            margin-top: 6px;
+        }
+
+        nav a {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 10px;
+            border-radius: 8px;
+            color: inherit;
+            text-decoration: none;
+            font-weight: 500;
+            transition: all var(--transition-duration) ease;
+        }
+
+        nav a:hover {
+            background: rgba(255, 255, 255, 0.1);
+            transform: translateX(5px);
+        }
+
+        nav a.active {
+            background: rgba(0, 0, 0, 0.12);
+            border-left: 4px solid var(--primary-orange);
+        }
+
+        /* 3. MAIN (Contenu principal) */
+        .main {
+            margin-left: 240px;
+            padding: 28px;
+            flex: 1;
+            transition: margin-left var(--transition-duration) ease;
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            gap: 16px;
+            align-items: center;
+            margin-bottom: 18px;
+        }
+
+        .header-left h1 {
+            font-size: 1.6rem;
+            color: var(--primary-brown);
+            margin: 0;
+        }
+
+        .user-info {
+            display: flex;
+            gap: 14px;
+            align-items: center;
+            background: var(--glass);
+            padding: 8px 12px;
+            border-radius: 12px;
+            box-shadow: var(--card-shadow);
+            transition: all var(--transition-duration) ease;
+        }
+
+        .user-info:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .user-info img {
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+        }
+
+        .user-info .name {
+            font-weight: 700;
+            color: var(--accent-yellow);
+            font-family: "Luckiest Guy", "Poppins", sans-serif;
+        }
+
+        .user-info p {
+            margin: 0;
+            font-size: .9rem;
+            color: var(--muted);
+        }
+
+        /* 4. LAYOUTS & COMPOSANTS */
+        .top-area {
+            display: grid;
+            grid-template-columns: 360px 1fr;
+            gap: 20px;
+            margin-bottom: 22px;
+        }
+
+        .card {
+            background: var(--white);
+            border-radius: 14px;
+            padding: 18px;
+            box-shadow: var(--card-shadow);
+            transition: all var(--transition-duration) ease;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--hover-shadow);
+        }
+
+        .balance-card .balance-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+        .balance-card .balance-amount {
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: var(--primary-brown);
+        }
+
+        .quick-order .title-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 12px;
+        }
+
+        .quick-order .info {
+            font-size: .9rem;
+            color: var(--muted);
+        }
+
+        .separator-dashed {
+            border: none;
+            border-top: 1px dashed #F2F2F2;
+            margin: 12px 0;
+        }
+
+        .btn-group {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+
+        .btn-group-single {
+            display: flex;
+            margin-top: 8px;
+        }
+
+        /* 5. FORMULAIRE */
+        form#orderForm {
+            display: grid;
+            gap: 12px;
+        }
+
+        .field {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        label {
+            font-size: .9rem;
+            color: var(--primary-brown);
+            font-weight: 600;
+        }
+
+        select,
+        input[type="text"],
+        input[type="number"] {
+            padding: 10px 12px;
+            border-radius: 8px;
+            border: 1px solid #E8E8E8;
+            font-size: 1rem;
+            transition: border-color .15s, box-shadow .15s;
+        }
+
+        select:focus,
+        input:focus {
+            outline: none;
+            border-color: var(--primary-orange);
+            box-shadow: 0 6px 18px rgba(255, 122, 89, 0.12);
+        }
+
+        .inline-row {
+            display: flex;
+            gap: 10px;
+        }
+
+        .inline-row .field {
+            flex: 1;
+        }
+
+        .price-box {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 12px;
+            border-radius: 8px;
+            background: var(--white);
+            border: 1px dashed #eee;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% {
+                box-shadow: 0 0 0 0 rgba(255, 122, 89, 0.2);
+            }
+            70% {
+                box-shadow: 0 0 0 10px rgba(255, 122, 89, 0);
+            }
+            100% {
+                box-shadow: 0 0 0 0 rgba(255, 122, 89, 0);
+            }
+        }
+
+        .price-box .label {
+            color: var(--muted);
+            font-weight: 600;
+        }
+
+        .price-box .value {
+            font-weight: 800;
+            color: var(--primary-brown);
+            transition: all var(--transition-duration) ease;
+        }
+
+        .btn-row {
+            display: flex;
+            gap: 10px;
+            margin-top: 6px;
+        }
+
+        .btn {
+            flex: 1;
+            padding: 11px;
+            border-radius: 10px;
+            border: none;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all var(--transition-duration) ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn:after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 5px;
+            height: 5px;
+            background: rgba(255, 255, 255, 0.5);
             opacity: 0;
+            border-radius: 100%;
+            transform: scale(1, 1) translate(-50%);
+            transform-origin: 50% 50%;
         }
-    }
-    .btn-primary{background:linear-gradient(90deg,var(--primary-orange), #E64A19);color:#fff;box-shadow:0 8px 20px rgba(230,74,25,0.18)}
-    .btn-primary:hover{background:linear-gradient(90deg, #E64A19, var(--primary-orange)); transform: translateY(-2px); box-shadow:0 12px 25px rgba(230,74,25,0.25)}
-    .btn-secondary{background:#fff;border:1px solid #eee;color:var(--primary-brown)}
-    .btn-secondary:hover{background:#f9f9f9; transform: translateY(-2px); box-shadow:0 8px 15px rgba(0,0,0,0.1)}
 
-    /* "Voir tous les services" under the form */
-    .all-services{
-        margin-top:12px;display:block;text-decoration:none;text-align:center;padding:12px;border-radius:10px;background:transparent;border:2px dashed #f0c6b4;color:var(--primary-brown);font-weight:700;
-        transition: all 0.3s ease;
-    }
-    .all-services:hover {
-        background: rgba(240, 198, 180, 0.2);
-        transform: translateY(-2px);
-    }
+        .btn:focus:not(:active)::after {
+            animation: ripple 1s ease-out;
+        }
 
-    /* Recent orders */
-    .section-title{font-size:1.15rem;color:var(--primary-brown);margin-bottom:12px;font-weight:700}
-    table.orders{width:100%;border-collapse:collapse;background:var(--white);border-radius:10px;overflow:hidden;box-shadow:var(--card-shadow)}
-    table.orders thead th{background:#FFF3E8;padding:12px;text-align:left;color:var(--primary-brown)}
-    table.orders td, table.orders th{padding:12px;border-bottom:1px solid #F2F2F2}
-    .status{padding:6px 10px;border-radius:999px;font-weight:700;font-size:.85rem; display: inline-block;}
-    .status.completed{background:#E6F7EE;color:#0BB07B}
-    .status.processing{background:#E6F2FF;color:#2D6AE0}
-    .status.pending{background:#FFF7E6;color:#F7BF2F}
+        @keyframes ripple {
+            0% {
+                transform: scale(0, 0);
+                opacity: 0.5;
+            }
+            100% {
+                transform: scale(30, 30);
+                opacity: 0;
+            }
+        }
 
-    /* Toast notification */
-    .toast {
-        position: fixed;
-        top: 20px;
-        right: 20px;
-        padding: 15px 20px;
-        border-radius: 8px;
-        color: white;
-        z-index: 1000;
-        opacity: 0;
-        transform: translateY(-20px);
-        transition: all 0.3s ease;
-        box-shadow: 0 5px 15px rgba(0,0,0,0.2);
-    }
-    .toast.success { background-color: var(--success); }
-    .toast.error { background-color: var(--error); }
-    .toast.show {
-        opacity: 1;
-        transform: translateY(0);
-    }
+        .btn-primary {
+            background: linear-gradient(90deg, var(--primary-orange), #E64A19);
+            color: #fff;
+            box-shadow: 0 8px 20px rgba(230, 74, 25, 0.18);
+        }
 
-    /* Loading spinner */
-    .spinner {
-        display: inline-block;
-        width: 20px;
-        height: 20px;
-        border: 3px solid rgba(255,255,255,0.3);
-        border-radius: 50%;
-        border-top-color: #fff;
-        animation: spin 1s ease-in-out infinite;
-    }
-    @keyframes spin {
-        to { transform: rotate(360deg); }
-    }
+        .btn-primary:hover {
+            background: linear-gradient(90deg, #E64A19, var(--primary-orange));
+            transform: translateY(-2px);
+            box-shadow: 0 12px 25px rgba(230, 74, 25, 0.25);
+        }
 
-    /* small helpers */
-    .muted{color:var(--muted);font-size:.95rem}
-    .fade-in{animation:fadeIn .35s ease both}
-    @keyframes fadeIn{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+        .btn-secondary {
+            background: #fff;
+            border: 1px solid #eee;
+            color: var(--primary-brown);
+        }
 
-    /* responsive */
-    @media(max-width:720px){
-        .sidebar{display:none}
-        .main{margin-left:0;padding:16px}
-        .header{flex-direction:column;align-items:flex-start;gap:12px}
-        .inline-row{flex-direction:column;}
-    }
+        .btn-secondary:hover {
+            background: #f9f9f9;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 15px rgba(0, 0, 0, 0.1);
+        }
 
-    /* Menu toggle for mobile */
-    .menu-toggle {
-        display: none;
-        position: fixed;
-        top: 15px;
-        left: 15px;
-        z-index: 101;
-        background: var(--primary-brown);
-        color: white;
-        border: none;
-        border-radius: 50%;
-        width: 40px;
-        height: 40px;
-        box-shadow: 0 2px 10px rgba(0,0,0,0.2);
-        cursor: pointer;
-    }
-    @media(max-width:720px){
-        .menu-toggle { display: block; }
-        .sidebar.show { display: block; width: 80%; }
-    }
+        .all-services {
+            margin-top: 12px;
+            display: block;
+            text-decoration: none;
+            text-align: center;
+            padding: 12px;
+            border-radius: 10px;
+            background: transparent;
+            border: 2px dashed #f0c6b4;
+            color: var(--primary-brown);
+            font-weight: 700;
+            transition: all var(--transition-duration) ease;
+        }
 
-</style>
+        .all-services:hover {
+            background: rgba(240, 198, 180, 0.2);
+            transform: translateY(-2px);
+        }
+
+        /* 6. TABLEAU & ÉTATS */
+        .section-title {
+            font-size: 1.15rem;
+            color: var(--primary-brown);
+            margin-bottom: 12px;
+            font-weight: 700;
+        }
+
+        .table-container {
+            overflow-x: auto;
+        }
+
+        table.orders {
+            width: 100%;
+            border-collapse: collapse;
+            background: var(--white);
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: var(--card-shadow);
+            white-space: nowrap;
+        }
+
+        table.orders thead th {
+            background: #FFF3E8;
+            padding: 12px;
+            text-align: left;
+            color: var(--primary-brown);
+        }
+
+        table.orders td,
+        table.orders th {
+            padding: 12px;
+            border-bottom: 1px solid #F2F2F2;
+            vertical-align: top;
+        }
+
+        .link-cell {
+            max-width: 200px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .status {
+            padding: 6px 10px;
+            border-radius: 999px;
+            font-weight: 700;
+            font-size: .85rem;
+            display: inline-block;
+        }
+
+        .status.completed {
+            background: #E6F7EE;
+            color: #0BB07B;
+        }
+
+        .status.processing {
+            background: #E6F2FF;
+            color: #2D6AE0;
+        }
+
+        .status.pending {
+            background: #FFF7E6;
+            color: #F7BF2F;
+        }
+
+        /* 7. Notifications & Animations */
+        .toast {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            padding: 15px 20px;
+            border-radius: 8px;
+            color: white;
+            z-index: 1000;
+            opacity: 0;
+            transform: translateY(-20px);
+            transition: all var(--transition-duration) ease;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .toast.success {
+            background-color: var(--success);
+        }
+
+        .toast.error {
+            background-color: var(--error);
+        }
+
+        .toast.show {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .spinner {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            border-top-color: #fff;
+            animation: spin 1s ease-in-out infinite;
+        }
+
+        @keyframes spin {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        .muted {
+            color: var(--muted);
+            font-size: .95rem;
+        }
+
+        .fade-in {
+            animation: fadeIn .35s ease both;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(6px);
+            }
+            to {
+                opacity: 1;
+                transform: none;
+            }
+        }
+
+        /* 8. RESPONSIVITÉ */
+        .menu-toggle {
+            display: none;
+            position: fixed;
+            top: 15px;
+            left: 15px;
+            z-index: 101;
+            background: var(--primary-brown);
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+            cursor: pointer;
+        }
+
+        @media(max-width: 980px) {
+            .top-area {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media(max-width: 720px) {
+            .sidebar {
+                display: none;
+                transform: translateX(-100%);
+            }
+
+            .sidebar.show {
+                display: block;
+                width: 80%;
+                transform: translateX(0);
+            }
+
+            .main {
+                margin-left: 0;
+                padding: 16px;
+            }
+
+            .header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 12px;
+            }
+
+            .inline-row {
+                flex-direction: column;
+            }
+
+            .menu-toggle {
+                display: block;
+            }
+        }
+    </style>
 </head>
 <body>
 
-<!-- Menu toggle for mobile -->
 <button class="menu-toggle" id="menuToggle">
     <i class="fas fa-bars"></i>
 </button>
 
-<!-- SIDEBAR -->
 <aside class="sidebar" id="sidebar">
     <div class="brand">
         <img src="https://ui-avatars.com/api/?name=MaestroDigitLab&background=FF7A59&color=fff" alt="logo">
         <div>
             <h2>MaestroDigitLab</h2>
-            <div style="font-size:.82rem;opacity:.9">boost & marketing</div>
+            <div class="muted">boost & marketing</div>
         </div>
     </div>
 
     <nav>
-        <ul>
+        <ul class="nav-menu">
             <li><a href="#" class="active"><i class="fas fa-home"></i>&nbsp;<span>Tableau de bord</span></a></li>
             <li><a href="commandes.html"><i class="fas fa-shopping-cart"></i>&nbsp;<span>Commandes</span></a></li>
             <li><a href="services.html"><i class="fas fa-concierge-bell"></i>&nbsp;<span>Services</span></a></li>
@@ -281,7 +613,6 @@
     </nav>
 </aside>
 
-<!-- MAIN -->
 <main class="main">
     <header class="header">
         <div class="header-left">
@@ -293,44 +624,40 @@
             <img src="https://ui-avatars.com/api/?name=John+Doe&background=8B4513&color=fff" alt="utilisateur">
             <div>
                 <div class="name">John Doe</div>
-                <p id="balanceText">Solde: <strong id="balanceValue">25 000 FCFA</strong></p>
+                <p id="balanceText">Solde: <strong id="balanceValue"></strong></p>
             </div>
         </div>
     </header>
 
-    <!-- TOP AREA: balance / quick order -->
     <section class="top-area">
-        <!-- Balance & quick actions -->
         <div class="card balance-card fade-in">
-            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px">
+            <div class="balance-header">
                 <div>
-                    <div style="font-size:.9rem;color:var(--muted)">Solde disponible</div>
-                    <div class="balance-amount" id="balanceAmount">25 000 FCFA</div>
+                    <div class="muted">Solde disponible</div>
+                    <div class="balance-amount" id="balanceAmount"></div>
                 </div>
-                <div style="text-align:right">
+                <div class="balance-meta">
                     <div class="muted">Compte: <strong>Pro</strong></div>
-                    <div style="margin-top:8px"><button class="btn btn-secondary" id="btnDeposer">Déposer</button></div>
+                    <div class="btn-group-single"><button class="btn btn-secondary" id="btnDeposer">Déposer</button></div>
                 </div>
             </div>
-            <hr style="border:none;border-top:1px dashed #F2F2F2;margin:12px 0">
-            <div style="display:flex;gap:8px;flex-wrap:wrap">
+            <hr class="separator-dashed">
+            <div class="btn-group">
                 <button class="btn btn-primary" id="quickOrderBtn"><i class="fas fa-magic"></i> Commander maintenant</button>
                 <a href="services.html" class="btn btn-secondary" style="text-decoration:none;display:inline-flex;align-items:center;justify-content:center"><i class="fas fa-list"></i>&nbsp; Tous les services</a>
             </div>
         </div>
 
-        <!-- Order form -->
         <div class="card quick-order fade-in" id="orderCard">
-            <div class="title">
+            <div class="title-container">
                 <div>
                     <strong>Formulaire de commande</strong>
-                    <div class="muted" style="font-size:.9rem">Plateforme → Service → Quantité → Qualité</div>
+                    <div class="muted">Plateforme → Service → Quantité → Qualité</div>
                 </div>
                 <div class="info">Prix estimé en temps réel</div>
             </div>
 
             <form id="orderForm" autocomplete="off">
-                <!-- Platform -->
                 <div class="field">
                     <label for="platform">Plateforme</label>
                     <select id="platform" required>
@@ -342,12 +669,10 @@
                     </select>
                 </div>
 
-                <!-- Service -->
                 <div class="field">
                     <label for="service">Service</label>
                     <select id="service" required>
-                        <!-- rempli par JS -->
-                    </select>
+                        </select>
                 </div>
 
                 <div class="inline-row">
@@ -379,7 +704,7 @@
                 <div class="btn-row">
                     <button type="submit" class="btn btn-primary" id="submitBtn">
                         <span id="submitText">Passer la commande</span>
-                        <span id="submitSpinner" class="spinner" style="display:none"></span>
+                        <span id="submitSpinner" class="spinner"></span>
                     </button>
                     <button type="button" id="resetForm" class="btn btn-secondary">Réinitialiser</button>
                 </div>
@@ -389,461 +714,497 @@
         </div>
     </section>
 
-    <!-- RECENT ORDERS -->
     <section class="card fade-in">
         <div class="section-title">Commandes Récentes</div>
 
-        <table class="orders" id="ordersTable">
-            <thead>
-                <tr>
-                    <th>ID</th>
-                    <th>Service</th>
-                    <th>Lien</th>
-                    <th>Quantité</th>
-                    <th>Qualité</th>
-                    <th>Prix</th>
-                    <th>Statut</th>
-                    <th>Date</th>
-                </tr>
-            </thead>
-            <tbody>
-                <!-- Rempli par JS (localStorage) -->
-            </tbody>
-        </table>
+        <div class="table-container">
+            <table class="orders" id="ordersTable">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Service</th>
+                        <th>Lien</th>
+                        <th>Quantité</th>
+                        <th>Qualité</th>
+                        <th>Prix</th>
+                        <th>Statut</th>
+                        <th>Date</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    </tbody>
+            </table>
+        </div>
     </section>
 </main>
 
-<!-- Toast notification -->
 <div class="toast" id="toast"></div>
 
 <script>
-/* ====== Données de tarification avec paliers ====== */
-const pricing = {
-    facebook: {
-        "Followers": [
-            { quantity: 1000, price: 2100 },
-            { quantity: 5000, price: 9500 },
-            { quantity: 10000, price: 19200 }
-        ],
-        "Likes publication et vues de vidéos ou réel": [
-            { quantity: 1000, price: 1500 },
-            { quantity: 5000, price: 6500 },
-            { quantity: 10000, price: 11500 }
-        ],
-        "J’aime pour votre page": [
-            { quantity: 1000, price: 2800 },
-            { quantity: 5000, price: 7000 },
-            { quantity: 10000, price: 11000 }
-        ],
-        "Commentaires": [
-            { quantity: 10, price: 850 }
-        ],
-        "Partage pour votre publication ou Avis pour votre page": [
-            { quantity: 1000, price: 800 },
-            { quantity: 5000, price: 4000 },
-            { quantity: 10000, price: 9000 }
-        ],
-        "Membres pour votre groupe": [
-            { quantity: 1000, price: 2000 },
-            { quantity: 5000, price: 9000 }
-        ]
-    },
-    tiktok: {
-        "Abonnees": [
-            { quantity: 1000, price: 2500 },
-            { quantity: 2000, price: 5000 },
-            { quantity: 5000, price: 9500 },
-            { quantity: 10000, price: 19500 }
-        ],
-        "Likes vidéo": [
-            { quantity: 1000, price: 1000 },
-            { quantity: 5000, price: 4500 },
-            { quantity: 10000, price: 8000 }
-        ],
-        "Vues de vidéos": [
-            { quantity: 1000, price: 800 },
-            { quantity: 5000, price: 3500 },
-            { quantity: 10000, price: 5000 }
-        ],
-        "Sauvegarde et partage de vidéos & j’aime pour votre direct": [
-            { quantity: 1000, price: 500 },
-            { quantity: 5000, price: 2000 },
-            { quantity: 10000, price: 3500 }
-        ],
-        "Commentaires personnalisés": [
-            { quantity: 10, price: 500 },
-            { quantity: 1000, price: 5000 }
-        ]
-    },
-    instagram: {
-        "Abonnees": [
-            { quantity: 1000, price: 2500 },
-            { quantity: 2000, price: 5000 },
-            { quantity: 5000, price: 9500 },
-            { quantity: 10000, price: 19500 }
-        ],
-        "Likes vidéo": [
-            { quantity: 1000, price: 1000 },
-            { quantity: 5000, price: 4500 },
-            { quantity: 10000, price: 8000 }
-        ],
-        "Vues de vidéos": [
-            { quantity: 1000, price: 500 },
-            { quantity: 5000, price: 2000 },
-            { quantity: 10000, price: 3000 }
-        ],
-        "Commentaires personnalisés": [
-            { quantity: 10, price: 300 },
-            { quantity: 1000, price: 3000 }
-        ],
-        "Vues de story": [
-            { quantity: 1000, price: 500 },
-            { quantity: 5000, price: 2000 },
-            { quantity: 10000, price: 4000 }
-        ]
-    },
-    youtube: {
-        "Abonnees": [
-            { quantity: 1000, price: 5000 },
-            { quantity: 2000, price: 9500 },
-            { quantity: 5000, price: 24500 },
-            { quantity: 10000, price: 50000 }
-        ],
-        "Vues et j’aime la vidéo": [
-            { quantity: 1000, price: 1500 },
-            { quantity: 2000, price: 3000 },
-            { quantity: 5000, price: 7000 },
-            { quantity: 10000, price: 13500 }
-        ]
-    },
-    autre: {
-        "Service personnalisé": [
-            { quantity: 100, price: 1000 }
-        ]
-    }
-};
+    /*
+        ======================================
+        Fichier JavaScript pour le Tableau de Bord
+        Projet MaestroDigitLab
+        ======================================
+    */
 
-const serviceMap = {
-    facebook: Object.keys(pricing.facebook),
-    tiktok: Object.keys(pricing.tiktok),
-    instagram: Object.keys(pricing.instagram),
-    youtube: Object.keys(pricing.youtube),
-    autre: Object.keys(pricing.autre)
-};
+    // =========================================================
+    // 1. CONFIGURATION (Données de l'application)
+    // =========================================================
 
-const formatFCFA = (n) => {
-    if (isNaN(n)) return "-- FCFA";
-    return new Intl.NumberFormat('fr-FR').format(Math.round(n)) + " FCFA";
-}
-
-// Elements
-const platformEl = document.getElementById('platform');
-const serviceEl = document.getElementById('service');
-const quantityEl = document.getElementById('quantity');
-const qualityEl = document.getElementById('quality');
-const linkEl = document.getElementById('link');
-const priceEl = document.getElementById('priceEstimate');
-const orderForm = document.getElementById('orderForm');
-const ordersTableBody = document.querySelector('#ordersTable tbody');
-const balanceAmountEl = document.getElementById('balanceAmount');
-const quantityHelp = document.getElementById('quantityHelp');
-const toastEl = document.getElementById('toast');
-const submitBtn = document.getElementById('submitBtn');
-const submitText = document.getElementById('submitText');
-const submitSpinner = document.getElementById('submitSpinner');
-const menuToggle = document.getElementById('menuToggle');
-const sidebar = document.getElementById('sidebar');
-
-let balance = 25000; // valeur initiale
-balanceAmountEl.textContent = formatFCFA(balance);
-
-// Afficher les paliers disponibles pour le service sélectionné
-function updateQuantityHelp() {
-    const platform = platformEl.value;
-    const service = serviceEl.value;
-    
-    if (pricing[platform] && pricing[platform][service]) {
-        const tiers = pricing[platform][service];
-        const tierQuantities = tiers.map(tier => tier.quantity.toLocaleString('fr-FR'));
-        quantityHelp.textContent = `Quantités disponibles: ${tierQuantities.join(', ')}`;
-    } else {
-        quantityHelp.textContent = 'Saisissez la quantité désirée';
-    }
-}
-
-// Populate services depending on platform
-function populateServices(platform){
-    serviceEl.innerHTML = '';
-    serviceMap[platform].forEach(s => {
-        const opt = document.createElement('option');
-        opt.value = s;
-        opt.textContent = s;
-        serviceEl.appendChild(opt);
-    });
-    updateQuantityHelp();
-    updatePrice();
-}
-
-// Trouver le prix pour une quantité donnée selon les paliers
-function findPriceForQuantity(platform, service, quantity) {
-    if (!pricing[platform] || !pricing[platform][service]) return 0;
-    
-    const tiers = pricing[platform][service];
-    
-    // Si la quantité demandée correspond exactement à un palier
-    const exactMatch = tiers.find(tier => tier.quantity === quantity);
-    if (exactMatch) return exactMatch.price;
-    
-    // Si la quantité est inférieure au plus petit palier
-    const minTier = tiers.reduce((min, tier) => tier.quantity < min.quantity ? tier : min, tiers[0]);
-    if (quantity < minTier.quantity) {
-        return (minTier.price / minTier.quantity) * quantity;
-    }
-    
-    // Si la quantité est supérieure au plus grand palier
-    const maxTier = tiers.reduce((max, tier) => tier.quantity > max.quantity ? tier : max, tiers[0]);
-    if (quantity > maxTier.quantity) {
-        return (maxTier.price / maxTier.quantity) * quantity;
-    }
-    
-    // Trouver les paliers inférieur et supérieur pour interpolation
-    let lowerTier = null;
-    let upperTier = null;
-    
-    for (let i = 0; i < tiers.length - 1; i++) {
-        if (quantity >= tiers[i].quantity && quantity <= tiers[i+1].quantity) {
-            lowerTier = tiers[i];
-            upperTier = tiers[i+1];
-            break;
+    /**
+     * Données de tarification des services avec des paliers.
+     */
+    const pricing = {
+        facebook: {
+            "Followers": [{ quantity: 1000, price: 2100 }, { quantity: 5000, price: 9500 }, { quantity: 10000, price: 19200 }],
+            "Likes publication et vues de vidéos ou réel": [{ quantity: 1000, price: 1500 }, { quantity: 5000, price: 6500 }, { quantity: 10000, price: 11500 }],
+            "J’aime pour votre page": [{ quantity: 1000, price: 2800 }, { quantity: 5000, price: 7000 }, { quantity: 10000, price: 11000 }],
+            "Commentaires": [{ quantity: 10, price: 850 }],
+            "Partage pour votre publication ou Avis pour votre page": [{ quantity: 1000, price: 800 }, { quantity: 5000, price: 4000 }, { quantity: 10000, price: 9000 }],
+            "Membres pour votre groupe": [{ quantity: 1000, price: 2000 }, { quantity: 5000, price: 9000 }]
+        },
+        tiktok: {
+            "Abonnees": [{ quantity: 1000, price: 2500 }, { quantity: 2000, price: 5000 }, { quantity: 5000, price: 9500 }, { quantity: 10000, price: 19500 }],
+            "Likes vidéo": [{ quantity: 1000, price: 1000 }, { quantity: 5000, price: 4500 }, { quantity: 10000, price: 8000 }],
+            "Vues de vidéos": [{ quantity: 1000, price: 800 }, { quantity: 5000, price: 3500 }, { quantity: 10000, price: 5000 }],
+            "Sauvegarde et partage de vidéos & j’aime pour votre direct": [{ quantity: 1000, price: 500 }, { quantity: 5000, price: 2000 }, { quantity: 10000, price: 3500 }],
+            "Commentaires personnalisés": [{ quantity: 10, price: 500 }, { quantity: 1000, price: 5000 }]
+        },
+        instagram: {
+            "Abonnees": [{ quantity: 1000, price: 2500 }, { quantity: 2000, price: 5000 }, { quantity: 5000, price: 9500 }, { quantity: 10000, price: 19500 }],
+            "Likes vidéo": [{ quantity: 1000, price: 1000 }, { quantity: 5000, price: 4500 }, { quantity: 10000, price: 8000 }],
+            "Vues de vidéos": [{ quantity: 1000, price: 500 }, { quantity: 5000, price: 2000 }, { quantity: 10000, price: 3000 }],
+            "Commentaires personnalisés": [{ quantity: 10, price: 300 }, { quantity: 1000, price: 3000 }],
+            "Vues de story": [{ quantity: 1000, price: 500 }, { quantity: 5000, price: 2000 }, { quantity: 10000, price: 4000 }]
+        },
+        youtube: {
+            "Abonnees": [{ quantity: 1000, price: 5000 }, { quantity: 2000, price: 9500 }, { quantity: 5000, price: 24500 }, { quantity: 10000, price: 50000 }],
+            "Vues et j’aime la vidéo": [{ quantity: 1000, price: 1500 }, { quantity: 2000, price: 3000 }, { quantity: 5000, price: 7000 }, { quantity: 10000, price: 13500 }]
+        },
+        autre: {
+            "Service personnalisé": [{ quantity: 100, price: 1000 }]
         }
-    }
-    
-    if (!lowerTier || !upperTier) return 0;
-    
-    // Interpolation linéaire entre les deux paliers
-    const pricePerUnitLower = lowerTier.price / lowerTier.quantity;
-    const pricePerUnitUpper = upperTier.price / upperTier.quantity;
-    
-    // Utiliser une interpolation pondérée
-    const ratio = (quantity - lowerTier.quantity) / (upperTier.quantity - lowerTier.quantity);
-    const interpolatedPricePerUnit = pricePerUnitLower + (pricePerUnitUpper - pricePerUnitLower) * ratio;
-    
-    return interpolatedPricePerUnit * quantity;
-}
-
-// Price calculation
-function calculatePrice(){
-    const platform = platformEl.value;
-    const service = serviceEl.value;
-    const qty = Number(quantityEl.value) || 0;
-    const quality = qualityEl.value;
-
-    if (!platform || !service || qty <= 0) return 0;
-
-    const basePrice = findPriceForQuantity(platform, service, qty);
-    const qualMultiplier = (quality === 'high') ? 2 : 1;
-    const price = basePrice * qualMultiplier;
-    
-    return price;
-}
-
-function updatePrice(){
-    const price = calculatePrice();
-    priceEl.textContent = formatFCFA(price);
-    
-    // Animation du changement de prix
-    priceEl.style.transform = 'scale(1.1)';
-    setTimeout(() => {
-        priceEl.style.transform = 'scale(1)';
-    }, 300);
-}
-
-// Afficher une notification toast
-function showToast(message, type = 'success') {
-    toastEl.textContent = message;
-    toastEl.className = `toast ${type} show`;
-    
-    setTimeout(() => {
-        toastEl.classList.remove('show');
-    }, 3000);
-}
-
-// LocalStorage orders handling
-function loadOrders(){
-    const raw = localStorage.getItem('mdl_orders_v1');
-    if (!raw) return [];
-    try { return JSON.parse(raw) } catch(e) { return [] }
-}
-function saveOrders(list){
-    localStorage.setItem('mdl_orders_v1', JSON.stringify(list));
-}
-function addOrder(order){
-    const list = loadOrders();
-    list.unshift(order); // add at top
-    saveOrders(list);
-    renderOrders();
-}
-
-function renderOrders(){
-    const orders = loadOrders();
-    ordersTableBody.innerHTML = '';
-    if (orders.length === 0){
-        const tr = document.createElement('tr');
-        tr.innerHTML = '<td colspan="8" style="text-align:center;color:#888;padding:20px">Aucune commande enregistrée — passe ta première commande !</td>';
-        ordersTableBody.appendChild(tr);
-        return;
-    }
-
-    orders.forEach(o => {
-        const tr = document.createElement('tr');
-        tr.innerHTML = `
-            <td>${o.id}</td>
-            <td>${o.platform} • ${o.service}</td>
-            <td style="max-width:200px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${o.link}</td>
-            <td>${o.quantity.toLocaleString('fr-FR')}</td>
-            <td>${o.qualityLabel}</td>
-            <td>${formatFCFA(o.price)}</td>
-            <td><span class="status ${o.statusClass}">${o.statusLabel}</span></td>
-            <td>${o.date}</td>
-        `;
-        ordersTableBody.appendChild(tr);
-    });
-}
-
-// Helpers
-function uid(prefix='MDL'){
-    return prefix + Math.floor(Math.random()*900000 + 100000);
-}
-function todayStr(){
-    const now = new Date();
-    return now.toLocaleString('fr-FR', {year:'numeric',month:'2-digit',day:'2-digit',hour:'2-digit',minute:'2-digit'});
-}
-
-// EVENTS
-platformEl.addEventListener('change', () => {
-    populateServices(platformEl.value);
-    updateQuantityHelp();
-});
-serviceEl.addEventListener('change', () => {
-    updatePrice();
-    updateQuantityHelp();
-});
-quantityEl.addEventListener('input', updatePrice);
-qualityEl.addEventListener('change', updatePrice);
-
-// quick order button scrolls to form and focuses link
-document.getElementById('quickOrderBtn').addEventListener('click', () => {
-    document.getElementById('link').focus();
-    window.scrollTo({top: document.getElementById('orderCard').offsetTop - 20, behavior:'smooth'});
-});
-
-// reset form
-document.getElementById('resetForm').addEventListener('click', () => {
-    populateServices(platformEl.value);
-    quantityEl.value = 1000;
-    qualityEl.value = 'standard';
-    linkEl.value = '';
-    updatePrice();
-});
-
-// submit order
-orderForm.addEventListener('submit', async function(e){
-    e.preventDefault();
-
-    const platform = platformEl.value;
-    const service = serviceEl.value;
-    const quantity = Number(quantityEl.value);
-    const quality = qualityEl.value;
-    const link = linkEl.value.trim();
-
-    if (!link){
-        showToast('Veuillez entrer un lien / identifiant valide.', 'error');
-        linkEl.focus();
-        return;
-    }
-    if (!quantity || quantity < 1){
-        showToast('Veuillez entrer une quantité valide (> 0).', 'error');
-        quantityEl.focus();
-        return;
-    }
-
-    const price = calculatePrice();
-
-    // Afficher l'indicateur de chargement
-    submitText.style.display = 'none';
-    submitSpinner.style.display = 'inline-block';
-    submitBtn.disabled = true;
-
-    // Simuler un délai de traitement
-    await new Promise(resolve => setTimeout(resolve, 1000));
-
-    // Simple balance check (optionnel)
-    if (price > balance){
-        if(!confirm('Le prix est ' + formatFCFA(price) + ' mais ton solde est ' + formatFCFA(balance) + '. Continuer et créer la commande (paiement différé) ?')) {
-            submitText.style.display = 'inline-block';
-            submitSpinner.style.display = 'none';
-            submitBtn.disabled = false;
-            return;
-        }
-    } else {
-        // débiter le solde local (si tu veux gérer via Firestore, remplace ici)
-        balance = Math.max(0, balance - price);
-        balanceAmountEl.textContent = formatFCFA(balance);
-    }
-
-    const order = {
-        id: uid('#MDL'),
-        platform: platform.charAt(0).toUpperCase() + platform.slice(1),
-        service,
-        link,
-        quantity,
-        qualityLabel: (quality === 'high') ? 'Haute' : 'Standard',
-        price,
-        statusLabel: 'En cours',
-        statusClass: 'processing',
-        date: todayStr()
     };
 
-    addOrder(order);
+    /**
+     * Mappage des plateformes aux services disponibles.
+     */
+    const serviceMap = Object.keys(pricing).reduce((acc, platform) => {
+        acc[platform] = Object.keys(pricing[platform]);
+        return acc;
+    }, {});
 
-    // reset some fields
-    linkEl.value = '';
-    quantityEl.value = 1000;
-    qualityEl.value = 'standard';
-    updatePrice();
+    // =========================================================
+    // 2. ÉTAT DE L'APPLICATION (Données dynamiques)
+    // =========================================================
+    const state = {
+        balance: 25000,
+        orders: [],
+    };
 
-    // feedback utilisateur
-    showToast(`Commande créée : ${order.id} — Prix: ${formatFCFA(order.price)}`);
+    /**
+     * Met à jour l'état de l'application et déclenche un re-rendu de l'UI si nécessaire.
+     * @param {object} newState - Le nouvel état ou partie de l'état à fusionner.
+     */
+    const setState = (newState) => {
+        Object.assign(state, newState);
+        renderUI();
+    };
 
-    // Réactiver le bouton
-    submitText.style.display = 'inline-block';
-    submitSpinner.style.display = 'none';
-    submitBtn.disabled = false;
-});
+    // =========================================================
+    // 3. ÉLÉMENTS DU DOM (Sélection une seule fois)
+    // =========================================================
+    const dom = {
+        platform: document.getElementById('platform'),
+        service: document.getElementById('service'),
+        quantity: document.getElementById('quantity'),
+        quality: document.getElementById('quality'),
+        link: document.getElementById('link'),
+        priceEstimate: document.getElementById('priceEstimate'),
+        orderForm: document.getElementById('orderForm'),
+        ordersTableBody: document.querySelector('#ordersTable tbody'),
+        balanceAmount: document.getElementById('balanceAmount'),
+        quantityHelp: document.getElementById('quantityHelp'),
+        toast: document.getElementById('toast'),
+        submitBtn: document.getElementById('submitBtn'),
+        submitText: document.getElementById('submitText'),
+        submitSpinner: document.getElementById('submitSpinner'),
+        menuToggle: document.getElementById('menuToggle'),
+        sidebar: document.getElementById('sidebar'),
+        quickOrderBtn: document.getElementById('quickOrderBtn'),
+        resetFormBtn: document.getElementById('resetForm'),
+    };
 
-// Toggle sidebar on mobile
-menuToggle.addEventListener('click', () => {
-    sidebar.classList.toggle('show');
-});
+    // =========================================================
+    // 4. FONCTIONS UTILITAIRES
+    // =========================================================
 
-// Close sidebar when clicking outside on mobile
-document.addEventListener('click', (e) => {
-    if (window.innerWidth <= 720 && 
-        !sidebar.contains(e.target) && 
-        !menuToggle.contains(e.target) && 
-        sidebar.classList.contains('show')) {
-        sidebar.classList.remove('show');
-    }
-});
+    /**
+     * Formate un nombre en FCFA.
+     * @param {number} n - Le nombre à formater.
+     * @returns {string} Le nombre formaté en FCFA.
+     */
+    const formatFCFA = (n) => {
+        if (isNaN(n)) return "-- FCFA";
+        return new Intl.NumberFormat('fr-FR').format(Math.round(n)) + " FCFA";
+    };
 
-// INITIALIZE
-platformEl.value = 'instagram'; // Set default platform
-populateServices(platformEl.value);
-updatePrice();
-renderOrders();
+    /**
+     * Génère un identifiant unique pour une commande.
+     * @param {string} prefix - Le préfixe de l'identifiant.
+     * @returns {string} L'identifiant généré.
+     */
+    const uid = (prefix = 'MDL') => {
+        return prefix + Math.floor(Math.random() * 900000 + 100000);
+    };
 
-/* Console friendly message */
-console.log('Dashboard initialisé — formulaire de commande centralisé prêt.');
+    /**
+     * Retourne la date et l'heure actuelles formatées.
+     * @returns {string} La date et l'heure formatées.
+     */
+    const todayStr = () => {
+        const now = new Date();
+        return now.toLocaleString('fr-FR', { year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit' });
+    };
+
+    /**
+     * Affiche une notification toast à l'utilisateur.
+     * @param {string} message - Le message à afficher.
+     * @param {string} type - Le type de notification ('success' ou 'error').
+     */
+    const showToast = (message, type = 'success') => {
+        dom.toast.textContent = message;
+        dom.toast.className = `toast ${type} show`;
+        setTimeout(() => {
+            dom.toast.classList.remove('show');
+        }, 3000);
+    };
+
+    // =========================================================
+    // 5. LOGIQUE MÉTIER & CALCULS
+    // =========================================================
+
+    /**
+     * Trouve le prix pour une quantité donnée en utilisant les paliers.
+     * Effectue une interpolation linéaire si la quantité ne correspond pas à un palier exact.
+     * @param {string} platform - La plateforme sélectionnée.
+     * @param {string} service - Le service sélectionné.
+     * @param {number} quantity - La quantité demandée.
+     * @returns {number} Le prix calculé.
+     */
+    const findPriceForQuantity = (platform, service, quantity) => {
+        if (!pricing[platform] || !pricing[platform][service]) return 0;
+
+        const tiers = pricing[platform][service].sort((a, b) => a.quantity - b.quantity);
+        const minTier = tiers[0];
+        const maxTier = tiers[tiers.length - 1];
+
+        if (quantity <= minTier.quantity) {
+            return (minTier.price / minTier.quantity) * quantity;
+        }
+
+        if (quantity >= maxTier.quantity) {
+            return (maxTier.price / maxTier.quantity) * quantity;
+        }
+
+        for (let i = 0; i < tiers.length - 1; i++) {
+            const lowerTier = tiers[i];
+            const upperTier = tiers[i + 1];
+            if (quantity >= lowerTier.quantity && quantity <= upperTier.quantity) {
+                const pricePerUnitLower = lowerTier.price / lowerTier.quantity;
+                const pricePerUnitUpper = upperTier.price / upperTier.quantity;
+                const ratio = (quantity - lowerTier.quantity) / (upperTier.quantity - lowerTier.quantity);
+                const interpolatedPricePerUnit = pricePerUnitLower + (pricePerUnitUpper - pricePerUnitLower) * ratio;
+                return interpolatedPricePerUnit * quantity;
+            }
+        }
+        return 0;
+    };
+
+    /**
+     * Calcule le prix total de la commande en fonction des valeurs du formulaire.
+     * @returns {number} Le prix total de la commande.
+     */
+    const calculatePrice = () => {
+        const platform = dom.platform.value;
+        const service = dom.service.value;
+        const quantity = Number(dom.quantity.value) || 0;
+        const quality = dom.quality.value;
+
+        if (!platform || !service || quantity <= 0) return 0;
+
+        const basePrice = findPriceForQuantity(platform, service, quantity);
+        const qualityMultiplier = (quality === 'high') ? 2 : 1;
+        return basePrice * qualityMultiplier;
+    };
+
+    // =========================================================
+    // 6. GESTION DU RENDU DE L'INTERFACE UTILISATEUR (UI)
+    // =========================================================
+
+    /**
+     * Met à jour le solde affiché.
+     */
+    const renderBalance = () => {
+        dom.balanceAmount.textContent = formatFCFA(state.balance);
+        document.getElementById('balanceValue').textContent = formatFCFA(state.balance);
+    };
+
+    /**
+     * Met à jour le menu déroulant des services en fonction de la plateforme.
+     * @param {string} platform - La plateforme sélectionnée.
+     */
+    const populateServices = (platform) => {
+        dom.service.innerHTML = '';
+        const services = serviceMap[platform] || [];
+        services.forEach(s => {
+            const opt = document.createElement('option');
+            opt.value = s;
+            opt.textContent = s;
+            dom.service.appendChild(opt);
+        });
+    };
+
+    /**
+     * Met à jour le prix affiché dans le formulaire.
+     */
+    const updatePriceUI = () => {
+        const price = calculatePrice();
+        dom.priceEstimate.textContent = formatFCFA(price);
+        dom.priceEstimate.style.transform = 'scale(1.1)';
+        setTimeout(() => {
+            dom.priceEstimate.style.transform = 'scale(1)';
+        }, 300);
+    };
+
+    /**
+     * Affiche les paliers de quantité disponibles pour le service sélectionné.
+     */
+    const updateQuantityHelp = () => {
+        const platform = dom.platform.value;
+        const service = dom.service.value;
+        const tiers = pricing[platform]?.[service];
+        if (tiers) {
+            const tierQuantities = tiers.map(tier => tier.quantity.toLocaleString('fr-FR'));
+            dom.quantityHelp.textContent = `Quantités disponibles: ${tierQuantities.join(', ')}`;
+        } else {
+            dom.quantityHelp.textContent = 'Saisissez la quantité désirée';
+        }
+    };
+
+    /**
+     * Rend le tableau des commandes à partir de l'état global.
+     */
+    const renderOrdersTable = () => {
+        dom.ordersTableBody.innerHTML = '';
+        if (state.orders.length === 0) {
+            const tr = document.createElement('tr');
+            tr.innerHTML = '<td colspan="8" style="text-align:center;color:#888;padding:20px">Aucune commande enregistrée — passe ta première commande !</td>';
+            dom.ordersTableBody.appendChild(tr);
+            return;
+        }
+
+        state.orders.forEach(o => {
+            const tr = document.createElement('tr');
+            tr.innerHTML = `
+                <td>${o.id}</td>
+                <td>${o.platform} • ${o.service}</td>
+                <td class="link-cell">${o.link}</td>
+                <td>${o.quantity.toLocaleString('fr-FR')}</td>
+                <td>${o.qualityLabel}</td>
+                <td>${formatFCFA(o.price)}</td>
+                <td><span class="status ${o.statusClass}">${o.statusLabel}</span></td>
+                <td>${o.date}</td>
+            `;
+            dom.ordersTableBody.appendChild(tr);
+        });
+    };
+
+    /**
+     * Fonction de rendu principal qui met à jour l'intégralité de l'UI.
+     */
+    const renderUI = () => {
+        renderBalance();
+        renderOrdersTable();
+        updatePriceUI();
+    };
+
+    // =========================================================
+    // 7. GESTION DES COMMANDES & DU LOCAL STORAGE
+    // =========================================================
+
+    /**
+     * Charge les commandes depuis le localStorage.
+     * @returns {Array} La liste des commandes ou un tableau vide.
+     */
+    const loadOrders = () => {
+        const raw = localStorage.getItem('mdl_orders_v1');
+        if (!raw) return [];
+        try {
+            return JSON.parse(raw);
+        } catch (e) {
+            console.error("Erreur lors de la lecture des commandes depuis le localStorage :", e);
+            return [];
+        }
+    };
+
+    /**
+     * Sauvegarde les commandes dans le localStorage.
+     * @param {Array} list - La liste des commandes à sauvegarder.
+     */
+    const saveOrders = (list) => {
+        localStorage.setItem('mdl_orders_v1', JSON.stringify(list));
+    };
+
+    /**
+     * Ajoute une nouvelle commande à la liste et met à jour le localStorage.
+     * @param {object} order - L'objet commande à ajouter.
+     */
+    const addOrder = (order) => {
+        const newOrders = [order, ...state.orders];
+        setState({ orders: newOrders });
+        saveOrders(newOrders);
+    };
+
+    // =========================================================
+    // 8. GESTIONNAIRES D'ÉVÉNEMENTS
+    // =========================================================
+
+    const setupEventListeners = () => {
+        // Événements de mise à jour du prix et des services
+        dom.platform.addEventListener('change', () => {
+            populateServices(dom.platform.value);
+            updateQuantityHelp();
+        });
+        dom.service.addEventListener('change', () => {
+            updatePriceUI();
+            updateQuantityHelp();
+        });
+        dom.quantity.addEventListener('input', updatePriceUI);
+        dom.quality.addEventListener('change', updatePriceUI);
+
+        // Boutons d'action
+        dom.quickOrderBtn.addEventListener('click', () => {
+            dom.link.focus();
+            window.scrollTo({ top: dom.orderForm.offsetTop - 20, behavior: 'smooth' });
+        });
+
+        dom.resetFormBtn.addEventListener('click', () => {
+            dom.orderForm.reset();
+            populateServices(dom.platform.value);
+            updateQuantityHelp();
+            updatePriceUI();
+        });
+
+        // Soumission du formulaire
+        dom.orderForm.addEventListener('submit', async function (e) {
+            e.preventDefault();
+
+            const platform = dom.platform.value;
+            const service = dom.service.value;
+            const quantity = Number(dom.quantity.value);
+            const quality = dom.quality.value;
+            const link = dom.link.value.trim();
+            const price = calculatePrice();
+
+            // Validation simple
+            if (!link || !link.startsWith('http')) {
+                showToast('Veuillez entrer un lien valide.', 'error');
+                dom.link.focus();
+                return;
+            }
+            if (quantity <= 0) {
+                showToast('La quantité doit être supérieure à 0.', 'error');
+                dom.quantity.focus();
+                return;
+            }
+
+            // Afficher l'indicateur de chargement
+            dom.submitText.style.display = 'none';
+            dom.submitSpinner.style.display = 'inline-block';
+            dom.submitBtn.disabled = true;
+
+            // Simulation d'une requête API
+            await new Promise(resolve => setTimeout(resolve, 1000));
+
+            // Débit du solde
+            if (price > state.balance) {
+                if (!confirm(`Le prix est ${formatFCFA(price)} mais ton solde est ${formatFCFA(state.balance)}. Continuer (paiement différé) ?`)) {
+                    dom.submitText.style.display = 'inline-block';
+                    dom.submitSpinner.style.display = 'none';
+                    dom.submitBtn.disabled = false;
+                    return;
+                }
+            } else {
+                setState({ balance: Math.max(0, state.balance - price) });
+            }
+
+            // Création de l'objet commande
+            const newOrder = {
+                id: uid('#MDL'),
+                platform: platform.charAt(0).toUpperCase() + platform.slice(1),
+                service,
+                link,
+                quantity,
+                qualityLabel: (quality === 'high') ? 'Haute' : 'Standard',
+                price,
+                statusLabel: 'En cours',
+                statusClass: 'processing',
+                date: todayStr()
+            };
+
+            addOrder(newOrder);
+            showToast(`Commande créée : ${newOrder.id} — Prix: ${formatFCFA(newOrder.price)}`);
+
+            // Réinitialiser les champs du formulaire après soumission
+            dom.link.value = '';
+            dom.quantity.value = 1000;
+            dom.quality.value = 'standard';
+            updatePriceUI();
+
+            // Réactiver le bouton
+            dom.submitText.style.display = 'inline-block';
+            dom.submitSpinner.style.display = 'none';
+            dom.submitBtn.disabled = false;
+        });
+
+        // Gestion du menu mobile
+        dom.menuToggle.addEventListener('click', () => {
+            dom.sidebar.classList.toggle('show');
+        });
+
+        document.addEventListener('click', (e) => {
+            if (window.innerWidth <= 720 && !dom.sidebar.contains(e.target) && !dom.menuToggle.contains(e.target) && dom.sidebar.classList.contains('show')) {
+                dom.sidebar.classList.remove('show');
+            }
+        });
+    };
+
+    // =========================================================
+    // 9. INITIALISATION
+    // =========================================================
+    const initializeApp = () => {
+        console.log('MaestroDigitLab Dashboard — Initialisation de l’application...');
+
+        // Charger les données initiales depuis le localStorage
+        setState({
+            orders: loadOrders(),
+        });
+
+        // Configurer le formulaire
+        dom.platform.value = 'instagram'; // Valeur par défaut
+        populateServices(dom.platform.value);
+        updateQuantityHelp();
+        updatePriceUI();
+
+        // Mettre en place les gestionnaires d'événements
+        setupEventListeners();
+
+        console.log('Application initialisée avec succès ! ✅');
+    };
+
+    document.addEventListener('DOMContentLoaded', initializeApp);
 </script>
 </body>
 </html>
