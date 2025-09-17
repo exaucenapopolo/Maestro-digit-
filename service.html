@@ -415,6 +415,33 @@
             box-shadow: 0 8px 15px rgba(0,0,0,0.1);
         }
 
+        /* CUSTOM SERVICE BUTTON */
+        .custom-service-btn {
+            display: block;
+            width: 100%;
+            padding: 20px;
+            background: linear-gradient(90deg, var(--primary-orange), var(--primary-blue));
+            color: white;
+            text-align: center;
+            border-radius: var(--border-radius);
+            margin: 40px 0;
+            font-size: 1.2rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all var(--transition-speed) ease;
+            box-shadow: var(--card-shadow);
+            border: none;
+        }
+
+        .custom-service-btn:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 35px rgba(0,0,0,0.15);
+        }
+
+        .custom-service-btn i {
+            margin-right: 10px;
+        }
+
         /* FOOTER */
         .footer {
             background: linear-gradient(90deg, var(--primary-brown), var(--primary-blue));
@@ -670,7 +697,7 @@
 <!-- SERVICES SECTION -->
 <section class="services-container">
     <h2 class="section-title">
-        <i class="fas fa-concierce-bell"></i> Services Disponibles
+        <i class="fas fa-concierge-bell"></i> Services Disponibles
     </h2>
     
     <div class="services-grid">
@@ -722,8 +749,6 @@
             <p>Création d'identités visuelles percutantes et professionnelles</p>
             <div class="price">À partir de 12 000 FCFA</div>
         </div>
-        
-        <!-- NOUVEAUX SERVICES AJOUTÉS -->
         
         <!-- Service 7 -->
         <div class="service-card" data-service="dessin-anime" data-category="creation">
@@ -797,6 +822,11 @@
             <div class="price">À partir de 22 000 FCFA</div>
         </div>
     </div>
+    
+    <!-- BOUTON SERVICE PERSONNALISÉ -->
+    <button class="custom-service-btn" id="customServiceBtn">
+        <i class="fas fa-plus-circle"></i> Service Personnalisé - Contactez-nous pour un service sur mesure
+    </button>
     
     <!-- FORMULAIRES DE SERVICE -->
     
@@ -1147,8 +1177,6 @@
         </form>
     </div>
     
-    <!-- NOUVEAUX FORMULAIRES AJOUTÉS -->
-    
     <!-- Formulaire Dessin Animé -->
     <div class="service-form-container" id="dessin-anime-form">
         <h3 class="form-title">Dessin Animé</h3>
@@ -1213,7 +1241,7 @@
                     <option value="8">8</option>
                     <option value="9">9</option>
                     <option value="10">10</option>
-                </select>
+                    </select>
             </div>
             
             <div class="field">
@@ -1275,7 +1303,7 @@
             
             <div class="field">
                 <label for="contacts-details"><i class="fas fa-info-circle"></i> Détails supplémentaires</label>
-                <textarea id="contacts-details" placeholder Précisions sur le type de contacts souhaités..."></textarea>
+                <textarea id="contacts-details" placeholder="Précisions sur le type de contacts souhaités..."></textarea>
             </div>
             
             <div class="price-box">
@@ -1294,8 +1322,112 @@
         </form>
     </div>
     
-    <!-- Ajouter les autres formulaires ici -->
-    <!-- Les formulaires pour les autres services suivent le même modèle -->
+    <!-- Formulaire Spectateurs Live -->
+    <div class="service-form-container" id="spectateurs-live-form">
+        <h3 class="form-title">Spectateurs en Direct Live</h3>
+        <form class="service-form" id="spectateurs-live-form-data">
+            <div class="field">
+                <label for="live-platform"><i class="fas fa-video"></i> Plateforme de streaming</label>
+                <select id="live-platform" required>
+                    <option value="">Sélectionnez une plateforme</option>
+                    <option value="facebook">Facebook</option>
+                    <option value="instagram">Instagram</option>
+                    <option value="tiktok">TikTok</option>
+                    <option value="youtube">YouTube</option>
+                    <option value="twitch">Twitch</option>
+                    <option value="other">Autre</option>
+                </select>
+            </div>
+            
+            <div class="field">
+                <label for="live-spectateurs"><i class="fas fa-users"></i> Nombre de spectateurs souhaités</label>
+                <input type="number" id="live-spectateurs" min="10" required placeholder="Ex: 100">
+            </div>
+            
+            <div class="field">
+                <label for="live-lien"><i class="fas fa-link"></i> Lien vers votre live</label>
+                <input type="text" id="live-lien" required placeholder="URL de votre live">
+            </div>
+            
+            <div class="field">
+                <label for="live-duree"><i class="fas fa-clock"></i> Durée prévue du live (heures)</label>
+                <input type="number" id="live-duree" min="1" required placeholder="Ex: 2">
+            </div>
+            
+            <div class="field">
+                <label for="live-details"><i class="fas fa-info-circle"></i> Détails supplémentaires</label>
+                <textarea id="live-details" placeholder="Précisions sur votre live..."></textarea>
+            </div>
+            
+            <div class="price-box">
+                <div class="label">Prix estimé</div>
+                <div class="value">10 000 FCFA</div>
+            </div>
+            
+            <div class="btn-row">
+                <button type="submit" class="btn btn-primary">
+                    <i class="fab fa-whatsapp"></i> Commander et discuter
+                </button>
+                <button type="button" class="btn btn-secondary" id="reset-live-form">
+                    <i class="fas fa-redo"></i> Réinitialiser
+                </button>
+            </div>
+        </form>
+    </div>
+    
+    <!-- Formulaire Parc Liquidem -->
+    <div class="service-form-container" id="parc-liquidem-form">
+        <h3 class="form-title">Parc Liquidem Premium</h3>
+        <form class="service-form" id="parc-liquidem-form-data">
+            <div class="field">
+                <label for="liquidem-niveau"><i class="fas fa-star"></i> Niveau de parc souhaité</label>
+                <select id="liquidem-niveau" required>
+                    <option value="">Sélectionnez un niveau</option>
+                    <option value="debutant">Débutant</option>
+                    <option value="intermediaire">Intermédiaire</option>
+                    <option value="avance">Avancé</option>
+                    <option value="professionnel">Professionnel</option>
+                </select>
+            </div>
+            
+            <div class="field">
+                <label for="liquidem-duree"><i class="fas fa-calendar"></i> Durée d'abonnement souhaitée</label>
+                <select id="liquidem-duree" required>
+                    <option value="">Sélectionnez une durée</option>
+                    <option value="1">1 mois</option>
+                    <option value="3">3 mois</option>
+                    <option value="6">6 mois</option>
+                    <option value="12">12 mois</option>
+                </select>
+            </div>
+            
+            <div class="field">
+                <label for="liquidem-objectif"><i class="fas fa-bullseye"></i> Objectif principal</label>
+                <textarea id="liquidem-objectif" required placeholder="Décrivez votre objectif avec Liquidem..."></textarea>
+            </div>
+            
+            <div class="field">
+                <label for="liquidem-details"><i class="fas fa-info-circle"></i> Détails supplémentaires</label>
+                <textarea id="liquidem-details" placeholder="Précisions sur vos besoins..."></textarea>
+            </div>
+            
+            <div class="price-box">
+                <div class="label">Prix estimé</div>
+                <div class="value">30 000 FCFA</div>
+            </div>
+            
+            <div class="btn-row">
+                <button type="submit" class="btn btn-primary">
+                    <i class="fab fa-whatsapp"></i> Commander et discuter
+                </button>
+                <button type="button" class="btn btn-secondary" id="reset-liquidem-form">
+                    <i class="fas fa-redo"></i> Réinitialiser
+                </button>
+            </div>
+        </form>
+    </div>
+    
+    <!-- Ajouter les autres formulaires manquants ici avec la même structure -->
     
 </section>
 
@@ -1423,6 +1555,8 @@
     setupFormSubmission('design-form-data', 'Design de logos et flyers', '12 000');
     setupFormSubmission('dessin-anime-form-data', 'Dessin Animé', '50 000');
     setupFormSubmission('liste-contacts-form-data', 'Liste de Contacts', '20 000');
+    setupFormSubmission('spectateurs-live-form-data', 'Spectateurs en Direct Live', '10 000');
+    setupFormSubmission('parc-liquidem-form-data', 'Parc Liquidem Premium', '30 000');
     // Ajouter les autres formulaires ici
     
     // Gestion du filtre des services
@@ -1467,6 +1601,12 @@
             top: 0,
             behavior: 'smooth'
         });
+    });
+    
+    // Bouton Service Personnalisé
+    document.getElementById('customServiceBtn').addEventListener('click', function() {
+        const message = "Bonjour, je cherche un autre service qui n'est pas listé sur votre site. Pouvez-vous m'aider?";
+        window.open(`https://wa.me/237699853665?text=${encodeURIComponent(message)}`, '_blank');
     });
 </script>
 </body>
