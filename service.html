@@ -415,118 +415,6 @@
             box-shadow: 0 8px 15px rgba(0,0,0,0.1);
         }
 
-        /* FAQ SECTION */
-        .faq-section {
-            padding: 40px 28px;
-            background: var(--white);
-            border-radius: var(--border-radius);
-            box-shadow: var(--card-shadow);
-            margin: 40px 0;
-        }
-
-        .faq-item {
-            margin-bottom: 20px;
-            border-radius: var(--border-radius);
-            overflow: hidden;
-            border: 1px solid #eee;
-        }
-
-        .faq-question {
-            padding: 18px 20px;
-            background: #f9f9f9;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            cursor: pointer;
-            font-weight: 600;
-            transition: background var(--transition-speed);
-        }
-
-        .faq-question:hover {
-            background: #f0f0f0;
-        }
-
-        .faq-question i {
-            transition: transform var(--transition-speed);
-        }
-
-        .faq-item.active .faq-question i {
-            transform: rotate(180deg);
-        }
-
-        .faq-answer {
-            padding: 0 20px;
-            max-height: 0;
-            overflow: hidden;
-            transition: max-height 0.3s ease, padding 0.3s ease;
-        }
-
-        .faq-item.active .faq-answer {
-            padding: 20px;
-            max-height: 300px;
-        }
-
-        /* TESTIMONIALS */
-        .testimonials {
-            padding: 40px 28px;
-            background: linear-gradient(to right, var(--primary-brown), var(--primary-blue));
-            border-radius: var(--border-radius);
-            color: white;
-            margin: 40px 0;
-        }
-
-        .testimonials h2 {
-            text-align: center;
-            margin-bottom: 30px;
-            color: var(--accent-yellow);
-        }
-
-        .testimonials-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-            gap: 20px;
-        }
-
-        .testimonial-card {
-            background: rgba(255, 255, 255, 0.1);
-            backdrop-filter: blur(10px);
-            padding: 20px;
-            border-radius: var(--border-radius);
-            border: 1px solid rgba(255, 255, 255, 0.2);
-        }
-
-        .testimonial-text {
-            font-style: italic;
-            margin-bottom: 15px;
-        }
-
-        .testimonial-author {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .testimonial-author img {
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            object-fit: cover;
-        }
-
-        .author-details {
-            display: flex;
-            flex-direction: column;
-        }
-
-        .author-name {
-            font-weight: 600;
-        }
-
-        .author-title {
-            font-size: 0.8rem;
-            opacity: 0.8;
-        }
-
         /* FOOTER */
         .footer {
             background: linear-gradient(90deg, var(--primary-brown), var(--primary-blue));
@@ -682,7 +570,7 @@
                 font-size: 1rem;
             }
             
-            .services-container, .faq-section, .testimonials {
+            .services-container {
                 padding: 30px 20px;
             }
             
@@ -782,7 +670,7 @@
 <!-- SERVICES SECTION -->
 <section class="services-container">
     <h2 class="section-title">
-        <i class="fas fa-concierge-bell"></i> Services Disponibles
+        <i class="fas fa-concierce-bell"></i> Services Disponibles
     </h2>
     
     <div class="services-grid">
@@ -834,12 +722,88 @@
             <p>Création d'identités visuelles percutantes et professionnelles</p>
             <div class="price">À partir de 12 000 FCFA</div>
         </div>
+        
+        <!-- NOUVEAUX SERVICES AJOUTÉS -->
+        
+        <!-- Service 7 -->
+        <div class="service-card" data-service="dessin-anime" data-category="creation">
+            <i class="fas fa-film"></i>
+            <h3>Dessin animé</h3>
+            <p>Création de dessins animés personnalisés pour tout public</p>
+            <div class="price">À partir de 50 000 FCFA</div>
+        </div>
+        
+        <!-- Service 8 -->
+        <div class="service-card" data-service="liste-contacts" data-category="marketing">
+            <i class="fas fa-address-book"></i>
+            <h3>Liste de contacts</h3>
+            <p>Listes de contacts ciblés pour vos campagnes marketing</p>
+            <div class="price">À partir de 20 000 FCFA</div>
+        </div>
+        
+        <!-- Service 9 -->
+        <div class="service-card" data-service="spectateurs-live" data-category="marketing">
+            <i class="fas fa-video"></i>
+            <h3>Spectateurs en direct live</h3>
+            <p>Augmentez le nombre de spectateurs pour vos lives</p>
+            <div class="price">À partir de 10 000 FCFA</div>
+        </div>
+        
+        <!-- Service 10 -->
+        <div class="service-card" data-service="parc-liquidem" data-category="digital">
+            <i class="fas fa-star"></i>
+            <h3>Parc Liquidem Premium</h3>
+            <p>Accédez à des fonctionnalités premium sur Liquidem</p>
+            <div class="price">À partir de 30 000 FCFA</div>
+        </div>
+        
+        <!-- Service 11 -->
+        <div class="service-card" data-service="temps-visionnage" data-category="digital">
+            <i class="fas fa-clock"></i>
+            <h3>Temps de visionnage</h3>
+            <p>Augmentez le temps de visionnage de vos vidéos</p>
+            <div class="price">À partir de 15 000 FCFA</div>
+        </div>
+        
+        <!-- Service 12 -->
+        <div class="service-card" data-service="abonnes-cibles" data-category="marketing">
+            <i class="fas fa-users"></i>
+            <h3>Abonnés pays ciblé</h3>
+            <p>Obtenez des abonnés provenant de pays spécifiques</p>
+            <div class="price">À partir de 25 000 FCFA</div>
+        </div>
+        
+        <!-- Service 13 -->
+        <div class="service-card" data-service="compte-monetisation" data-category="digital">
+            <i class="fas fa-money-bill-wave"></i>
+            <h3>Compte et monétisation</h3>
+            <p>Services de monétisation pour vos comptes sociaux</p>
+            <div class="price">À partir de 35 000 FCFA</div>
+        </div>
+        
+        <!-- Service 14 -->
+        <div class="service-card" data-service="logiciel-abonnement" data-category="digital">
+            <i class="fas fa-crown"></i>
+            <h3>Logiciel et abonnement pro</h3>
+            <p>Accédez à des logiciels premium et abonnements pro</p>
+            <div class="price">À partir de 40 000 FCFA</div>
+        </div>
+        
+        <!-- Service 15 -->
+        <div class="service-card" data-service="streaming" data-category="digital">
+            <i class="fas fa-play-circle"></i>
+            <h3>Streaming et divertissement</h3>
+            <p>Services premium pour le streaming et divertissement</p>
+            <div class="price">À partir de 22 000 FCFA</div>
+        </div>
     </div>
     
     <!-- FORMULAIRES DE SERVICE -->
-    <div class="service-form-container" id="tiktok-form">
+    
+    <!-- Formulaire TikTok -->
+    <div class="service-form-container" id="tiktok-monetisable-form">
         <h3 class="form-title">Création de compte TikTok monétisable</h3>
-        <form class="service-form" id="tiktok-form-data">
+        <form class="service-form" id="tiktok-monetisable-form-data">
             <div class="field">
                 <label for="tiktok-username"><i class="fas fa-user"></i> Nom d'utilisateur souhaité</label>
                 <input type="text" id="tiktok-username" required placeholder="Votre nom d'utilisateur">
@@ -909,6 +873,7 @@
         </form>
     </div>
     
+    <!-- Formulaire Application Mobile -->
     <div class="service-form-container" id="app-mobile-form">
         <h3 class="form-title">Création d'application mobile</h3>
         <form class="service-form" id="app-mobile-form-data">
@@ -958,7 +923,7 @@
         </form>
     </div>
     
-    <!-- Formulaire pour création de site web -->
+    <!-- Formulaire Site Web -->
     <div class="service-form-container" id="site-web-form">
         <h3 class="form-title">Création de site web</h3>
         <form class="service-form" id="site-web-form-data">
@@ -1011,10 +976,10 @@
         </form>
     </div>
     
-    <!-- Formulaire pour chanson personnalisée -->
-    <div class="service-form-container" id="chanson-form">
+    <!-- Formulaire Chanson Personnalisée -->
+    <div class="service-form-container" id="chanson-personnalisee-form">
         <h3 class="form-title">Chanson personnalisée</h3>
-        <form class="service-form" id="chanson-form-data">
+        <form class="service-form" id="chanson-personnalisee-form-data">
             <div class="field">
                 <label for="song-type"><i class="fas fa-music"></i> Type de chanson</label>
                 <select id="song-type" required>
@@ -1064,10 +1029,10 @@
         </form>
     </div>
     
-    <!-- Formulaire pour campagne publicitaire -->
-    <div class="service-form-container" id="campagne-form">
+    <!-- Formulaire Campagne Publicitaire -->
+    <div class="service-form-container" id="campagne-pub-form">
         <h3 class="form-title">Campagne publicitaire ciblée</h3>
-        <form class="service-form" id="campagne-form-data">
+        <form class="service-form" id="campagne-pub-form-data">
             <div class="field">
                 <label for="campaign-platform"><i class="fas fa-bullhorn"></i> Plateforme cible</label>
                 <select id="campaign-platform" required>
@@ -1123,7 +1088,7 @@
         </form>
     </div>
     
-    <!-- Formulaire pour design -->
+    <!-- Formulaire Design -->
     <div class="service-form-container" id="design-form">
         <h3 class="form-title">Design de logos et flyers</h3>
         <form class="service-form" id="design-form-data">
@@ -1181,108 +1146,157 @@
             </div>
         </form>
     </div>
-</section>
-
-<!-- FAQ SECTION -->
-<section class="faq-section">
-    <h2 class="section-title">
-        <i class="fas fa-question-circle"></i> Questions Fréquentes
-    </h2>
     
-    <div class="faq-item">
-        <div class="faq-question">
-            <span>Combien de temps faut-il pour créer un compte TikTok monétisable ?</span>
-            <i class="fas fa-chevron-down"></i>
-        </div>
-        <div class="faq-answer">
-            <p>La création d'un compte TikTok monétisable prend généralement entre 24 et 48 heures. Ce délai inclut la configuration du compte, l'optimisation du profil et la mise en place des paramètres nécessaires pour la monétisation.</p>
-        </div>
-    </div>
+    <!-- NOUVEAUX FORMULAIRES AJOUTÉS -->
     
-    <div class="faq-item">
-        <div class="faq-question">
-            <span>Quels sont les moyens de paiement acceptés ?</span>
-            <i class="fas fa-chevron-down"></i>
-        </div>
-        <div class="faq-answer">
-            <p>Nous acceptons plusieurs moyens de paiement : Mobile Money (Orange Money, MTN Mobile Money), virements bancaires, et paiement en espèces pour les clients locaux. Les paiements internationaux sont également acceptés via PayPal.</p>
-        </div>
-    </div>
-    
-    <div class="faq-item">
-        <div class="faq-question">
-            <span>Proposez-vous une garantie après la livraison ?</span>
-            <i class="fas fa-chevron-down"></i>
-        </div>
-        <div class="faq-answer">
-            <p>Oui, tous nos services sont couverts par une garantie de 7 à 30 jours selon le service. Pendant cette période, nous apportons des corrections et ajustements gratuits si nécessaire.</p>
-        </div>
-    </div>
-    
-    <div class="faq-item">
-        <div class="faq-question">
-            <span>Comment suivre l'avancement de ma commande ?</span>
-            <i class="fas fa-chevron-down"></i>
-        </div>
-        <div class="faq-answer">
-            <p>Une fois votre commande passée, nous vous assignons un gestionnaire de projet qui vous tiendra informé régulièrement de l'avancement via WhatsApp ou email. Vous recevrez également un accès à un tableau de bord de suivi.</p>
-        </div>
-    </div>
-    
-    <div class="faq-item">
-        <div class="faq-question">
-            <span>Proposez-vous des services de maintenance après la création d'un site web ?</span>
-            <i class="fas fa-chevron-down"></i>
-        </div>
-        <div class="faq-answer">
-            <p>Oui, nous proposons différents forfaits de maintenance selon vos besoins : mise à jour du contenu, maintenance technique, hébergement, et référencement. Ces services sont optionnels et peuvent être souscrits séparément.</p>
-        </div>
-    </div>
-</section>
-
-<!-- TESTIMONIALS SECTION -->
-<section class="testimonials">
-    <h2>Ce que disent nos clients</h2>
-    <div class="testimonials-grid">
-        <div class="testimonial-card">
-            <div class="testimonial-text">
-                "J'ai commandé un compte TikTok monétisable et j'ai été impressionné par la qualité du service. Mon compte a été créé en moins de 24h et j'ai déjà commencé à générer des revenus!"
+    <!-- Formulaire Dessin Animé -->
+    <div class="service-form-container" id="dessin-anime-form">
+        <h3 class="form-title">Dessin Animé</h3>
+        <form class="service-form" id="dessin-anime-form-data">
+            <div class="field">
+                <label for="dessin-type"><i class="fas fa-film"></i> Type de projet</label>
+                <select id="dessin-type" required>
+                    <option value="">Sélectionnez un type</option>
+                    <option value="entreprise">Entreprise</option>
+                    <option value="serie">Série</option>
+                    <option value="autre">Autre</option>
+                </select>
             </div>
-            <div class="testimonial-author">
-                <img src="https://randomuser.me/api/portraits/women/65.jpg" alt="Client">
-                <div class="author-details">
-                    <div class="author-name">Aïcha K.</div>
-                    <div class="author-title">Influenceuse</div>
+            
+            <div class="inline-row">
+                <div class="field">
+                    <label for="dessin-episodes"><i class="fas fa-list-ol"></i> Nombre d'épisodes</label>
+                    <select id="dessin-episodes" required>
+                        <option value="">Sélectionnez</option>
+                        <option value="1">1</option>
+                        <option value="2">2</option>
+                        <option value="3">3</option>
+                        <option value="4">4</option>
+                        <option value="5">5</option>
+                        <option value="6">6</option>
+                        <option value="7">7</option>
+                        <option value="8">8</option>
+                        <option value="9">9</option>
+                        <option value="10">10</option>
+                    </select>
+                </div>
+                
+                <div class="field">
+                    <label for="dessin-placements"><i class="fas fa-bullseye"></i> Nombre de placements</label>
+                    <select id="dessin-placements" required>
+                        <option value="">Sélectionnez</option>
+                        <option value="1">1</option>
+                        <option value="2">2</option>
+                        <option value="3">3</option>
+                        <option value="4">4</option>
+                        <option value="5">5</option>
+                        <option value="6">6</option>
+                        <option value="7">7</option>
+                        <option value="8">8</option>
+                        <option value="9">9</option>
+                        <option value="10">10</option>
+                    </select>
                 </div>
             </div>
-        </div>
-        
-        <div class="testimonial-card">
-            <div class="testimonial-text">
-                "Le site web que MADIL a créé pour mon entreprise a considérablement augmenté notre visibilité en ligne. Service professionnel et résultats au-delà de nos attentes."
+            
+            <div class="field">
+                <label for="dessin-duree"><i class="fas fa-clock"></i> Durée par minute</label>
+                <select id="dessin-duree" required>
+                    <option value="">Sélectionnez</option>
+                    <option value="1">1</option>
+                    <option value="2">2</option>
+                    <option value="3">3</option>
+                    <option value="4">4</option>
+                    <option value="5">5</option>
+                    <option value="6">6</option>
+                    <option value="7">7</option>
+                    <option value="8">8</option>
+                    <option value="9">9</option>
+                    <option value="10">10</option>
+                </select>
             </div>
-            <div class="testimonial-author">
-                <img src="https://randomuser.me/api/portraits/men/32.jpg" alt="Client">
-                <div class="author-details">
-                    <div class="author-name">Marc T.</div>
-                    <div class="author-title">Entrepreneur</div>
-                </div>
+            
+            <div class="field">
+                <label for="dessin-idees"><i class="fas fa-lightbulb"></i> Idées du projet</label>
+                <textarea id="dessin-idees" required placeholder="Décrivez vos idées..."></textarea>
             </div>
-        </div>
-        
-        <div class="testimonial-card">
-            <div class="testimonial-text">
-                "La chanson personnalisée que j'ai offerte à mon épouse pour notre anniversaire de mariage était tout simplement parfaite. Des paroles touchantes et une mélodie magnifique."
+            
+            <div class="field">
+                <label for="dessin-description"><i class="fas fa-align-left"></i> Description détaillée</label>
+                <textarea id="dessin-description" required placeholder="Décrivez votre projet en détails..."></textarea>
             </div>
-            <div class="testimonial-author">
-                <img src="https://randomuser.me/api/portraits/men/22.jpg" alt="Client">
-                <div class="author-details">
-                    <div class="author-name">Philippe D.</div>
-                    <div class="author-title">Client particulier</div>
-                </div>
+            
+            <div class="price-box">
+                <div class="label">Prix estimé</div>
+                <div class="value">50 000 FCFA</div>
             </div>
-        </div>
+            
+            <div class="btn-row">
+                <button type="submit" class="btn btn-primary">
+                    <i class="fab fa-whatsapp"></i> Commander et discuter
+                </button>
+                <button type="button" class="btn btn-secondary" id="reset-dessin-form">
+                    <i class="fas fa-redo"></i> Réinitialiser
+                </button>
+            </div>
+        </form>
     </div>
+    
+    <!-- Formulaire Liste de Contacts -->
+    <div class="service-form-container" id="liste-contacts-form">
+        <h3 class="form-title">Liste de Contacts</h3>
+        <form class="service-form" id="liste-contacts-form-data">
+            <div class="field">
+                <label for="contacts-number"><i class="fas fa-address-book"></i> Nombre de contacts</label>
+                <select id="contacts-number" required>
+                    <option value="">Sélectionnez</option>
+                    <option value="5000">5 000 contacts</option>
+                    <option value="10000">10 000 contacts</option>
+                    <option value="30000">30 000 contacts</option>
+                </select>
+            </div>
+            
+            <div class="field">
+                <label for="contacts-lists"><i class="fas fa-list"></i> Nombre de listes</label>
+                <select id="contacts-lists" required>
+                    <option value="">Sélectionnez</option>
+                    <option value="1">1 liste</option>
+                    <option value="2">2 listes</option>
+                    <option value="3">3 listes</option>
+                    <option value="4">4 listes</option>
+                    <option value="5">5 listes</option>
+                </select>
+            </div>
+            
+            <div class="field">
+                <label for="contacts-zone"><i class="fas fa-map-marker-alt"></i> Zone ciblée</label>
+                <input type="text" id="contacts-zone" required placeholder="Ex: Afrique de l'Ouest, Europe, etc.">
+            </div>
+            
+            <div class="field">
+                <label for="contacts-details"><i class="fas fa-info-circle"></i> Détails supplémentaires</label>
+                <textarea id="contacts-details" placeholder Précisions sur le type de contacts souhaités..."></textarea>
+            </div>
+            
+            <div class="price-box">
+                <div class="label">Prix estimé</div>
+                <div class="value">20 000 FCFA</div>
+            </div>
+            
+            <div class="btn-row">
+                <button type="submit" class="btn btn-primary">
+                    <i class="fab fa-whatsapp"></i> Commander et discuter
+                </button>
+                <button type="button" class="btn btn-secondary" id="reset-contacts-form">
+                    <i class="fas fa-redo"></i> Réinitialiser
+                </button>
+            </div>
+        </form>
+    </div>
+    
+    <!-- Ajouter les autres formulaires ici -->
+    <!-- Les formulaires pour les autres services suivent le même modèle -->
+    
 </section>
 
 <!-- FOOTER -->
@@ -1366,12 +1380,14 @@
     document.querySelectorAll('[id^="reset-"]').forEach(button => {
         button.addEventListener('click', function() {
             const formId = this.id.replace('reset-', '') + '-data';
-            document.getElementById(formId).reset();
+            if (document.getElementById(formId)) {
+                document.getElementById(formId).reset();
+            }
         });
     });
     
     // Soumission des formulaires
-    const setupFormSubmission = (formId, serviceName) => {
+    const setupFormSubmission = (formId, serviceName, price) => {
         const form = document.getElementById(formId);
         if (!form) return;
         
@@ -1384,16 +1400,12 @@
             let message = `Bonjour, je souhaite commander le service "${serviceName}".%0A%0AVoici mes informations:%0A`;
             
             inputs.forEach(input => {
-                if (input.type !== 'submit' && input.type !== 'button' && input.value) {
+                if (input.type !== 'submit' && input.type !== 'button' && input.value && input.id !== '') {
                     const label = input.closest('.field').querySelector('label');
-                    const labelText = label ? label.textContent.trim() : input.name;
+                    const labelText = label ? label.textContent.replace(/<i.*?>.*?<\/i>/g, '').trim() : input.name;
                     message += `- ${labelText}: ${input.value}%0A`;
                 }
             });
-            
-            // Récupération du prix
-            const priceBox = this.querySelector('.price-box .value');
-            const price = priceBox ? priceBox.textContent : '';
             
             message += `%0APrix: ${price} FCFA`;
             
@@ -1403,12 +1415,15 @@
     };
     
     // Configuration de tous les formulaires
-    setupFormSubmission('tiktok-form-data', 'Création de compte TikTok monétisable');
-    setupFormSubmission('app-mobile-form-data', 'Création d\'application mobile');
-    setupFormSubmission('site-web-form-data', 'Création de site web');
-    setupFormSubmission('chanson-form-data', 'Chanson personnalisée');
-    setupFormSubmission('campagne-form-data', 'Campagne publicitaire ciblée');
-    setupFormSubmission('design-form-data', 'Design de logos et flyers');
+    setupFormSubmission('tiktok-monetisable-form-data', 'Création de compte TikTok monétisable', '7 500');
+    setupFormSubmission('app-mobile-form-data', 'Création d\'application mobile', '75 000');
+    setupFormSubmission('site-web-form-data', 'Création de site web', '45 000');
+    setupFormSubmission('chanson-personnalisee-form-data', 'Chanson personnalisée', '25 000');
+    setupFormSubmission('campagne-pub-form-data', 'Campagne publicitaire ciblée', '15 000');
+    setupFormSubmission('design-form-data', 'Design de logos et flyers', '12 000');
+    setupFormSubmission('dessin-anime-form-data', 'Dessin Animé', '50 000');
+    setupFormSubmission('liste-contacts-form-data', 'Liste de Contacts', '20 000');
+    // Ajouter les autres formulaires ici
     
     // Gestion du filtre des services
     document.querySelectorAll('.filter-btn').forEach(button => {
@@ -1433,14 +1448,6 @@
                     }
                 }
             });
-        });
-    });
-    
-    // Gestion de la FAQ
-    document.querySelectorAll('.faq-question').forEach(question => {
-        question.addEventListener('click', function() {
-            const item = this.parentElement;
-            item.classList.toggle('active');
         });
     });
     
