@@ -2,9 +2,9 @@
 <html lang="fr">
 <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width,initial-scale=1" />
-    <meta name="description" content="Tableau de bord MaestroDigitLab - Commandez vos services de marketing digital et boost sur les réseaux sociaux">
-    <meta name="keywords" content="marketing digital, réseaux sociaux, followers, likes, abonnés">
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content="Tableau de bord MaestroDigitLab - Services de marketing digital et croissance sur les réseaux sociaux">
+    <meta name="keywords" content="marketing digital, réseaux sociaux, followers, likes, abonnés, Instagram, Facebook, TikTok">
     <title>Tableau de bord - MaestroDigitLab</title>
 
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -27,6 +27,7 @@
             --sidebar-width: 240px;
             --transition-speed: 0.3s;
             --border-radius: 14px;
+            --header-height: 70px;
         }
 
         * {
@@ -44,168 +45,206 @@
             font-family: "Poppins", sans-serif;
             background: linear-gradient(180deg, #FFFDF8 0%, var(--cream) 100%);
             color: #222;
-            display: flex;
-            min-height: 100vh;
-            overflow-x: hidden;
             line-height: 1.6;
+            overflow-x: hidden;
         }
 
-        /* SIDEBAR */
-        .sidebar {
-            width: var(--sidebar-width);
-            background: linear-gradient(180deg, var(--primary-brown), #5D4037);
+        /* HEADER */
+        .main-header {
+            background: linear-gradient(90deg, var(--primary-brown), #5D4037);
             color: var(--white);
-            padding: 22px;
+            padding: 0 28px;
+            height: var(--header-height);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
             position: fixed;
-            height: 100vh;
-            overflow: auto;
-            transition: width var(--transition-speed);
-            z-index: 100;
-            box-shadow: 2px 0 10px rgba(0,0,0,0.1);
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
         }
 
-        .brand {
+        .logo-container {
             display: flex;
             align-items: center;
             gap: 12px;
-            margin-bottom: 18px;
-            padding-bottom: 15px;
-            border-bottom: 1px solid rgba(255,255,255,0.1);
         }
 
-        .brand img {
-            width: 48px;
-            height: 48px;
+        .logo-container img {
+            width: 42px;
+            height: 42px;
             border-radius: 10px;
             object-fit: cover;
             box-shadow: 0 4px 8px rgba(0,0,0,0.2);
         }
 
-        .brand h2 {
-            font-size: 1.1rem;
-            margin: 0;
-            font-weight: 700;
+        .logo-text {
+            font-family: "Luckiest Guy", "Poppins", sans-serif;
+            font-size: 1.5rem;
+            color: var(--accent-yellow);
             letter-spacing: 0.5px;
         }
 
-        .brand-subtitle {
-            font-size: 0.82rem;
-            opacity: 0.9;
-            margin-top: 2px;
-        }
-
-        nav ul {
-            list-style: none;
-            padding: 0;
-            margin-top: 6px;
-        }
-
-        nav li {
-            margin-bottom: 8px;
-        }
-
-        nav a {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            padding: 12px;
-            border-radius: 8px;
-            color: inherit;
-            text-decoration: none;
-            font-weight: 500;
-            transition: all var(--transition-speed) ease;
-            position: relative;
-        }
-
-        nav a:hover {
-            background: rgba(255,255,255,0.1);
-            transform: translateX(5px);
-        }
-
-        nav a.active {
-            background: rgba(0,0,0,0.12);
-            border-left: 4px solid var(--primary-orange);
-        }
-
-        nav a.active:before {
-            content: '';
-            position: absolute;
-            right: 10px;
-            width: 8px;
-            height: 8px;
-            border-radius: 50%;
-            background: var(--primary-orange);
-            box-shadow: 0 0 8px var(--primary-orange);
-        }
-
-        /* MAIN CONTENT */
-        .main {
-            margin-left: var(--sidebar-width);
-            padding: 28px;
-            flex: 1;
-            transition: margin-left var(--transition-speed) ease;
-        }
-
-        /* HEADER */
-        .header {
-            display: flex;
-            justify-content: space-between;
-            gap: 16px;
-            align-items: center;
-            margin-bottom: 28px;
-            flex-wrap: wrap;
-        }
-
-        .header-left h1 {
-            font-size: 1.8rem;
-            color: var(--primary-brown);
-            margin: 0 0 5px 0;
-            font-weight: 700;
-        }
-
-        .user-info {
+        .user-header-info {
             display: flex;
             gap: 14px;
             align-items: center;
-            background: var(--glass);
-            padding: 10px 16px;
-            border-radius: var(--border-radius);
-            box-shadow: var(--card-shadow);
-            transition: all var(--transition-speed) ease;
+            background: rgba(255,255,255,0.15);
+            padding: 8px 16px;
+            border-radius: 50px;
             backdrop-filter: blur(10px);
+            transition: all var(--transition-speed) ease;
         }
 
-        .user-info:hover {
+        .user-header-info:hover {
+            background: rgba(255,255,255,0.25);
             transform: translateY(-2px);
-            box-shadow: 0 6px 15px rgba(0,0,0,0.1);
         }
 
-        .user-info img {
-            width: 48px;
-            height: 48px;
+        .user-header-info img {
+            width: 40px;
+            height: 40px;
             border-radius: 50%;
             border: 2px solid var(--primary-orange);
         }
 
-        .user-info .name {
+        .user-header-info .name {
             font-weight: 700;
             color: var(--accent-yellow);
-            font-family: "Luckiest Guy", "Poppins", sans-serif;
-            letter-spacing: 0.5px;
+            font-family: "Poppins", sans-serif;
+            font-size: 0.95rem;
         }
 
-        .user-info p {
+        .user-header-info p {
             margin: 0;
-            font-size: .9rem;
-            color: var(--muted);
+            font-size: .85rem;
+            color: var(--white);
+            opacity: 0.9;
+        }
+
+        /* HERO SECTION */
+        .hero {
+            background: linear-gradient(120deg, rgba(139, 69, 19, 0.9), rgba(255, 122, 89, 0.8)), url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 100 100"><rect width="100" height="100" fill="%238B4513" opacity="0.1"/><path d="M0 0L100 100" stroke="%23FF7A59" stroke-width="2" opacity="0.2"/><path d="M100 0L0 100" stroke="%23FF7A59" stroke-width="2" opacity="0.2"/></svg>');
+            color: white;
+            padding: 100px 28px 60px;
+            text-align: center;
+            margin-top: var(--header-height);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero-content {
+            max-width: 800px;
+            margin: 0 auto;
+            position: relative;
+            z-index: 2;
+        }
+
+        .hero h1 {
+            font-size: 2.8rem;
+            margin-bottom: 16px;
+            font-weight: 800;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+            animation: fadeInUp 0.8s ease;
+        }
+
+        .hero p {
+            font-size: 1.2rem;
+            margin-bottom: 30px;
+            opacity: 0.9;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+            animation: fadeInUp 1s ease;
+        }
+
+        .hero-cta {
+            display: inline-flex;
+            gap: 15px;
+            animation: fadeInUp 1.2s ease;
+        }
+
+        .hero-cta .btn {
+            padding: 14px 28px;
+            border-radius: 50px;
+            font-weight: 600;
+            text-decoration: none;
+            transition: all var(--transition-speed) ease;
+            box-shadow: 0 6px 15px rgba(0,0,0,0.2);
+        }
+
+        .hero-cta .btn-primary {
+            background: var(--accent-yellow);
+            color: var(--primary-brown);
+        }
+
+        .hero-cta .btn-primary:hover {
+            background: #FFC107;
+            transform: translateY(-3px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.25);
+        }
+
+        .hero-cta .btn-secondary {
+            background: transparent;
+            color: white;
+            border: 2px solid white;
+        }
+
+        .hero-cta .btn-secondary:hover {
+            background: white;
+            color: var(--primary-brown);
+            transform: translateY(-3px);
+        }
+
+        /* Decorative elements */
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
+            transform: rotate(30deg);
+        }
+
+        /* MAIN CONTENT */
+        .main {
+            padding: 40px 28px;
+        }
+
+        /* SECTION STYLES */
+        .section-title {
+            font-size: 1.8rem;
+            color: var(--primary-brown);
+            margin-bottom: 28px;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            position: relative;
+            padding-bottom: 10px;
+        }
+
+        .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 60px;
+            height: 4px;
+            background: linear-gradient(90deg, var(--primary-orange), var(--primary-brown));
+            border-radius: 2px;
         }
 
         /* LAYOUT: top area contains quick cards + order area */
         .top-area {
             display: grid;
             grid-template-columns: 360px 1fr;
-            gap: 24px;
-            margin-bottom: 28px;
+            gap: 28px;
+            margin-bottom: 40px;
         }
 
         @media (max-width: 980px) {
@@ -218,7 +257,7 @@
         .card {
             background: var(--white);
             border-radius: var(--border-radius);
-            padding: 22px;
+            padding: 28px;
             box-shadow: var(--card-shadow);
             transition: all var(--transition-speed) ease;
             position: relative;
@@ -227,7 +266,7 @@
 
         .card:hover {
             transform: translateY(-5px);
-            box-shadow: 0 12px 30px rgba(0,0,0,0.1);
+            box-shadow: 0 15px 35px rgba(0,0,0,0.1);
         }
 
         .card:before {
@@ -247,17 +286,42 @@
         }
 
         .balance-card .balance-amount {
-            font-size: 1.5rem;
+            font-size: 1.8rem;
             font-weight: 800;
             color: var(--primary-brown);
-            margin: 5px 0;
+            margin: 8px 0;
+        }
+
+        .quick-stats {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .stat-item {
+            background: rgba(139, 69, 19, 0.08);
+            padding: 15px;
+            border-radius: 10px;
+            text-align: center;
+        }
+
+        .stat-item .value {
+            font-size: 1.4rem;
+            font-weight: 700;
+            color: var(--primary-brown);
+        }
+
+        .stat-item .label {
+            font-size: 0.85rem;
+            color: var(--muted);
         }
 
         .quick-order .title {
             display: flex;
             justify-content: space-between;
             align-items: flex-start;
-            margin-bottom: 16px;
+            margin-bottom: 20px;
             flex-wrap: wrap;
             gap: 10px;
         }
@@ -270,10 +334,50 @@
             border-radius: 20px;
         }
 
+        /* Platform selection with icons */
+        .platform-options {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .platform-option {
+            text-align: center;
+            padding: 12px 5px;
+            border-radius: 10px;
+            background: rgba(139, 69, 19, 0.05);
+            cursor: pointer;
+            transition: all var(--transition-speed) ease;
+            border: 2px solid transparent;
+        }
+
+        .platform-option:hover {
+            background: rgba(139, 69, 19, 0.1);
+            transform: translateY(-3px);
+        }
+
+        .platform-option.active {
+            background: rgba(255, 122, 89, 0.15);
+            border-color: var(--primary-orange);
+        }
+
+        .platform-option i {
+            font-size: 1.8rem;
+            margin-bottom: 8px;
+            display: block;
+        }
+
+        .platform-option .platform-name {
+            font-size: 0.8rem;
+            font-weight: 600;
+            color: var(--primary-brown);
+        }
+
         /* Order form */
         form#orderForm {
             display: grid;
-            gap: 16px;
+            gap: 20px;
         }
 
         .field {
@@ -297,13 +401,14 @@
         }
 
         select, input[type="text"], input[type="number"] {
-            padding: 12px 14px;
+            padding: 14px 16px;
             border-radius: 10px;
             border: 1px solid #E8E8E8;
             font-size: 1rem;
             font-family: 'Poppins', sans-serif;
             transition: border-color .15s, box-shadow .15s;
             background: #fff;
+            width: 100%;
         }
 
         select:focus, input:focus {
@@ -314,7 +419,7 @@
 
         .inline-row {
             display: flex;
-            gap: 12px;
+            gap: 15px;
         }
 
         .inline-row .field {
@@ -325,7 +430,7 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 14px 16px;
+            padding: 16px 20px;
             border-radius: 10px;
             background: linear-gradient(90deg, #fff, #fff);
             border: 1px dashed #eee;
@@ -348,18 +453,18 @@
             font-weight: 800;
             color: var(--primary-brown);
             transition: all 0.3s ease;
-            font-size: 1.2rem;
+            font-size: 1.4rem;
         }
 
         .btn-row {
             display: flex;
-            gap: 12px;
-            margin-top: 10px;
+            gap: 15px;
+            margin-top: 15px;
         }
 
         .btn {
             flex: 1;
-            padding: 14px;
+            padding: 16px;
             border-radius: 10px;
             border: none;
             font-weight: 700;
@@ -429,11 +534,11 @@
 
         /* "Voir tous les services" under the form */
         .all-services {
-            margin-top: 16px;
+            margin-top: 20px;
             display: block;
             text-decoration: none;
             text-align: center;
-            padding: 14px;
+            padding: 16px;
             border-radius: 10px;
             background: transparent;
             border: 2px dashed #f0c6b4;
@@ -463,19 +568,8 @@
         }
 
         /* Recent orders */
-        .section-title {
-            font-size: 1.3rem;
-            color: var(--primary-brown);
-            margin-bottom: 16px;
-            font-weight: 700;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .section-title i {
-            font-size: 1.1rem;
-            color: var(--primary-orange);
+        .orders-container {
+            overflow-x: auto;
         }
 
         table.orders {
@@ -485,6 +579,7 @@
             border-radius: var(--border-radius);
             overflow: hidden;
             box-shadow: var(--card-shadow);
+            min-width: 800px;
         }
 
         table.orders thead th {
@@ -514,7 +609,7 @@
         }
 
         .status {
-            padding: 6px 12px;
+            padding: 8px 14px;
             border-radius: 999px;
             font-weight: 700;
             font-size: .85rem;
@@ -541,7 +636,7 @@
         /* Toast notification */
         .toast {
             position: fixed;
-            top: 20px;
+            top: 90px;
             right: 20px;
             padding: 16px 22px;
             border-radius: 10px;
@@ -596,231 +691,341 @@
             to { transform: rotate(360deg); }
         }
 
-        /* small helpers */
-        .muted {
-            color: var(--muted);
-            font-size: .95rem;
+        /* Animations */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
 
         .fade-in {
-            animation: fadeIn .35s ease both;
+            animation: fadeInUp 0.5s ease both;
         }
 
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(6px); }
-            to { opacity: 1; transform: none; }
+        .delay-1 {
+            animation-delay: 0.2s;
         }
 
+        .delay-2 {
+            animation-delay: 0.4s;
+        }
+
+        .delay-3 {
+            animation-delay: 0.6s;
+        }
+
+        /* Divider */
         .divider {
             border: none;
             border-top: 1px dashed #F2F2F2;
-            margin: 16px 0;
+            margin: 20px 0;
         }
 
-        /* Progress bar */
-        .progress-bar {
-            height: 6px;
-            background: #e0e0e0;
-            border-radius: 3px;
-            overflow: hidden;
-            margin: 8px 0;
+        /* Footer */
+        .footer {
+            background: linear-gradient(90deg, var(--primary-brown), #5D4037);
+            color: white;
+            padding: 40px 28px;
+            margin-top: 60px;
         }
 
-        .progress-fill {
-            height: 100%;
-            background: linear-gradient(90deg, var(--primary-orange), var(--primary-brown));
-            border-radius: 3px;
-            transition: width 0.5s ease;
+        .footer-content {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 40px;
+            max-width: 1200px;
+            margin: 0 auto;
         }
 
-        /* responsive */
-        @media (max-width: 720px) {
-            .sidebar {
-                display: none;
+        .footer-logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 15px;
+        }
+
+        .footer-logo img {
+            width: 40px;
+            height: 40px;
+            border-radius: 8px;
+        }
+
+        .footer-logo-text {
+            font-family: "Luckiest Guy", "Poppins", sans-serif;
+            font-size: 1.5rem;
+            color: var(--accent-yellow);
+        }
+
+        .footer-description {
+            opacity: 0.8;
+            line-height: 1.6;
+            margin-bottom: 20px;
+        }
+
+        .footer-heading {
+            font-size: 1.2rem;
+            margin-bottom: 20px;
+            color: var(--accent-yellow);
+            position: relative;
+            padding-bottom: 10px;
+        }
+
+        .footer-heading::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 30px;
+            height: 3px;
+            background: var(--primary-orange);
+            border-radius: 2px;
+        }
+
+        .footer-links {
+            list-style: none;
+        }
+
+        .footer-links li {
+            margin-bottom: 12px;
+        }
+
+        .footer-links a {
+            color: rgba(255,255,255,0.8);
+            text-decoration: none;
+            transition: all var(--transition-speed) ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .footer-links a:hover {
+            color: var(--accent-yellow);
+            transform: translateX(5px);
+        }
+
+        .social-links {
+            display: flex;
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .social-links a {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.1);
+            color: white;
+            transition: all var(--transition-speed) ease;
+        }
+
+        .social-links a:hover {
+            background: var(--primary-orange);
+            transform: translateY(-3px);
+        }
+
+        .footer-bottom {
+            text-align: center;
+            margin-top: 40px;
+            padding-top: 20px;
+            border-top: 1px solid rgba(255,255,255,0.1);
+            opacity: 0.7;
+            font-size: 0.9rem;
+        }
+
+        /* Responsive design */
+        @media (max-width: 980px) {
+            .top-area {
+                grid-template-columns: 1fr;
+            }
+            
+            .platform-options {
+                grid-template-columns: repeat(3, 1fr);
+            }
+        }
+
+        @media (max-width: 768px) {
+            .main-header {
+                padding: 0 20px;
+            }
+            
+            .hero h1 {
+                font-size: 2.2rem;
+            }
+            
+            .hero p {
+                font-size: 1rem;
+            }
+            
+            .hero-cta {
+                flex-direction: column;
             }
             
             .main {
-                margin-left: 0;
-                padding: 16px;
-            }
-            
-            .header {
-                flex-direction: column;
-                align-items: flex-start;
-                gap: 12px;
+                padding: 30px 20px;
             }
             
             .inline-row {
                 flex-direction: column;
             }
             
-            .user-info {
-                width: 100%;
-            }
-            
             .btn-row {
                 flex-direction: column;
             }
+            
+            .footer-content {
+                grid-template-columns: 1fr;
+                gap: 30px;
+            }
+            
+            .platform-options {
+                grid-template-columns: repeat(2, 1fr);
+            }
         }
 
-        /* Menu toggle for mobile */
-        .menu-toggle {
-            display: none;
-            position: fixed;
-            top: 15px;
-            left: 15px;
-            z-index: 101;
-            background: var(--primary-brown);
-            color: white;
-            border: none;
-            border-radius: 50%;
-            width: 50px;
-            height: 50px;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
-            cursor: pointer;
-            transition: all var(--transition-speed) ease;
-        }
-
-        .menu-toggle:hover {
-            transform: scale(1.05);
-        }
-
-        @media (max-width: 720px) {
-            .menu-toggle { 
-                display: flex;
-                align-items: center;
+        @media (max-width: 480px) {
+            .main-header {
+                flex-direction: column;
+                height: auto;
+                padding: 15px;
+            }
+            
+            .user-header-info {
+                margin-top: 15px;
+                width: 100%;
                 justify-content: center;
             }
             
-            .sidebar.show { 
-                display: block; 
-                width: 80%; 
-                box-shadow: 5px 0 25px rgba(0,0,0,0.15);
+            .hero {
+                padding: 120px 20px 50px;
             }
-        }
-
-        /* Footer */
-        .footer {
-            margin-top: 40px;
-            text-align: center;
-            padding: 20px;
-            color: var(--muted);
-            font-size: 0.9rem;
-            border-top: 1px solid #f0f0f0;
-        }
-
-        /* Custom scrollbar */
-        ::-webkit-scrollbar {
-            width: 8px;
-        }
-
-        ::-webkit-scrollbar-track {
-            background: #f1f1f1;
-            border-radius: 10px;
-        }
-
-        ::-webkit-scrollbar-thumb {
-            background: var(--primary-orange);
-            border-radius: 10px;
-        }
-
-        ::-webkit-scrollbar-thumb:hover {
-            background: var(--primary-brown);
+            
+            .hero h1 {
+                font-size: 1.8rem;
+            }
+            
+            .section-title {
+                font-size: 1.5rem;
+            }
+            
+            .platform-options {
+                grid-template-columns: 1fr;
+            }
+            
+            .card {
+                padding: 20px;
+            }
         }
     </style>
 </head>
 <body>
 
-<!-- Menu toggle for mobile -->
-<button class="menu-toggle" id="menuToggle" aria-label="Ouvrir le menu">
-    <i class="fas fa-bars"></i>
-</button>
-
-<!-- SIDEBAR -->
-<aside class="sidebar" id="sidebar">
-    <div class="brand">
+<!-- HEADER -->
+<header class="main-header">
+    <div class="logo-container">
         <img src="https://ui-avatars.com/api/?name=MaestroDigitLab&background=FF7A59&color=fff" alt="logo MaestroDigitLab">
-        <div>
-            <h2>MaestroDigitLab</h2>
-            <div class="brand-subtitle">boost & marketing</div>
-        </div>
+        <div class="logo-text">MaestroDigitLab</div>
     </div>
 
-    <nav aria-label="Navigation principale">
-        <ul>
-            <li><a href="#" class="active"><i class="fas fa-home"></i><span>Tableau de bord</span></a></li>
-            <li><a href="commandes.html"><i class="fas fa-shopping-cart"></i><span>Commandes</span></a></li>
-            <li><a href="services.html"><i class="fas fa-concierge-bell"></i><span>Services</span></a></li>
-            <li><a href="fonds.html"><i class="fas fa-wallet"></i><span>Portefeuille</span></a></li>
-            <li><a href="statistiques.html"><i class="fas fa-chart-line"></i><span>Statistiques</span></a></li>
-            <li><a href="#"><i class="fas fa-cog"></i><span>Paramètres</span></a></li>
-        </ul>
-    </nav>
-</aside>
+    <div class="user-header-info">
+        <img src="https://ui-avatars.com/api/?name=John+Doe&background=8B4513&color=fff" alt="Photo de profil de John Doe">
+        <div>
+            <div class="name">John Doe</div>
+            <p>Solde: <strong>25 000 FCFA</strong></p>
+        </div>
+    </div>
+</header>
 
-<!-- MAIN -->
+<!-- HERO SECTION -->
+<section class="hero">
+    <div class="hero-content">
+        <h1>Boostez Votre Présence en Ligne</h1>
+        <p>Des services de qualité pour augmenter votre visibilité sur les réseaux sociaux et atteindre vos objectifs digitaux</p>
+        <div class="hero-cta">
+            <a href="#orderCard" class="btn btn-primary"><i class="fas fa-bolt"></i> Commander maintenant</a>
+            <a href="#services" class="btn btn-secondary"><i class="fas fa-info-circle"></i> En savoir plus</a>
+        </div>
+    </div>
+</section>
+
+<!-- MAIN CONTENT -->
 <main class="main">
-    <header class="header">
-        <div class="header-left">
-            <h1>Tableau de bord</h1>
-            <div class="muted">Bienvenue sur votre espace — commandez rapidement vos services</div>
-        </div>
-
-        <div class="user-info">
-            <img src="https://ui-avatars.com/api/?name=John+Doe&background=8B4513&color=fff" alt="Photo de profil de John Doe">
-            <div>
-                <div class="name">John Doe</div>
-                <p id="balanceText">Solde: <strong id="balanceValue">25 000 FCFA</strong></p>
-            </div>
-        </div>
-    </header>
-
     <!-- TOP AREA: balance / quick order -->
-    <section class="top-area" aria-labelledby="quickOrderTitle">
+    <section class="top-area">
         <!-- Balance & quick actions -->
         <div class="card balance-card fade-in">
-            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px">
+            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:15px">
                 <div>
                     <div style="font-size:.9rem;color:var(--muted)">Solde disponible</div>
                     <div class="balance-amount" id="balanceAmount">25 000 FCFA</div>
                 </div>
                 <div style="text-align:right">
                     <div class="muted">Compte: <strong>Pro</strong></div>
-                    <div style="margin-top:10px"><button class="btn btn-secondary" id="btnDeposer"><i class="fas fa-plus"></i>Déposer</button></div>
+                    <div style="margin-top:12px"><button class="btn btn-secondary" id="btnDeposer"><i class="fas fa-plus"></i> Déposer</button></div>
                 </div>
             </div>
             <div class="divider"></div>
-            <div style="display:flex;gap:10px;flex-wrap:wrap">
+            
+            <div class="quick-stats">
+                <div class="stat-item">
+                    <div class="value">12</div>
+                    <div class="label">Commandes actives</div>
+                </div>
+                <div class="stat-item">
+                    <div class="value">7</div>
+                    <div class="label">Commandes terminées</div>
+                </div>
+            </div>
+            
+            <div class="divider"></div>
+            <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:15px">
                 <button class="btn btn-primary" id="quickOrderBtn"><i class="fas fa-magic"></i> Commander maintenant</button>
-                <a href="services.html" class="btn btn-secondary" style="text-decoration:none;display:inline-flex;align-items:center;justify-content:center"><i class="fas fa-list"></i>Tous les services</a>
+                <a href="services.html" class="btn btn-secondary" style="text-decoration:none;display:inline-flex;align-items:center;justify-content:center"><i class="fas fa-list"></i> Tous les services</a>
             </div>
         </div>
 
         <!-- Order form -->
-        <div class="card quick-order fade-in" id="orderCard">
+        <div class="card quick-order fade-in delay-1" id="orderCard">
             <div class="title">
                 <div>
-                    <strong id="quickOrderTitle">Formulaire de commande</strong>
+                    <strong>Formulaire de commande</strong>
                     <div class="muted" style="font-size:.9rem">Plateforme → Service → Quantité → Qualité</div>
                 </div>
                 <div class="info">Prix estimé en temps réel</div>
             </div>
 
-            <form id="orderForm" autocomplete="off" novalidate>
-                <!-- Platform -->
-                <div class="field">
-                    <label for="platform"><i class="fas fa-globe"></i> Plateforme</label>
-                    <select id="platform" required aria-describedby="platformHelp">
-                        <option value="">Sélectionnez une plateforme</option>
-                        <option value="facebook">Facebook</option>
-                        <option value="instagram" selected>Instagram</option>
-                        <option value="tiktok">TikTok</option>
-                        <option value="youtube">YouTube</option>
-                        <option value="autre">Autre</option>
-                    </select>
-                    <div class="muted" id="platformHelp">Choisissez la plateforme cible</div>
+            <!-- Platform selection -->
+            <div class="platform-options">
+                <div class="platform-option active" data-platform="facebook">
+                    <i class="fab fa-facebook" style="color: #3b5998;"></i>
+                    <div class="platform-name">Facebook</div>
                 </div>
+                <div class="platform-option" data-platform="instagram">
+                    <i class="fab fa-instagram" style="color: #E1306C;"></i>
+                    <div class="platform-name">Instagram</div>
+                </div>
+                <div class="platform-option" data-platform="tiktok">
+                    <i class="fab fa-tiktok" style="color: #000000;"></i>
+                    <div class="platform-name">TikTok</div>
+                </div>
+                <div class="platform-option" data-platform="youtube">
+                    <i class="fab fa-youtube" style="color: #FF0000;"></i>
+                    <div class="platform-name">YouTube</div>
+                </div>
+                <div class="platform-option" data-platform="autre">
+                    <i class="fas fa-globe" style="color: #9E9E9E;"></i>
+                    <div class="platform-name">Autre</div>
+                </div>
+            </div>
 
+            <form id="orderForm" autocomplete="off" novalidate>
                 <!-- Service -->
                 <div class="field">
                     <label for="service"><i class="fas fa-cog"></i> Service</label>
@@ -864,7 +1069,7 @@
                         <span id="submitText">Passer la commande</span>
                         <span id="submitSpinner" class="spinner" style="display:none"></span>
                     </button>
-                    <button type="button" id="resetForm" class="btn btn-secondary"><i class="fas fa-redo"></i>Réinitialiser</button>
+                    <button type="button" id="resetForm" class="btn btn-secondary"><i class="fas fa-redo"></i> Réinitialiser</button>
                 </div>
             </form>
 
@@ -875,34 +1080,79 @@
     </section>
 
     <!-- RECENT ORDERS -->
-    <section class="card fade-in" aria-labelledby="recentOrdersTitle">
-        <div class="section-title" id="recentOrdersTitle">
+    <section class="card fade-in delay-2" id="services">
+        <div class="section-title">
             <i class="fas fa-history"></i> Commandes Récentes
         </div>
 
-        <table class="orders" id="ordersTable">
-            <thead>
-                <tr>
-                    <th>ID</th>
-                    <th>Service</th>
-                    <th>Lien</th>
-                    <th>Quantité</th>
-                    <th>Qualité</th>
-                    <th>Prix</th>
-                    <th>Statut</th>
-                    <th>Date</th>
-                </tr>
-            </thead>
-            <tbody>
-                <!-- Rempli par JS (localStorage) -->
-            </tbody>
-        </table>
+        <div class="orders-container">
+            <table class="orders" id="ordersTable">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Service</th>
+                        <th>Lien</th>
+                        <th>Quantité</th>
+                        <th>Qualité</th>
+                        <th>Prix</th>
+                        <th>Statut</th>
+                        <th>Date</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- Rempli par JS (localStorage) -->
+                </tbody>
+            </table>
+        </div>
     </section>
-
-    <footer class="footer">
-        <p>© 2023 MaestroDigitLab - Tous droits réservés</p>
-    </footer>
 </main>
+
+<!-- FOOTER -->
+<footer class="footer">
+    <div class="footer-content">
+        <div class="footer-about">
+            <div class="footer-logo">
+                <img src="https://ui-avatars.com/api/?name=MaestroDigitLab&background=FF7A59&color=fff" alt="logo MaestroDigitLab">
+                <div class="footer-logo-text">MaestroDigitLab</div>
+            </div>
+            <p class="footer-description">
+                Nous fournissons des services de marketing digital de qualité pour booster votre présence en ligne et atteindre vos objectifs.
+            </p>
+            <div class="social-links">
+                <a href="#"><i class="fab fa-facebook-f"></i></a>
+                <a href="#"><i class="fab fa-instagram"></i></a>
+                <a href="#"><i class="fab fa-tiktok"></i></a>
+                <a href="#"><i class="fab fa-youtube"></i></a>
+            </div>
+        </div>
+
+        <div class="footer-links-container">
+            <h3 class="footer-heading">Liens Rapides</h3>
+            <ul class="footer-links">
+                <li><a href="#"><i class="fas fa-chevron-right"></i> Tableau de bord</a></li>
+                <li><a href="#"><i class="fas fa-chevron-right"></i> Services</a></li>
+                <li><a href="#"><i class="fas fa-chevron-right"></i> Commandes</a></li>
+                <li><a href="#"><i class="fas fa-chevron-right"></i> Portefeuille</a></li>
+                <li><a href="#"><i class="fas fa-chevron-right"></i> Statistiques</a></li>
+            </ul>
+        </div>
+
+        <div class="footer-links-container">
+            <h3 class="footer-heading">Support</h3>
+            <ul class="footer-links">
+                <li><a href="#"><i class="fas fa-chevron-right"></i> Centre d'aide</a></li>
+                <li><a href="#"><i class="fas fa-chevron-right"></i> FAQ</a></li>
+                <li><a href="#"><i class="fas fa-chevron-right"></i> Contact</a></li>
+                <li><a href="#"><i class="fas fa-chevron-right"></i> Politique de confidentialité</a></li>
+                <li><a href="#"><i class="fas fa-chevron-right"></i> Conditions d'utilisation</a></li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="footer-bottom">
+        <p>&copy; 2023 MaestroDigitLab - Tous droits réservés</p>
+    </div>
+</footer>
 
 <!-- Toast notification -->
 <div class="toast" id="toast" role="alert" aria-live="assertive"></div>
@@ -1028,7 +1278,7 @@ const formatFCFA = (n) => {
 }
 
 // Elements
-const platformEl = document.getElementById('platform');
+const platformOptions = document.querySelectorAll('.platform-option');
 const serviceEl = document.getElementById('service');
 const quantityEl = document.getElementById('quantity');
 const qualityEl = document.getElementById('quality');
@@ -1042,20 +1292,20 @@ const toastEl = document.getElementById('toast');
 const submitBtn = document.getElementById('submitBtn');
 const submitText = document.getElementById('submitText');
 const submitSpinner = document.getElementById('submitSpinner');
-const menuToggle = document.getElementById('menuToggle');
-const sidebar = document.getElementById('sidebar');
 const btnDeposer = document.getElementById('btnDeposer');
+const quickOrderBtn = document.getElementById('quickOrderBtn');
+const resetFormBtn = document.getElementById('resetForm');
 
 let balance = 25000; // valeur initiale
 balanceAmountEl.textContent = formatFCFA(balance);
+let currentPlatform = 'instagram';
 
 // Afficher les paliers disponibles pour le service sélectionné
 function updateQuantityHelp() {
-    const platform = platformEl.value;
     const service = serviceEl.value;
     
-    if (pricing[platform] && pricing[platform][service]) {
-        const tiers = pricing[platform][service];
+    if (pricing[currentPlatform] && pricing[currentPlatform][service]) {
+        const tiers = pricing[currentPlatform][service];
         const tierQuantities = tiers.map(tier => tier.quantity.toLocaleString('fr-FR'));
         quantityHelp.textContent = `Quantités disponibles: ${tierQuantities.join(', ')}`;
     } else {
@@ -1132,14 +1382,13 @@ function findPriceForQuantity(platform, service, quantity) {
 
 // Price calculation
 function calculatePrice(){
-    const platform = platformEl.value;
     const service = serviceEl.value;
     const qty = Number(quantityEl.value) || 0;
     const quality = qualityEl.value;
 
-    if (!platform || !service || qty <= 0) return 0;
+    if (!service || qty <= 0) return 0;
 
-    const basePrice = findPriceForQuantity(platform, service, qty);
+    const basePrice = findPriceForQuantity(currentPlatform, service, qty);
     const qualMultiplier = (quality === 'high') ? 2 : 1;
     const price = basePrice * qualMultiplier;
     
@@ -1227,10 +1476,24 @@ function todayStr(){
 }
 
 // EVENTS
-platformEl.addEventListener('change', () => {
-    populateServices(platformEl.value);
-    updateQuantityHelp();
+// Platform selection
+platformOptions.forEach(option => {
+    option.addEventListener('click', () => {
+        // Remove active class from all options
+        platformOptions.forEach(opt => opt.classList.remove('active'));
+        
+        // Add active class to clicked option
+        option.classList.add('active');
+        
+        // Update current platform
+        currentPlatform = option.dataset.platform;
+        
+        // Update services dropdown
+        populateServices(currentPlatform);
+        updateQuantityHelp();
+    });
 });
+
 serviceEl.addEventListener('change', () => {
     updatePrice();
     updateQuantityHelp();
@@ -1239,15 +1502,15 @@ quantityEl.addEventListener('input', updatePrice);
 qualityEl.addEventListener('change', updatePrice);
 
 // quick order button scrolls to form and focuses link
-document.getElementById('quickOrderBtn').addEventListener('click', () => {
+quickOrderBtn.addEventListener('click', () => {
     document.getElementById('link').focus();
-    window.scrollTo({top: document.getElementById('orderCard').offsetTop - 20, behavior:'smooth'});
+    window.scrollTo({top: document.getElementById('orderCard').offsetTop - 100, behavior:'smooth'});
 });
 
 // reset form
-document.getElementById('resetForm').addEventListener('click', () => {
+resetFormBtn.addEventListener('click', () => {
     if (confirm('Êtes-vous sûr de vouloir réinitialiser le formulaire ?')) {
-        populateServices(platformEl.value);
+        populateServices(currentPlatform);
         quantityEl.value = 1000;
         qualityEl.value = 'standard';
         linkEl.value = '';
@@ -1265,19 +1528,12 @@ btnDeposer.addEventListener('click', () => {
 orderForm.addEventListener('submit', async function(e){
     e.preventDefault();
 
-    const platform = platformEl.value;
     const service = serviceEl.value;
     const quantity = Number(quantityEl.value);
     const quality = qualityEl.value;
     const link = linkEl.value.trim();
 
     // Validation
-    if (!platform) {
-        showToast('Veuillez sélectionner une plateforme.', 'error');
-        platformEl.focus();
-        return;
-    }
-    
     if (!service) {
         showToast('Veuillez sélectionner un service.', 'error');
         serviceEl.focus();
@@ -1318,12 +1574,12 @@ orderForm.addEventListener('submit', async function(e){
         // débiter le solde local (si tu veux gérer via Firestore, remplace ici)
         balance = Math.max(0, balance - price);
         balanceAmountEl.textContent = formatFCFA(balance);
-        document.getElementById('balanceValue').textContent = formatFCFA(balance);
+        document.querySelector('.user-header-info p').innerHTML = `Solde: <strong>${formatFCFA(balance)}</strong>`;
     }
 
     const order = {
         id: uid('#MDL'),
-        platform: platform.charAt(0).toUpperCase() + platform.slice(1),
+        platform: currentPlatform.charAt(0).toUpperCase() + currentPlatform.slice(1),
         service,
         link,
         quantity,
@@ -1351,32 +1607,9 @@ orderForm.addEventListener('submit', async function(e){
     submitBtn.disabled = false;
 });
 
-// Toggle sidebar on mobile
-menuToggle.addEventListener('click', (e) => {
-    e.stopPropagation();
-    sidebar.classList.toggle('show');
-});
-
-// Close sidebar when clicking outside on mobile
-document.addEventListener('click', (e) => {
-    if (window.innerWidth <= 720 && 
-        !sidebar.contains(e.target) && 
-        !menuToggle.contains(e.target) && 
-        sidebar.classList.contains('show')) {
-        sidebar.classList.remove('show');
-    }
-});
-
-// Close sidebar when pressing Escape key
-document.addEventListener('keydown', (e) => {
-    if (e.key === 'Escape' && sidebar.classList.contains('show')) {
-        sidebar.classList.remove('show');
-    }
-});
-
 // INITIALIZE
-platformEl.value = 'instagram'; // Set default platform
-populateServices(platformEl.value);
+// Set Instagram as default platform
+populateServices(currentPlatform);
 updatePrice();
 renderOrders();
 
