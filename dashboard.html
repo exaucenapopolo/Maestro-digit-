@@ -3,9 +3,9 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta name="description" content="Tableau de bord MaestroDigitLab - Services de marketing digital et croissance sur les réseaux sociaux">
+    <meta name="description" content="Tableau de bord MADIL - Services de marketing digital et croissance sur les réseaux sociaux">
     <meta name="keywords" content="marketing digital, réseaux sociaux, followers, likes, abonnés, Instagram, Facebook, TikTok">
-    <title>Tableau de bord - MaestroDigitLab</title>
+    <title>Tableau de bord - MADIL</title>
 
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Luckiest+Guy&display=swap" rel="stylesheet">
@@ -89,55 +89,175 @@
             letter-spacing: 0.5px;
         }
 
+        /* Hamburger Menu */
+        .hamburger-menu {
+            position: relative;
+            display: flex;
+            align-items: center;
+        }
+
+        .menu-btn {
+            background: rgba(255,255,255,0.15);
+            border: none;
+            border-radius: 50%;
+            width: 45px;
+            height: 45px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all var(--transition-speed) ease;
+            backdrop-filter: blur(10px);
+        }
+
+        .menu-btn:hover {
+            background: rgba(255,255,255,0.25);
+            transform: translateY(-2px);
+        }
+
+        .menu-btn span {
+            display: block;
+            width: 20px;
+            height: 2px;
+            background: var(--white);
+            margin: 2px 0;
+            transition: all var(--transition-speed) ease;
+        }
+
+        .menu-btn.active span:nth-child(1) {
+            transform: rotate(45deg) translate(5px, 5px);
+        }
+
+        .menu-btn.active span:nth-child(2) {
+            opacity: 0;
+        }
+
+        .menu-btn.active span:nth-child(3) {
+            transform: rotate(-45deg) translate(5px, -5px);
+        }
+
+        .dropdown-menu {
+            position: absolute;
+            top: 100%;
+            right: 0;
+            background: var(--white);
+            border-radius: var(--border-radius);
+            box-shadow: var(--card-shadow);
+            width: 280px;
+            padding: 10px 0;
+            z-index: 1001;
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(-10px);
+            transition: all var(--transition-speed) ease;
+        }
+
+        .dropdown-menu.active {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(10px);
+        }
+
+        .dropdown-menu ul {
+            list-style: none;
+        }
+
+        .dropdown-menu li {
+            padding: 0;
+            margin: 0;
+        }
+
+        .dropdown-menu a {
+            display: flex;
+            align-items: center;
+            padding: 12px 20px;
+            color: var(--primary-brown);
+            text-decoration: none;
+            transition: all var(--transition-speed) ease;
+            border-left: 3px solid transparent;
+        }
+
+        .dropdown-menu a:hover {
+            background: rgba(66, 133, 244, 0.1);
+            border-left-color: var(--primary-blue);
+            padding-left: 25px;
+        }
+
+        .dropdown-menu i {
+            width: 24px;
+            margin-right: 12px;
+            color: var(--primary-blue);
+        }
+
+        .menu-divider {
+            height: 1px;
+            background: #eee;
+            margin: 8px 0;
+        }
+
         /* WELCOME SECTION */
         .welcome-section {
-            background: linear-gradient(120deg, rgba(66, 133, 244, 0.1), rgba(255, 122, 89, 0.1));
-            padding: 100px 28px 40px;
+            background: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)), 
+                        url('https://images.unsplash.com/photo-1460925895917-afdab827c52f?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2015&q=80');
+            background-size: cover;
+            background-position: center;
+            padding: 120px 28px 60px;
             margin-top: var(--header-height);
             text-align: center;
-            border-bottom: 1px solid rgba(139, 69, 19, 0.1);
+            color: var(--white);
+            position: relative;
+            overflow: hidden;
         }
 
         .welcome-content {
             max-width: 800px;
             margin: 0 auto;
+            position: relative;
+            z-index: 2;
         }
 
         .welcome-title {
-            font-size: 2.2rem;
+            font-size: 2.5rem;
             margin-bottom: 10px;
             font-weight: 700;
-            color: var(--primary-brown);
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
             animation: fadeInUp 0.8s ease;
         }
 
         .welcome-subtitle {
-            font-size: 1.1rem;
+            font-size: 1.2rem;
             margin-bottom: 30px;
-            color: var(--muted);
+            opacity: 0.9;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.5);
             animation: fadeInUp 1s ease;
         }
 
         .balance-display {
             display: inline-block;
-            background: var(--white);
-            padding: 15px 30px;
-            border-radius: 50px;
-            box-shadow: var(--card-shadow);
+            background: rgba(255,255,255,0.15);
+            padding: 20px 35px;
+            border-radius: 15px;
+            backdrop-filter: blur(10px);
             margin-top: 20px;
+            border: 1px solid rgba(255,255,255,0.2);
             animation: fadeInUp 1.2s ease;
         }
 
         .balance-label {
             font-size: 0.9rem;
-            color: var(--muted);
+            color: rgba(255,255,255,0.9);
             margin-bottom: 5px;
         }
 
         .balance-amount {
-            font-size: 1.8rem;
+            font-size: 2rem;
             font-weight: 800;
-            color: var(--primary-blue);
+            color: var(--accent-yellow);
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.3);
         }
 
         /* MAIN CONTENT */
@@ -777,7 +897,7 @@
             }
             
             .welcome-title {
-                font-size: 1.8rem;
+                font-size: 2rem;
             }
             
             .welcome-subtitle {
@@ -808,17 +928,15 @@
 
         @media (max-width: 480px) {
             .main-header {
-                flex-direction: column;
-                height: auto;
                 padding: 15px;
             }
             
             .welcome-section {
-                padding: 120px 20px 30px;
+                padding: 100px 20px 40px;
             }
             
             .welcome-title {
-                font-size: 1.5rem;
+                font-size: 1.8rem;
             }
             
             .section-title {
@@ -826,11 +944,18 @@
             }
             
             .platform-options {
-                grid-template-columns: 1fr;
+                grid-template-columns: 1fr 1fr;
             }
             
             .card {
                 padding: 20px;
+            }
+            
+            .dropdown-menu {
+                width: 100%;
+                right: 0;
+                left: 0;
+                border-radius: 0;
             }
         }
     </style>
@@ -840,8 +965,44 @@
 <!-- HEADER -->
 <header class="main-header">
     <div class="logo-container">
-        <img src="https://ui-avatars.com/api/?name=MaestroDigitLab&background=FF7A59&color=fff" alt="logo MaestroDigitLab">
-        <div class="logo-text">MaestroDigitLab</div>
+        <img src="https://ui-avatars.com/api/?name=MADIL&background=FF7A59&color=fff" alt="logo MADIL">
+        <div class="logo-text">MADIL</div>
+    </div>
+
+    <div class="hamburger-menu">
+        <button class="menu-btn" id="menuBtn">
+            <span></span>
+            <span></span>
+            <span></span>
+        </button>
+        
+        <div class="dropdown-menu" id="dropdownMenu">
+            <ul>
+                <li><a href="#"><i class="fas fa-home"></i> Tableau de bord</a></li>
+                <li><a href="#"><i class="fas fa-user-circle"></i> Mon profil</a></li>
+                <li><a href="#"><i class="fas fa-wallet"></i> Portefeuille</a></li>
+                <li><a href="#"><i class="fas fa-history"></i> Historique</a></li>
+                
+                <div class="menu-divider"></div>
+                
+                <li><a href="#"><i class="fas fa-cog"></i> Paramètres</a></li>
+                <li><a href="#"><i class="fas fa-question-circle"></i> Aide & Support</a></li>
+                
+                <div class="menu-divider"></div>
+                
+                <li><a href="#"><i class="fas fa-bell"></i> Notifications <span class="badge">3</span></a></li>
+                <li><a href="#"><i class="fas fa-gift"></i> Offres spéciales</a></li>
+                
+                <div class="menu-divider"></div>
+                
+                <li><a href="#"><i class="fas fa-users"></i> Parrainage</a></li>
+                <li><a href="#"><i class="fas fa-star"></i> Évaluez-nous</a></li>
+                
+                <div class="menu-divider"></div>
+                
+                <li><a href="#"><i class="fas fa-sign-out-alt"></i> Déconnexion</a></li>
+            </ul>
+        </div>
     </div>
 </header>
 
@@ -849,7 +1010,7 @@
 <section class="welcome-section">
     <div class="welcome-content">
         <h1 class="welcome-title">Bienvenue, John Doe</h1>
-        <p class="welcome-subtitle">Suivez votre tableau de bord</p>
+        <p class="welcome-subtitle">Suivez votre tableau de bord et gérez vos services en un seul endroit</p>
         <div class="balance-display">
             <div class="balance-label">Solde disponible</div>
             <div class="balance-amount" id="balanceAmount">25 000 FCFA</div>
@@ -1009,8 +1170,8 @@
     <div class="footer-content">
         <div class="footer-about">
             <div class="footer-logo">
-                <img src="https://ui-avatars.com/api/?name=MaestroDigitLab&background=FF7A59&color=fff" alt="logo MaestroDigitLab">
-                <div class="footer-logo-text">MaestroDigitLab</div>
+                <img src="https://ui-avatars.com/api/?name=MADIL&background=FF7A59&color=fff" alt="logo MADIL">
+                <div class="footer-logo-text">MADIL</div>
             </div>
             <p class="footer-description">
                 Nous fournissons des services de marketing digital de qualité pour booster votre présence en ligne et atteindre vos objectifs.
@@ -1047,7 +1208,7 @@
     </div>
 
     <div class="footer-bottom">
-        <p>&copy; 2023 MaestroDigitLab - Tous droits réservés</p>
+        <p>&copy; 2023 MADIL - Tous droits réservés</p>
     </div>
 </footer>
 
@@ -1202,10 +1363,27 @@ const quickOrderBtn = document.getElementById('quickOrderBtn');
 const resetFormBtn = document.getElementById('resetForm');
 const activeOrdersEl = document.getElementById('activeOrders');
 const completedOrdersEl = document.getElementById('completedOrders');
+const menuBtn = document.getElementById('menuBtn');
+const dropdownMenu = document.getElementById('dropdownMenu');
 
 let balance = 25000; // valeur initiale
 balanceAmountEl.textContent = formatFCFA(balance);
 let currentPlatform = 'instagram';
+
+// Gestion du menu hamburger
+menuBtn.addEventListener('click', function(e) {
+    e.stopPropagation();
+    menuBtn.classList.toggle('active');
+    dropdownMenu.classList.toggle('active');
+});
+
+// Fermer le menu en cliquant à l'extérieur
+document.addEventListener('click', function(e) {
+    if (dropdownMenu.classList.contains('active') && !dropdownMenu.contains(e.target) && !menuBtn.contains(e.target)) {
+        menuBtn.classList.remove('active');
+        dropdownMenu.classList.remove('active');
+    }
+});
 
 // Afficher les paliers disponibles pour le service sélectionné
 function updateQuantityHelp() {
@@ -1216,7 +1394,7 @@ function updateQuantityHelp() {
         const tierQuantities = tiers.map(tier => tier.quantity.toLocaleString('fr-FR'));
         quantityHelp.textContent = `Quantités disponibles: ${tierQuantities.join(', ')}`;
     } else {
-        quantityHelp.textContent = 'Saisissez la quantité désirée';
+    quantityHelp.textContent = 'Saisissez la quantité désirée';
     }
 }
 
