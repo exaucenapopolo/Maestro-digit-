@@ -1,0 +1,867 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Services - MADIL</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Luckiest+Guy&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-orange: #FF7A59;
+            --primary-brown: #8B4513;
+            --primary-blue: #4285F4;
+            --primary-green: #34A853;
+            --cream: #FBE9E7;
+            --white: #FFFFFF;
+            --muted: #9E9E9E;
+            --card-shadow: 0 8px 30px rgba(0,0,0,0.08);
+            --accent-yellow: #FFD64D;
+            --glass: rgba(255,255,255,0.7);
+            --success: #4CAF50;
+            --warning: #FF9800;
+            --error: #F44336;
+            --transition-speed: 0.3s;
+            --border-radius: 14px;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: "Poppins", sans-serif;
+            background: linear-gradient(180deg, #FFFDF8 0%, var(--cream) 100%);
+            color: #222;
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        /* HEADER */
+        .main-header {
+            background: linear-gradient(90deg, var(--primary-brown), var(--primary-blue));
+            color: var(--white);
+            padding: 0 28px;
+            height: 70px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+
+        .logo-container {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .logo-container img {
+            width: 42px;
+            height: 42px;
+            border-radius: 10px;
+            object-fit: cover;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+        }
+
+        .logo-text {
+            font-family: "Luckiest Guy", "Poppins", sans-serif;
+            font-size: 1.5rem;
+            color: var(--accent-yellow);
+            letter-spacing: 0.5px;
+        }
+
+        .back-btn {
+            color: var(--white);
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-weight: 500;
+            transition: all var(--transition-speed) ease;
+        }
+
+        .back-btn:hover {
+            transform: translateX(-5px);
+        }
+
+        /* HERO SECTION */
+        .services-hero {
+            background: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), 
+                        url('https://images.unsplash.com/photo-1460925895917-afdab827c52f?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2015&q=80');
+            background-size: cover;
+            background-position: center;
+            padding: 120px 28px 60px;
+            margin-top: 70px;
+            text-align: center;
+            color: var(--white);
+        }
+
+        .services-hero h1 {
+            font-size: 2.8rem;
+            margin-bottom: 16px;
+            font-weight: 800;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .services-hero p {
+            font-size: 1.2rem;
+            max-width: 700px;
+            margin: 0 auto 30px;
+            opacity: 0.9;
+        }
+
+        /* SERVICES SECTION */
+        .services-container {
+            padding: 40px 28px;
+        }
+
+        .section-title {
+            font-size: 1.8rem;
+            color: var(--primary-brown);
+            margin-bottom: 28px;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            position: relative;
+            padding-bottom: 10px;
+        }
+
+        .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 60px;
+            height: 4px;
+            background: linear-gradient(90deg, var(--primary-orange), var(--primary-blue));
+            border-radius: 2px;
+        }
+
+        .services-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 25px;
+            margin-bottom: 50px;
+        }
+
+        .service-card {
+            background: var(--white);
+            border-radius: var(--border-radius);
+            padding: 25px;
+            box-shadow: var(--card-shadow);
+            transition: all var(--transition-speed) ease;
+            cursor: pointer;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+            border: 2px solid transparent;
+        }
+
+        .service-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+            border-color: var(--primary-orange);
+        }
+
+        .service-card i {
+            font-size: 2.5rem;
+            color: var(--primary-blue);
+            margin-bottom: 15px;
+            display: block;
+        }
+
+        .service-card h3 {
+            font-size: 1.3rem;
+            margin-bottom: 10px;
+            color: var(--primary-brown);
+        }
+
+        .service-card p {
+            color: var(--muted);
+            margin-bottom: 15px;
+            font-size: 0.9rem;
+        }
+
+        .service-card .price {
+            font-weight: 800;
+            color: var(--primary-blue);
+            font-size: 1.2rem;
+            margin-top: 10px;
+        }
+
+        /* SERVICE FORM */
+        .service-form-container {
+            background: var(--white);
+            border-radius: var(--border-radius);
+            padding: 30px;
+            box-shadow: var(--card-shadow);
+            margin-top: 30px;
+            display: none;
+        }
+
+        .service-form-container.active {
+            display: block;
+            animation: fadeIn 0.5s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .form-title {
+            font-size: 1.5rem;
+            color: var(--primary-brown);
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid var(--cream);
+        }
+
+        .service-form {
+            display: grid;
+            gap: 20px;
+        }
+
+        .field {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        label {
+            font-size: .9rem;
+            color: var(--primary-brown);
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        label i {
+            font-size: 0.8rem;
+            color: var(--muted);
+        }
+
+        select, input[type="text"], input[type="number"], input[type="email"], input[type="date"], textarea {
+            padding: 14px 16px;
+            border-radius: 10px;
+            border: 1px solid #E8E8E8;
+            font-size: 1rem;
+            font-family: 'Poppins', sans-serif;
+            transition: border-color .15s, box-shadow .15s;
+            background: #fff;
+            width: 100%;
+        }
+
+        select:focus, input:focus, textarea:focus {
+            outline: none;
+            border-color: var(--primary-blue);
+            box-shadow: 0 6px 18px rgba(66,133,244,0.12);
+        }
+
+        .inline-row {
+            display: flex;
+            gap: 15px;
+        }
+
+        .inline-row .field {
+            flex: 1;
+        }
+
+        textarea {
+            min-height: 120px;
+            resize: vertical;
+        }
+
+        .price-box {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 16px 20px;
+            border-radius: 10px;
+            background: linear-gradient(90deg, #fff, #fff);
+            border: 1px dashed #eee;
+            animation: pulse 2s infinite;
+            margin: 10px 0;
+        }
+
+        @keyframes pulse {
+            0% { box-shadow: 0 0 0 0 rgba(66,133,244,0.2); }
+            70% { box-shadow: 0 0 0 10px rgba(66,133,244,0); }
+            100% { box-shadow: 0 0 0 0 rgba(66,133,244,0); }
+        }
+
+        .price-box .label {
+            color: var(--muted);
+            font-weight: 600;
+        }
+
+        .price-box .value {
+            font-weight: 800;
+            color: var(--primary-blue);
+            transition: all 0.3s ease;
+            font-size: 1.4rem;
+        }
+
+        .btn-row {
+            display: flex;
+            gap: 15px;
+            margin-top: 15px;
+        }
+
+        .btn {
+            flex: 1;
+            padding: 16px;
+            border-radius: 10px;
+            border: none;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all var(--transition-speed) ease;
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        .btn-primary {
+            background: linear-gradient(90deg, var(--primary-green), #2e7d32);
+            color: #fff;
+            box-shadow: 0 8px 20px rgba(46,125,50,0.18);
+        }
+
+        .btn-primary:hover {
+            background: linear-gradient(90deg, #2e7d32, var(--primary-green));
+            transform: translateY(-2px);
+            box-shadow: 0 12px 25px rgba(46,125,50,0.25);
+        }
+
+        .btn-secondary {
+            background: #fff;
+            border: 1px solid #eee;
+            color: var(--primary-brown);
+        }
+
+        .btn-secondary:hover {
+            background: #f9f9f9;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 15px rgba(0,0,0,0.1);
+        }
+
+        /* FOOTER */
+        .footer {
+            background: linear-gradient(90deg, var(--primary-brown), var(--primary-blue));
+            color: white;
+            padding: 40px 28px;
+            margin-top: 60px;
+        }
+
+        .footer-content {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 40px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .footer-logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 15px;
+        }
+
+        .footer-logo img {
+            width: 40px;
+            height: 40px;
+            border-radius: 8px;
+        }
+
+        .footer-logo-text {
+            font-family: "Luckiest Guy", "Poppins", sans-serif;
+            font-size: 1.5rem;
+            color: var(--accent-yellow);
+        }
+
+        .footer-description {
+            opacity: 0.8;
+            line-height: 1.6;
+            margin-bottom: 20px;
+        }
+
+        .footer-heading {
+            font-size: 1.2rem;
+            margin-bottom: 20px;
+            color: var(--accent-yellow);
+            position: relative;
+            padding-bottom: 10px;
+        }
+
+        .footer-heading::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 30px;
+            height: 3px;
+            background: var(--primary-orange);
+            border-radius: 2px;
+        }
+
+        .footer-links {
+            list-style: none;
+        }
+
+        .footer-links li {
+            margin-bottom: 12px;
+        }
+
+        .footer-links a {
+            color: rgba(255,255,255,0.8);
+            text-decoration: none;
+            transition: all var(--transition-speed) ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .footer-links a:hover {
+            color: var(--accent-yellow);
+            transform: translateX(5px);
+        }
+
+        .social-links {
+            display: flex;
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .social-links a {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.1);
+            color: white;
+            transition: all var(--transition-speed) ease;
+        }
+
+        .social-links a:hover {
+            background: var(--primary-orange);
+            transform: translateY(-3px);
+        }
+
+        .footer-bottom {
+            text-align: center;
+            margin-top: 40px;
+            padding-top: 20px;
+            border-top: 1px solid rgba(255,255,255,0.1);
+            opacity: 0.7;
+            font-size: 0.9rem;
+        }
+
+        /* Responsive design */
+        @media (max-width: 768px) {
+            .services-hero h1 {
+                font-size: 2.2rem;
+            }
+            
+            .services-hero p {
+                font-size: 1rem;
+            }
+            
+            .services-container {
+                padding: 30px 20px;
+            }
+            
+            .inline-row {
+                flex-direction: column;
+            }
+            
+            .btn-row {
+                flex-direction: column;
+            }
+            
+            .footer-content {
+                grid-template-columns: 1fr;
+                gap: 30px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .main-header {
+                padding: 15px;
+            }
+            
+            .services-hero {
+                padding: 100px 20px 40px;
+            }
+            
+            .services-hero h1 {
+                font-size: 1.8rem;
+            }
+            
+            .section-title {
+                font-size: 1.5rem;
+            }
+            
+            .services-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .service-card {
+                padding: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<!-- HEADER -->
+<header class="main-header">
+    <div class="logo-container">
+        <img src="https://ui-avatars.com/api/?name=MADIL&background=FF7A59&color=fff" alt="logo MADIL">
+        <div class="logo-text">MADIL</div>
+    </div>
+    <a href="dashboard.html" class="back-btn">
+        <i class="fas fa-arrow-left"></i> Retour au tableau de bord
+    </a>
+</header>
+
+<!-- HERO SECTION -->
+<section class="services-hero">
+    <h1>Nos Services</h1>
+    <p>Découvrez tous nos services professionnels pour booster votre présence en ligne et développer votre activité</p>
+</section>
+
+<!-- SERVICES SECTION -->
+<section class="services-container">
+    <h2 class="section-title">
+        <i class="fas fa-concierge-bell"></i> Services Disponibles
+    </h2>
+    
+    <div class="services-grid">
+        <!-- Service 1 -->
+        <div class="service-card" data-service="tiktok-monetisable">
+            <i class="fab fa-tiktok"></i>
+            <h3>Création de compte TikTok monétisable</h3>
+            <p>Obtenez un compte TikTok entièrement configuré et prêt à être monétisé</p>
+            <div class="price">7 500 FCFA</div>
+        </div>
+        
+        <!-- Service 2 -->
+        <div class="service-card" data-service="app-mobile">
+            <i class="fas fa-mobile-alt"></i>
+            <h3>Création d'application mobile</h3>
+            <p>Développement d'applications mobiles sur mesure pour iOS et Android</p>
+            <div class="price">À partir de 75 000 FCFA</div>
+        </div>
+        
+        <!-- Service 3 -->
+        <div class="service-card" data-service="site-web">
+            <i class="fas fa-laptop-code"></i>
+            <h3>Création de site web</h3>
+            <p>Conception de sites web professionnels responsive et modernes</p>
+            <div class="price">À partir de 45 000 FCFA</div>
+        </div>
+        
+        <!-- Service 4 -->
+        <div class="service-card" data-service="chanson-personnalisee">
+            <i class="fas fa-music"></i>
+            <h3>Chanson personnalisée</h3>
+            <p>Une chanson unique créée spécialement pour vous ou pour offrir</p>
+            <div class="price">25 000 FCFA</div>
+        </div>
+        
+        <!-- Service 5 -->
+        <div class="service-card" data-service="campagne-pub">
+            <i class="fas fa-ad"></i>
+            <h3>Campagne publicitaire ciblée</h3>
+            <p>Campagnes publicitaires optimisées sur les réseaux sociaux</p>
+            <div class="price">À partir de 15 000 FCFA</div>
+        </div>
+        
+        <!-- Service 6 -->
+        <div class="service-card" data-service="design">
+            <i class="fas fa-paint-brush"></i>
+            <h3>Design de logos et flyers</h3>
+            <p>Création d'identités visuelles percutantes et professionnelles</p>
+            <div class="price">À partir de 12 000 FCFA</div>
+        </div>
+    </div>
+    
+    <!-- FORMULAIRES DE SERVICE -->
+    <div class="service-form-container" id="tiktok-form">
+        <h3 class="form-title">Création de compte TikTok monétisable</h3>
+        <form class="service-form" id="tiktok-form-data">
+            <div class="field">
+                <label for="tiktok-username"><i class="fas fa-user"></i> Nom d'utilisateur souhaité</label>
+                <input type="text" id="tiktok-username" required placeholder="Votre nom d'utilisateur">
+            </div>
+            
+            <div class="field">
+                <label for="tiktok-email"><i class="fas fa-envelope"></i> Adresse email</label>
+                <input type="email" id="tiktok-email" required placeholder="votre@email.com">
+            </div>
+            
+            <div class="field">
+                <label for="tiktok-displayname"><i class="fas fa-signature"></i> Nom d'affichage</label>
+                <input type="text" id="tiktok-displayname" required placeholder="Nom visible sur le profil">
+            </div>
+            
+            <div class="inline-row">
+                <div class="field">
+                    <label for="tiktok-birthdate"><i class="fas fa-birthday-cake"></i> Date de naissance</label>
+                    <input type="date" id="tiktok-birthdate" required>
+                </div>
+                
+                <div class="field">
+                    <label for="tiktok-country"><i class="fas fa-globe"></i> Pays du compte</label>
+                    <select id="tiktok-country" required>
+                        <option value="">Sélectionnez un pays</option>
+                        <option value="fr">France</option>
+                        <option value="cm">Cameroun</option>
+                        <option value="ci">Côte d'Ivoire</option>
+                        <option value="sn">Sénégal</option>
+                        <option value="us">États-Unis</option>
+                        <option value="uk">Royaume-Uni</option>
+                        <option value="other">Autre</option>
+                    </select>
+                </div>
+            </div>
+            
+            <div class="field">
+                <label for="tiktok-niche"><i class="fas fa-tags"></i> Niche du compte</label>
+                <select id="tiktok-niche" required>
+                    <option value="">Sélectionnez une niche</option>
+                    <option value="divertissement">Divertissement</option>
+                    <option value="musique">Musique</option>
+                    <option value="danse">Danse</option>
+                    <option value="comédie">Comédie</option>
+                    <option value="education">Éducation</option>
+                    <option value="beaute">Beauté & Mode</option>
+                    <option value="cuisine">Cuisine</option>
+                    <option value="fitness">Fitness & Santé</option>
+                    <option value="voyage">Voyage</option>
+                    <option value="autre">Autre</option>
+                </select>
+            </div>
+            
+            <div class="price-box">
+                <div class="label">Prix total</div>
+                <div class="value">7 500 FCFA</div>
+            </div>
+            
+            <div class="btn-row">
+                <button type="submit" class="btn btn-primary">
+                    <i class="fab fa-whatsapp"></i> Commander et discuter
+                </button>
+                <button type="button" class="btn btn-secondary" id="reset-tiktok-form">
+                    <i class="fas fa-redo"></i> Réinitialiser
+                </button>
+            </div>
+        </form>
+    </div>
+    
+    <div class="service-form-container" id="app-mobile-form">
+        <h3 class="form-title">Création d'application mobile</h3>
+        <form class="service-form" id="app-mobile-form-data">
+            <div class="field">
+                <label for="app-name"><i class="fas fa-mobile-alt"></i> Nom de l'application</label>
+                <input type="text" id="app-name" required placeholder="Nom de votre application">
+            </div>
+            
+            <div class="field">
+                <label for="app-company"><i class="fas fa-building"></i> Nom de l'entreprise</label>
+                <input type="text" id="app-company" placeholder="Votre entreprise (si applicable)">
+            </div>
+            
+            <div class="field">
+                <label for="app-purpose"><i class="fas fa-bullseye"></i> Objectif de l'application</label>
+                <textarea id="app-purpose" required placeholder="Décrivez l'objectif principal de votre application..."></textarea>
+            </div>
+            
+            <div class="field">
+                <label for="app-platform"><i class="fas fa-layer-group"></i> Plateformes</label>
+                <select id="app-platform" required>
+                    <option value="">Sélectionnez une option</option>
+                    <option value="ios">iOS seulement</option>
+                    <option value="android">Android seulement</option>
+                    <option value="both">iOS et Android</option>
+                </select>
+            </div>
+            
+            <div class="field">
+                <label for="app-features"><i class="fas fa-star"></i> Fonctionnalités principales</label>
+                <textarea id="app-features" required placeholder="Listez les fonctionnalités principales que vous souhaitez..."></textarea>
+            </div>
+            
+            <div class="price-box">
+                <div class="label">Prix estimé</div>
+                <div class="value">75 000 FCFA</div>
+            </div>
+            
+            <div class="btn-row">
+                <button type="submit" class="btn btn-primary">
+                    <i class="fab fa-whatsapp"></i> Commander et discuter
+                </button>
+                <button type="button" class="btn btn-secondary" id="reset-app-form">
+                    <i class="fas fa-redo"></i> Réinitialiser
+                </button>
+            </div>
+        </form>
+    </div>
+    
+    <!-- Autres formulaires de service seraient ajoutés ici -->
+</section>
+
+<!-- FOOTER -->
+<footer class="footer">
+    <div class="footer-content">
+        <div class="footer-about">
+            <div class="footer-logo">
+                <img src="https://ui-avatars.com/api/?name=MADIL&background=FF7A59&color=fff" alt="logo MADIL">
+                <div class="footer-logo-text">MADIL</div>
+            </div>
+            <p class="footer-description">
+                Nous fournissons des services de marketing digital de qualité pour booster votre présence en ligne et atteindre vos objectifs.
+            </p>
+            <div class="social-links">
+                <a href="#"><i class="fab fa-facebook-f"></i></a>
+                <a href="#"><i class="fab fa-instagram"></i></a>
+                <a href="#"><i class="fab fa-tiktok"></i></a>
+                <a href="#"><i class="fab fa-youtube"></i></a>
+            </div>
+        </div>
+
+        <div class="footer-links-container">
+            <h3 class="footer-heading">Liens Rapides</h3>
+            <ul class="footer-links">
+                <li><a href="dashboard.html"><i class="fas fa-chevron-right"></i> Tableau de bord</a></li>
+                <li><a href="service.html"><i class="fas fa-chevron-right"></i> Services</a></li>
+                <li><a href="#"><i class="fas fa-chevron-right"></i> Commandes</a></li>
+                <li><a href="#"><i class="fas fa-chevron-right"></i> Portefeuille</a></li>
+                <li><a href="#"><i class="fas fa-chevron-right"></i> Statistiques</a></li>
+            </ul>
+        </div>
+
+        <div class="footer-links-container">
+            <h3 class="footer-heading">Support</h3>
+            <ul class="footer-links">
+                <li><a href="#"><i class="fas fa-chevron-right"></i> Centre d'aide</a></li>
+                <li><a href="#"><i class="fas fa-chevron-right"></i> FAQ</a></li>
+                <li><a href="#"><i class="fas fa-chevron-right"></i> Contact</a></li>
+                <li><a href="#"><i class="fas fa-chevron-right"></i> Politique de confidentialité</a></li>
+                <li><a href="#"><i class="fas fa-chevron-right"></i> Conditions d'utilisation</a></li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="footer-bottom">
+        <p>&copy; 2023 MADIL - Tous droits réservés</p>
+    </div>
+</footer>
+
+<script>
+    // Gestion de l'affichage des formulaires
+    document.querySelectorAll('.service-card').forEach(card => {
+        card.addEventListener('click', function() {
+            const serviceId = this.getAttribute('data-service');
+            
+            // Masquer tous les formulaires
+            document.querySelectorAll('.service-form-container').forEach(form => {
+                form.classList.remove('active');
+            });
+            
+            // Afficher le formulaire correspondant
+            if (serviceId === 'tiktok-monetisable') {
+                document.getElementById('tiktok-form').classList.add('active');
+            } else if (serviceId === 'app-mobile') {
+                document.getElementById('app-mobile-form').classList.add('active');
+            }
+            // Ajouter d'autres conditions pour les autres services
+            
+            // Faire défiler jusqu'au formulaire
+            document.querySelector('.service-form-container.active').scrollIntoView({
+                behavior: 'smooth',
+                block: 'start'
+            });
+        });
+    });
+    
+    // Réinitialisation des formulaires
+    document.getElementById('reset-tiktok-form').addEventListener('click', function() {
+        document.getElementById('tiktok-form-data').reset();
+    });
+    
+    document.getElementById('reset-app-form').addEventListener('click', function() {
+        document.getElementById('app-mobile-form-data').reset();
+    });
+    
+    // Soumission des formulaires
+    document.getElementById('tiktok-form-data').addEventListener('submit', function(e) {
+        e.preventDefault();
+        
+        // Récupération des données du formulaire
+        const username = document.getElementById('tiktok-username').value;
+        const email = document.getElementById('tiktok-email').value;
+        const displayName = document.getElementById('tiktok-displayname').value;
+        const birthdate = document.getElementById('tiktok-birthdate').value;
+        const country = document.getElementById('tiktok-country').value;
+        const niche = document.getElementById('tiktok-niche').value;
+        const price = "7 500";
+        
+        // Construction du message pour WhatsApp
+        const message = `Bonjour, je souhaite commander le service "Création de compte TikTok monétisable".%0A%0A` +
+                        `Voici mes informations:%0A` +
+                        `- Nom d'utilisateur: ${username}%0A` +
+                        `- Email: ${email}%0A` +
+                        `- Nom d'affichage: ${displayName}%0A` +
+                        `- Date de naissance: ${birthdate}%0A` +
+                        `- Pays: ${country}%0A` +
+                        `- Niche: ${niche}%0A%0A` +
+                        `Prix: ${price} FCFA`;
+        
+        // Redirection vers WhatsApp
+        window.open(`https://wa.me/237699853665?text=${message}`, '_blank');
+    });
+    
+    document.getElementById('app-mobile-form-data').addEventListener('submit', function(e) {
+        e.preventDefault();
+        
+        // Récupération des données du formulaire
+        const appName = document.getElementById('app-name').value;
+        const appCompany = document.getElementById('app-company').value;
+        const appPurpose = document.getElementById('app-purpose').value;
+        const appPlatform = document.getElementById('app-platform').value;
+        const appFeatures = document.getElementById('app-features').value;
+        const price = "75 000";
+        
+        // Construction du message pour WhatsApp
+        const message = `Bonjour, je souhaite commander le service "Création d'application mobile".%0A%0A` +
+                        `Voici mes informations:%0A` +
+                        `- Nom de l'application: ${appName}%0A` +
+                        `- Entreprise: ${appCompany}%0A` +
+                        `- Objectif: ${appPurpose}%0A` +
+                        `- Plateforme: ${appPlatform}%0A` +
+                        `- Fonctionnalités: ${appFeatures}%0A%0A` +
+                        `Prix: ${price} FCFA`;
+        
+        // Redirection vers WhatsApp
+        window.open(`https://wa.me/237699853665?text=${message}`, '_blank');
+    });
+</script>
+</body>
+</html>
