@@ -117,6 +117,40 @@
             opacity: 0.9;
         }
 
+        /* FILTER SECTION */
+        .services-filter {
+            padding: 20px 28px;
+            background: var(--white);
+            border-bottom: 1px solid #eee;
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 10px;
+            position: sticky;
+            top: 70px;
+            z-index: 100;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+        }
+
+        .filter-btn {
+            padding: 8px 16px;
+            border-radius: 20px;
+            border: 1px solid #ddd;
+            background: #f9f9f9;
+            cursor: pointer;
+            transition: all var(--transition-speed) ease;
+            font-size: 0.9rem;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .filter-btn.active, .filter-btn:hover {
+            background: var(--primary-blue);
+            color: white;
+            border-color: var(--primary-blue);
+        }
+
         /* SERVICES SECTION */
         .services-container {
             padding: 40px 28px;
@@ -163,6 +197,12 @@
             position: relative;
             overflow: hidden;
             border: 2px solid transparent;
+            opacity: 1;
+            transform: scale(1);
+        }
+
+        .service-card.hidden {
+            display: none;
         }
 
         .service-card:hover {
@@ -176,6 +216,11 @@
             color: var(--primary-blue);
             margin-bottom: 15px;
             display: block;
+            transition: transform var(--transition-speed);
+        }
+
+        .service-card:hover i {
+            transform: scale(1.1);
         }
 
         .service-card h3 {
@@ -197,6 +242,19 @@
             margin-top: 10px;
         }
 
+        .service-badge {
+            position: absolute;
+            top: 15px;
+            right: -30px;
+            background: var(--primary-orange);
+            color: white;
+            padding: 5px 30px;
+            font-size: 0.8rem;
+            transform: rotate(45deg);
+            width: 120px;
+            text-align: center;
+        }
+
         /* SERVICE FORM */
         .service-form-container {
             background: var(--white);
@@ -205,16 +263,15 @@
             box-shadow: var(--card-shadow);
             margin-top: 30px;
             display: none;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: all 0.5s ease;
         }
 
         .service-form-container.active {
             display: block;
-            animation: fadeIn 0.5s ease;
-        }
-
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
+            opacity: 1;
+            transform: translateY(0);
         }
 
         .form-title {
@@ -250,7 +307,7 @@
             color: var(--muted);
         }
 
-        select, input[type="text"], input[type="number"], input[type="email"], input[type="date"], textarea {
+        select, input[type="text"], input[type="number"], input[type="email"], input[type="date"], input[type="tel"], textarea {
             padding: 14px 16px;
             border-radius: 10px;
             border: 1px solid #E8E8E8;
@@ -356,6 +413,118 @@
             background: #f9f9f9;
             transform: translateY(-2px);
             box-shadow: 0 8px 15px rgba(0,0,0,0.1);
+        }
+
+        /* FAQ SECTION */
+        .faq-section {
+            padding: 40px 28px;
+            background: var(--white);
+            border-radius: var(--border-radius);
+            box-shadow: var(--card-shadow);
+            margin: 40px 0;
+        }
+
+        .faq-item {
+            margin-bottom: 20px;
+            border-radius: var(--border-radius);
+            overflow: hidden;
+            border: 1px solid #eee;
+        }
+
+        .faq-question {
+            padding: 18px 20px;
+            background: #f9f9f9;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            cursor: pointer;
+            font-weight: 600;
+            transition: background var(--transition-speed);
+        }
+
+        .faq-question:hover {
+            background: #f0f0f0;
+        }
+
+        .faq-question i {
+            transition: transform var(--transition-speed);
+        }
+
+        .faq-item.active .faq-question i {
+            transform: rotate(180deg);
+        }
+
+        .faq-answer {
+            padding: 0 20px;
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease, padding 0.3s ease;
+        }
+
+        .faq-item.active .faq-answer {
+            padding: 20px;
+            max-height: 300px;
+        }
+
+        /* TESTIMONIALS */
+        .testimonials {
+            padding: 40px 28px;
+            background: linear-gradient(to right, var(--primary-brown), var(--primary-blue));
+            border-radius: var(--border-radius);
+            color: white;
+            margin: 40px 0;
+        }
+
+        .testimonials h2 {
+            text-align: center;
+            margin-bottom: 30px;
+            color: var(--accent-yellow);
+        }
+
+        .testimonials-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 20px;
+        }
+
+        .testimonial-card {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            padding: 20px;
+            border-radius: var(--border-radius);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .testimonial-text {
+            font-style: italic;
+            margin-bottom: 15px;
+        }
+
+        .testimonial-author {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .testimonial-author img {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+
+        .author-details {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .author-name {
+            font-weight: 600;
+        }
+
+        .author-title {
+            font-size: 0.8rem;
+            opacity: 0.8;
         }
 
         /* FOOTER */
@@ -472,6 +641,37 @@
             font-size: 0.9rem;
         }
 
+        /* SCROLL TO TOP BUTTON */
+        .scroll-to-top {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: var(--primary-blue);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            opacity: 0;
+            visibility: hidden;
+            transition: all var(--transition-speed) ease;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            z-index: 999;
+        }
+
+        .scroll-to-top.visible {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .scroll-to-top:hover {
+            background: var(--primary-brown);
+            transform: translateY(-5px);
+        }
+
         /* Responsive design */
         @media (max-width: 768px) {
             .services-hero h1 {
@@ -482,7 +682,7 @@
                 font-size: 1rem;
             }
             
-            .services-container {
+            .services-container, .faq-section, .testimonials {
                 padding: 30px 20px;
             }
             
@@ -497,6 +697,16 @@
             .footer-content {
                 grid-template-columns: 1fr;
                 gap: 30px;
+            }
+
+            .services-filter {
+                top: 70px;
+                padding: 15px;
+            }
+
+            .filter-btn {
+                font-size: 0.8rem;
+                padding: 6px 12px;
             }
         }
 
@@ -524,6 +734,13 @@
             .service-card {
                 padding: 20px;
             }
+
+            .scroll-to-top {
+                bottom: 20px;
+                right: 20px;
+                width: 40px;
+                height: 40px;
+            }
         }
     </style>
 </head>
@@ -546,6 +763,22 @@
     <p>Découvrez tous nos services professionnels pour booster votre présence en ligne et développer votre activité</p>
 </section>
 
+<!-- SERVICES FILTER -->
+<div class="services-filter">
+    <button class="filter-btn active" data-filter="all">
+        <i class="fas fa-th"></i> Tous les services
+    </button>
+    <button class="filter-btn" data-filter="digital">
+        <i class="fas fa-globe"></i> Digital
+    </button>
+    <button class="filter-btn" data-filter="creation">
+        <i class="fas fa-paint-brush"></i> Création
+    </button>
+    <button class="filter-btn" data-filter="marketing">
+        <i class="fas fa-chart-line"></i> Marketing
+    </button>
+</div>
+
 <!-- SERVICES SECTION -->
 <section class="services-container">
     <h2 class="section-title">
@@ -554,7 +787,8 @@
     
     <div class="services-grid">
         <!-- Service 1 -->
-        <div class="service-card" data-service="tiktok-monetisable">
+        <div class="service-card" data-service="tiktok-monetisable" data-category="digital">
+            <div class="service-badge">Populaire</div>
             <i class="fab fa-tiktok"></i>
             <h3>Création de compte TikTok monétisable</h3>
             <p>Obtenez un compte TikTok entièrement configuré et prêt à être monétisé</p>
@@ -562,7 +796,7 @@
         </div>
         
         <!-- Service 2 -->
-        <div class="service-card" data-service="app-mobile">
+        <div class="service-card" data-service="app-mobile" data-category="digital">
             <i class="fas fa-mobile-alt"></i>
             <h3>Création d'application mobile</h3>
             <p>Développement d'applications mobiles sur mesure pour iOS et Android</p>
@@ -570,7 +804,7 @@
         </div>
         
         <!-- Service 3 -->
-        <div class="service-card" data-service="site-web">
+        <div class="service-card" data-service="site-web" data-category="digital">
             <i class="fas fa-laptop-code"></i>
             <h3>Création de site web</h3>
             <p>Conception de sites web professionnels responsive et modernes</p>
@@ -578,7 +812,7 @@
         </div>
         
         <!-- Service 4 -->
-        <div class="service-card" data-service="chanson-personnalisee">
+        <div class="service-card" data-service="chanson-personnalisee" data-category="creation">
             <i class="fas fa-music"></i>
             <h3>Chanson personnalisée</h3>
             <p>Une chanson unique créée spécialement pour vous ou pour offrir</p>
@@ -586,7 +820,7 @@
         </div>
         
         <!-- Service 5 -->
-        <div class="service-card" data-service="campagne-pub">
+        <div class="service-card" data-service="campagne-pub" data-category="marketing">
             <i class="fas fa-ad"></i>
             <h3>Campagne publicitaire ciblée</h3>
             <p>Campagnes publicitaires optimisées sur les réseaux sociaux</p>
@@ -594,7 +828,7 @@
         </div>
         
         <!-- Service 6 -->
-        <div class="service-card" data-service="design">
+        <div class="service-card" data-service="design" data-category="creation">
             <i class="fas fa-paint-brush"></i>
             <h3>Design de logos et flyers</h3>
             <p>Création d'identités visuelles percutantes et professionnelles</p>
@@ -724,7 +958,331 @@
         </form>
     </div>
     
-    <!-- Autres formulaires de service seraient ajoutés ici -->
+    <!-- Formulaire pour création de site web -->
+    <div class="service-form-container" id="site-web-form">
+        <h3 class="form-title">Création de site web</h3>
+        <form class="service-form" id="site-web-form-data">
+            <div class="field">
+                <label for="site-type"><i class="fas fa-laptop-code"></i> Type de site web</label>
+                <select id="site-type" required>
+                    <option value="">Sélectionnez un type</option>
+                    <option value="vitrine">Site vitrine</option>
+                    <option value="ecommerce">Site e-commerce</option>
+                    <option value="blog">Blog</option>
+                    <option value="portfolio">Portfolio</option>
+                    <option value="corporate">Site corporate</option>
+                    <option value="other">Autre</option>
+                </select>
+            </div>
+            
+            <div class="field">
+                <label for="site-name"><i class="fas fa-signature"></i> Nom du site web</label>
+                <input type="text" id="site-name" required placeholder="Nom de votre site web">
+            </div>
+            
+            <div class="field">
+                <label for="site-pages"><i class="fas fa-file"></i> Nombre de pages estimé</label>
+                <input type="number" id="site-pages" min="1" required placeholder="Ex: 5">
+            </div>
+            
+            <div class="field">
+                <label for="site-features"><i class="fas fa-star"></i> Fonctionnalités souhaitées</label>
+                <textarea id="site-features" required placeholder="Décrivez les fonctionnalités dont vous avez besoin..."></textarea>
+            </div>
+            
+            <div class="field">
+                <label for="site-deadline"><i class="fas fa-calendar-alt"></i> Délai souhaité (en semaines)</label>
+                <input type="number" id="site-deadline" min="1" placeholder="Ex: 4">
+            </div>
+            
+            <div class="price-box">
+                <div class="label">Prix estimé</div>
+                <div class="value">45 000 FCFA</div>
+            </div>
+            
+            <div class="btn-row">
+                <button type="submit" class="btn btn-primary">
+                    <i class="fab fa-whatsapp"></i> Commander et discuter
+                </button>
+                <button type="button" class="btn btn-secondary" id="reset-site-form">
+                    <i class="fas fa-redo"></i> Réinitialiser
+                </button>
+            </div>
+        </form>
+    </div>
+    
+    <!-- Formulaire pour chanson personnalisée -->
+    <div class="service-form-container" id="chanson-form">
+        <h3 class="form-title">Chanson personnalisée</h3>
+        <form class="service-form" id="chanson-form-data">
+            <div class="field">
+                <label for="song-type"><i class="fas fa-music"></i> Type de chanson</label>
+                <select id="song-type" required>
+                    <option value="">Sélectionnez un type</option>
+                    <option value="romantique">Romantique</option>
+                    <option value="anniversaire">Anniversaire</option>
+                    <option value="mariage">Mariage</option>
+                    <option value="hommage">Hommage</option>
+                    <option value="fun">Fun/Divertissement</option>
+                    <option value="other">Autre</option>
+                </select>
+            </div>
+            
+            <div class="field">
+                <label for="song-theme"><i class="fas fa-paint-brush"></i> Thème principal</label>
+                <input type="text" id="song-theme" required placeholder="Thème de la chanson">
+            </div>
+            
+            <div class="field">
+                <label for="song-dedication"><i class="fas fa-heart"></i> Personne à qui est dédiée la chanson</label>
+                <input type="text" id="song-dedication" required placeholder="Nom de la personne">
+            </div>
+            
+            <div class="field">
+                <label for="song-details"><i class="fas fa-info-circle"></i> Détails importants à inclure</label>
+                <textarea id="song-details" required placeholder="Détails, anecdotes, traits de personnalité à mentionner..."></textarea>
+            </div>
+            
+            <div class="field">
+                <label for="song-style"><i class="fas fa-headphones"></i> Style musical préféré</label>
+                <input type="text" id="song-style" placeholder="Pop, RnB, Afrobeat, etc.">
+            </div>
+            
+            <div class="price-box">
+                <div class="label">Prix total</div>
+                <div class="value">25 000 FCFA</div>
+            </div>
+            
+            <div class="btn-row">
+                <button type="submit" class="btn btn-primary">
+                    <i class="fab fa-whatsapp"></i> Commander et discuter
+                </button>
+                <button type="button" class="btn btn-secondary" id="reset-song-form">
+                    <i class="fas fa-redo"></i> Réinitialiser
+                </button>
+            </div>
+        </form>
+    </div>
+    
+    <!-- Formulaire pour campagne publicitaire -->
+    <div class="service-form-container" id="campagne-form">
+        <h3 class="form-title">Campagne publicitaire ciblée</h3>
+        <form class="service-form" id="campagne-form-data">
+            <div class="field">
+                <label for="campaign-platform"><i class="fas fa-bullhorn"></i> Plateforme cible</label>
+                <select id="campaign-platform" required>
+                    <option value="">Sélectionnez une plateforme</option>
+                    <option value="facebook">Facebook</option>
+                    <option value="instagram">Instagram</option>
+                    <option value="tiktok">TikTok</option>
+                    <option value="google">Google Ads</option>
+                    <option value="multiple">Multi-plateformes</option>
+                </select>
+            </div>
+            
+            <div class="field">
+                <label for="campaign-budget"><i class="fas fa-money-bill-wave"></i> Budget prévu (FCFA)</label>
+                <input type="number" id="campaign-budget" min="15000" required placeholder="Ex: 50000">
+            </div>
+            
+            <div class="field">
+                <label for="campaign-audience"><i class="fas fa-users"></i> Public cible</label>
+                <textarea id="campaign-audience" required placeholder="Décrivez votre public cible (âge, localisation, centres d'intérêt...)"></textarea>
+            </div>
+            
+            <div class="field">
+                <label for="campaign-goal"><i class="fas fa-bullseye"></i> Objectif principal</label>
+                <select id="campaign-goal" required>
+                    <option value="">Sélectionnez un objectif</option>
+                    <option value="visibility">Augmenter la visibilité</option>
+                    <option value="traffic">Générer du trafic</option>
+                    <option value="leads">Générer des leads</option>
+                    <option value="sales">Augmenter les ventes</option>
+                    <option value="engagement">Augmenter l'engagement</option>
+                </select>
+            </div>
+            
+            <div class="field">
+                <label for="campaign-duration"><i class="fas fa-clock"></i> Durée prévue (en jours)</label>
+                <input type="number" id="campaign-duration" min="1" required placeholder="Ex: 30">
+            </div>
+            
+            <div class="price-box">
+                <div class="label">Prix estimé</div>
+                <div class="value">15 000 FCFA</div>
+            </div>
+            
+            <div class="btn-row">
+                <button type="submit" class="btn btn-primary">
+                    <i class="fab fa-whatsapp"></i> Commander et discuter
+                </button>
+                <button type="button" class="btn btn-secondary" id="reset-campaign-form">
+                    <i class="fas fa-redo"></i> Réinitialiser
+                </button>
+            </div>
+        </form>
+    </div>
+    
+    <!-- Formulaire pour design -->
+    <div class="service-form-container" id="design-form">
+        <h3 class="form-title">Design de logos et flyers</h3>
+        <form class="service-form" id="design-form-data">
+            <div class="field">
+                <label for="design-type"><i class="fas fa-paint-brush"></i> Type de design</label>
+                <select id="design-type" required>
+                    <option value="">Sélectionnez un type</option>
+                    <option value="logo">Logo</option>
+                    <option value="flyer">Flyer</option>
+                    <option value="both">Logo + Flyer</option>
+                    <option value="branding">Identité visuelle complète</option>
+                </select>
+            </div>
+            
+            <div class="field">
+                <label for="design-style"><i class="fas fa-palette"></i> Style préféré</label>
+                <select id="design-style" required>
+                    <option value="">Sélectionnez un style</option>
+                    <option value="moderne">Moderne</option>
+                    <option value="classique">Classique</option>
+                    <option value="minimaliste">Minimaliste</option>
+                    <option value="elegant">Élégant</option>
+                    <option value="fun">Fun/Coloré</option>
+                    <option value="corporate">Corporate</option>
+                </select>
+            </div>
+            
+            <div class="field">
+                <label for="design-colors"><i class="fas fa-fill-drip"></i> Couleurs préférées</label>
+                <input type="text" id="design-colors" placeholder="Ex: Bleu, blanc, orange">
+            </div>
+            
+            <div class="field">
+                <label for="design-description"><i class="fas fa-edit"></i> Description du projet</label>
+                <textarea id="design-description" required placeholder="Décrivez votre entreprise/événement et ce que vous attendez du design..."></textarea>
+            </div>
+            
+            <div class="field">
+                <label for="design-deadline"><i class="fas fa-calendar-alt"></i> Délai souhaité (en jours)</label>
+                <input type="number" id="design-deadline" min="1" placeholder="Ex: 7">
+            </div>
+            
+            <div class="price-box">
+                <div class="label">Prix estimé</div>
+                <div class="value">12 000 FCFA</div>
+            </div>
+            
+            <div class="btn-row">
+                <button type="submit" class="btn btn-primary">
+                    <i class="fab fa-whatsapp"></i> Commander et discuter
+                </button>
+                <button type="button" class="btn btn-secondary" id="reset-design-form">
+                    <i class="fas fa-redo"></i> Réinitialiser
+                </button>
+            </div>
+        </form>
+    </div>
+</section>
+
+<!-- FAQ SECTION -->
+<section class="faq-section">
+    <h2 class="section-title">
+        <i class="fas fa-question-circle"></i> Questions Fréquentes
+    </h2>
+    
+    <div class="faq-item">
+        <div class="faq-question">
+            <span>Combien de temps faut-il pour créer un compte TikTok monétisable ?</span>
+            <i class="fas fa-chevron-down"></i>
+        </div>
+        <div class="faq-answer">
+            <p>La création d'un compte TikTok monétisable prend généralement entre 24 et 48 heures. Ce délai inclut la configuration du compte, l'optimisation du profil et la mise en place des paramètres nécessaires pour la monétisation.</p>
+        </div>
+    </div>
+    
+    <div class="faq-item">
+        <div class="faq-question">
+            <span>Quels sont les moyens de paiement acceptés ?</span>
+            <i class="fas fa-chevron-down"></i>
+        </div>
+        <div class="faq-answer">
+            <p>Nous acceptons plusieurs moyens de paiement : Mobile Money (Orange Money, MTN Mobile Money), virements bancaires, et paiement en espèces pour les clients locaux. Les paiements internationaux sont également acceptés via PayPal.</p>
+        </div>
+    </div>
+    
+    <div class="faq-item">
+        <div class="faq-question">
+            <span>Proposez-vous une garantie après la livraison ?</span>
+            <i class="fas fa-chevron-down"></i>
+        </div>
+        <div class="faq-answer">
+            <p>Oui, tous nos services sont couverts par une garantie de 7 à 30 jours selon le service. Pendant cette période, nous apportons des corrections et ajustements gratuits si nécessaire.</p>
+        </div>
+    </div>
+    
+    <div class="faq-item">
+        <div class="faq-question">
+            <span>Comment suivre l'avancement de ma commande ?</span>
+            <i class="fas fa-chevron-down"></i>
+        </div>
+        <div class="faq-answer">
+            <p>Une fois votre commande passée, nous vous assignons un gestionnaire de projet qui vous tiendra informé régulièrement de l'avancement via WhatsApp ou email. Vous recevrez également un accès à un tableau de bord de suivi.</p>
+        </div>
+    </div>
+    
+    <div class="faq-item">
+        <div class="faq-question">
+            <span>Proposez-vous des services de maintenance après la création d'un site web ?</span>
+            <i class="fas fa-chevron-down"></i>
+        </div>
+        <div class="faq-answer">
+            <p>Oui, nous proposons différents forfaits de maintenance selon vos besoins : mise à jour du contenu, maintenance technique, hébergement, et référencement. Ces services sont optionnels et peuvent être souscrits séparément.</p>
+        </div>
+    </div>
+</section>
+
+<!-- TESTIMONIALS SECTION -->
+<section class="testimonials">
+    <h2>Ce que disent nos clients</h2>
+    <div class="testimonials-grid">
+        <div class="testimonial-card">
+            <div class="testimonial-text">
+                "J'ai commandé un compte TikTok monétisable et j'ai été impressionné par la qualité du service. Mon compte a été créé en moins de 24h et j'ai déjà commencé à générer des revenus!"
+            </div>
+            <div class="testimonial-author">
+                <img src="https://randomuser.me/api/portraits/women/65.jpg" alt="Client">
+                <div class="author-details">
+                    <div class="author-name">Aïcha K.</div>
+                    <div class="author-title">Influenceuse</div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="testimonial-card">
+            <div class="testimonial-text">
+                "Le site web que MADIL a créé pour mon entreprise a considérablement augmenté notre visibilité en ligne. Service professionnel et résultats au-delà de nos attentes."
+            </div>
+            <div class="testimonial-author">
+                <img src="https://randomuser.me/api/portraits/men/32.jpg" alt="Client">
+                <div class="author-details">
+                    <div class="author-name">Marc T.</div>
+                    <div class="author-title">Entrepreneur</div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="testimonial-card">
+            <div class="testimonial-text">
+                "La chanson personnalisée que j'ai offerte à mon épouse pour notre anniversaire de mariage était tout simplement parfaite. Des paroles touchantes et une mélodie magnifique."
+            </div>
+            <div class="testimonial-author">
+                <img src="https://randomuser.me/api/portraits/men/22.jpg" alt="Client">
+                <div class="author-details">
+                    <div class="author-name">Philippe D.</div>
+                    <div class="author-title">Client particulier</div>
+                </div>
+            </div>
+        </div>
+    </div>
 </section>
 
 <!-- FOOTER -->
@@ -774,6 +1332,11 @@
     </div>
 </footer>
 
+<!-- SCROLL TO TOP BUTTON -->
+<div class="scroll-to-top" id="scrollToTop">
+    <i class="fas fa-arrow-up"></i>
+</div>
+
 <script>
     // Gestion de l'affichage des formulaires
     document.querySelectorAll('.service-card').forEach(card => {
@@ -786,81 +1349,117 @@
             });
             
             // Afficher le formulaire correspondant
-            if (serviceId === 'tiktok-monetisable') {
-                document.getElementById('tiktok-form').classList.add('active');
-            } else if (serviceId === 'app-mobile') {
-                document.getElementById('app-mobile-form').classList.add('active');
+            const formId = serviceId + '-form';
+            if (document.getElementById(formId)) {
+                document.getElementById(formId).classList.add('active');
+                
+                // Faire défiler jusqu'au formulaire
+                document.getElementById(formId).scrollIntoView({
+                    behavior: 'smooth',
+                    block: 'start'
+                });
             }
-            // Ajouter d'autres conditions pour les autres services
-            
-            // Faire défiler jusqu'au formulaire
-            document.querySelector('.service-form-container.active').scrollIntoView({
-                behavior: 'smooth',
-                block: 'start'
-            });
         });
     });
     
     // Réinitialisation des formulaires
-    document.getElementById('reset-tiktok-form').addEventListener('click', function() {
-        document.getElementById('tiktok-form-data').reset();
-    });
-    
-    document.getElementById('reset-app-form').addEventListener('click', function() {
-        document.getElementById('app-mobile-form-data').reset();
+    document.querySelectorAll('[id^="reset-"]').forEach(button => {
+        button.addEventListener('click', function() {
+            const formId = this.id.replace('reset-', '') + '-data';
+            document.getElementById(formId).reset();
+        });
     });
     
     // Soumission des formulaires
-    document.getElementById('tiktok-form-data').addEventListener('submit', function(e) {
-        e.preventDefault();
+    const setupFormSubmission = (formId, serviceName) => {
+        const form = document.getElementById(formId);
+        if (!form) return;
         
-        // Récupération des données du formulaire
-        const username = document.getElementById('tiktok-username').value;
-        const email = document.getElementById('tiktok-email').value;
-        const displayName = document.getElementById('tiktok-displayname').value;
-        const birthdate = document.getElementById('tiktok-birthdate').value;
-        const country = document.getElementById('tiktok-country').value;
-        const niche = document.getElementById('tiktok-niche').value;
-        const price = "7 500";
-        
-        // Construction du message pour WhatsApp
-        const message = `Bonjour, je souhaite commander le service "Création de compte TikTok monétisable".%0A%0A` +
-                        `Voici mes informations:%0A` +
-                        `- Nom d'utilisateur: ${username}%0A` +
-                        `- Email: ${email}%0A` +
-                        `- Nom d'affichage: ${displayName}%0A` +
-                        `- Date de naissance: ${birthdate}%0A` +
-                        `- Pays: ${country}%0A` +
-                        `- Niche: ${niche}%0A%0A` +
-                        `Prix: ${price} FCFA`;
-        
-        // Redirection vers WhatsApp
-        window.open(`https://wa.me/237699853665?text=${message}`, '_blank');
+        form.addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            // Récupération des données du formulaire
+            const formData = new FormData(this);
+            const inputs = this.querySelectorAll('input, select, textarea');
+            let message = `Bonjour, je souhaite commander le service "${serviceName}".%0A%0AVoici mes informations:%0A`;
+            
+            inputs.forEach(input => {
+                if (input.type !== 'submit' && input.type !== 'button' && input.value) {
+                    const label = input.closest('.field').querySelector('label');
+                    const labelText = label ? label.textContent.trim() : input.name;
+                    message += `- ${labelText}: ${input.value}%0A`;
+                }
+            });
+            
+            // Récupération du prix
+            const priceBox = this.querySelector('.price-box .value');
+            const price = priceBox ? priceBox.textContent : '';
+            
+            message += `%0APrix: ${price} FCFA`;
+            
+            // Redirection vers WhatsApp
+            window.open(`https://wa.me/237699853665?text=${message}`, '_blank');
+        });
+    };
+    
+    // Configuration de tous les formulaires
+    setupFormSubmission('tiktok-form-data', 'Création de compte TikTok monétisable');
+    setupFormSubmission('app-mobile-form-data', 'Création d\'application mobile');
+    setupFormSubmission('site-web-form-data', 'Création de site web');
+    setupFormSubmission('chanson-form-data', 'Chanson personnalisée');
+    setupFormSubmission('campagne-form-data', 'Campagne publicitaire ciblée');
+    setupFormSubmission('design-form-data', 'Design de logos et flyers');
+    
+    // Gestion du filtre des services
+    document.querySelectorAll('.filter-btn').forEach(button => {
+        button.addEventListener('click', function() {
+            // Mettre à jour l'état actif des boutons
+            document.querySelectorAll('.filter-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            this.classList.add('active');
+            
+            const filter = this.getAttribute('data-filter');
+            
+            // Filtrer les services
+            document.querySelectorAll('.service-card').forEach(card => {
+                if (filter === 'all') {
+                    card.classList.remove('hidden');
+                } else {
+                    if (card.getAttribute('data-category') === filter) {
+                        card.classList.remove('hidden');
+                    } else {
+                        card.classList.add('hidden');
+                    }
+                }
+            });
+        });
     });
     
-    document.getElementById('app-mobile-form-data').addEventListener('submit', function(e) {
-        e.preventDefault();
-        
-        // Récupération des données du formulaire
-        const appName = document.getElementById('app-name').value;
-        const appCompany = document.getElementById('app-company').value;
-        const appPurpose = document.getElementById('app-purpose').value;
-        const appPlatform = document.getElementById('app-platform').value;
-        const appFeatures = document.getElementById('app-features').value;
-        const price = "75 000";
-        
-        // Construction du message pour WhatsApp
-        const message = `Bonjour, je souhaite commander le service "Création d'application mobile".%0A%0A` +
-                        `Voici mes informations:%0A` +
-                        `- Nom de l'application: ${appName}%0A` +
-                        `- Entreprise: ${appCompany}%0A` +
-                        `- Objectif: ${appPurpose}%0A` +
-                        `- Plateforme: ${appPlatform}%0A` +
-                        `- Fonctionnalités: ${appFeatures}%0A%0A` +
-                        `Prix: ${price} FCFA`;
-        
-        // Redirection vers WhatsApp
-        window.open(`https://wa.me/237699853665?text=${message}`, '_blank');
+    // Gestion de la FAQ
+    document.querySelectorAll('.faq-question').forEach(question => {
+        question.addEventListener('click', function() {
+            const item = this.parentElement;
+            item.classList.toggle('active');
+        });
+    });
+    
+    // Bouton de défilement vers le haut
+    const scrollToTopBtn = document.getElementById('scrollToTop');
+    
+    window.addEventListener('scroll', () => {
+        if (window.pageYOffset > 300) {
+            scrollToTopBtn.classList.add('visible');
+        } else {
+            scrollToTopBtn.classList.remove('visible');
+        }
+    });
+    
+    scrollToTopBtn.addEventListener('click', () => {
+        window.scrollTo({
+            top: 0,
+            behavior: 'smooth'
+        });
     });
 </script>
 </body>
