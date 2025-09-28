@@ -735,6 +735,18 @@
             font-size: 0.9rem;
         }
 
+        .social-boost-link {
+            color: var(--accent-yellow);
+            text-decoration: none;
+            font-weight: 600;
+            transition: all var(--transition-speed) ease;
+        }
+
+        .social-boost-link:hover {
+            color: var(--primary-orange);
+            text-decoration: underline;
+        }
+
         /* Animations */
         @keyframes fadeInUp {
             from {
@@ -843,11 +855,11 @@
             
             <div class="dropdown-menu" id="dropdownMenu">
                 <ul>
-                    <li><a href="index.html"><i class="fas fa-home"></i> Accueil</a></li>
-                    <li><a href="services.html"><i class="fas fa-rocket"></i> Services</a></li>
-                    <li><a href="about.html"><i class="fas fa-info-circle"></i> À propos</a></li>
+                    <li><a href="Dashboard.html"><i class="fas fa-home"></i> Accueil</a></li>
+                    <li><a href="Dashboard.html"><i class="fas fa-rocket"></i> Services</a></li>
+                    <li><a href="Dashboard.html"><i class="fas fa-info-circle"></i> À propos</a></li>
                     <div class="menu-divider"></div>
-                    <li><a href="login.html" class="btn-primary" style="display: flex; margin: 10px;"><i class="fas fa-sign-in-alt"></i> Connexion</a></li>
+                    <li><a href="Dashboard.html" class="btn-primary" style="display: flex; margin: 10px;"><i class="fas fa-sign-in-alt"></i> Connexion</a></li>
                 </ul>
             </div>
         </div>
@@ -879,7 +891,7 @@
                     <div class="service-content">
                         <h3>Boost Instagram</h3>
                         <p>Augmentation de followers, likes et commentaires réels et engagés.</p>
-                        <a href="service-instagram.html" class="service-link">Découvrir <i class="fas fa-arrow-right"></i></a>
+                        <a href="Dashboard.html" class="service-link">Découvrir <i class="fas fa-arrow-right"></i></a>
                     </div>
                 </div>
                 <div class="service-card fade-in delay-1">
@@ -887,7 +899,7 @@
                     <div class="service-content">
                         <h3>Boost TikTok</h3>
                         <p>Visibilité accrue avec des followers, likes et partages qui augmentent votre portée.</p>
-                        <a href="service-tiktok.html" class="service-link">Découvrir <i class="fas fa-arrow-right"></i></a>
+                        <a href="Dashboard.html" class="service-link">Découvrir <i class="fas fa-arrow-right"></i></a>
                     </div>
                 </div>
                 <div class="service-card fade-in delay-2">
@@ -895,7 +907,7 @@
                     <div class="service-content">
                         <h3>Boost YouTube</h3>
                         <p>Développez votre chaîne avec des abonnés, vues et likes authentiques.</p>
-                        <a href="service-youtube.html" class="service-link">Découvrir <i class="fas fa-arrow-right"></i></a>
+                        <a href="Dashboard.html" class="service-link">Découvrir <i class="fas fa-arrow-right"></i></a>
                     </div>
                 </div>
                 <div class="service-card fade-in delay-2">
@@ -903,7 +915,7 @@
                     <div class="service-content">
                         <h3>Boost Twitter</h3>
                         <p>Augmentez votre influence avec des followers, retweets et likes ciblés.</p>
-                        <a href="service-twitter.html" class="service-link">Découvrir <i class="fas fa-arrow-right"></i></a>
+                        <a href="Dashboard.html" class="service-link">Découvrir <i class="fas fa-arrow-right"></i></a>
                     </div>
                 </div>
                 <div class="service-card fade-in delay-3">
@@ -911,7 +923,7 @@
                     <div class="service-content">
                         <h3>Boost Facebook</h3>
                         <p>Renforcez votre présence avec des likes, partages et commentaires.</p>
-                        <a href="service-facebook.html" class="service-link">Découvrir <i class="fas fa-arrow-right"></i></a>
+                        <a href="Dashboard.html" class="service-link">Découvrir <i class="fas fa-arrow-right"></i></a>
                     </div>
                 </div>
                 <div class="service-card fade-in delay-3">
@@ -919,7 +931,7 @@
                     <div class="service-content">
                         <h3>Services Web</h3>
                         <p>Optimisation SEO, développement de sites web et solutions digitales complètes.</p>
-                        <a href="service-web.html" class="service-link">Découvrir <i class="fas fa-arrow-right"></i></a>
+                        <a href="Dashboard.html" class="service-link">Découvrir <i class="fas fa-arrow-right"></i></a>
                     </div>
                 </div>
             </div>
@@ -936,7 +948,7 @@
                     <p>Fondée en 2025, MADIL est née de la passion pour la transformation digitale et le potentiel illimité des médias sociaux en Afrique et au-delà.</p>
                     <p>Notre équipe combine expertise technologique et créativité pour offrir des services de boostage qui amplifient véritablement votre présence en ligne.</p>
                     <p>"Votre Vision, Notre Technologie" n'est pas simplement un slogan, c'est notre engagement à traduire vos ambitions en résultats tangibles.</p>
-                    <a href="about.html" class="btn btn-primary" style="margin-top: 20px;">
+                    <a href="https://social-boost-horizon-new-sbh.vercel.app/" class="btn btn-primary" style="margin-top: 20px;">
                         <i class="fas fa-arrow-right"></i>
                         En savoir plus
                     </a>
@@ -993,7 +1005,7 @@
                 <i class="fas fa-envelope"></i>
                 Contactez-nous
             </h2>
-            <form class="contact-form">
+            <form class="contact-form" id="contactForm">
                 <div class="field">
                     <label for="name"><i class="fas fa-user"></i> Votre Nom</label>
                     <input type="text" id="name" name="name" required>
@@ -1036,20 +1048,20 @@
             <div class="footer-column">
                 <h3 class="footer-heading">Services</h3>
                 <ul class="footer-links">
-                    <li><a href="service-instagram.html"><i class="fab fa-instagram"></i> Boost Instagram</a></li>
-                    <li><a href="service-tiktok.html"><i class="fab fa-tiktok"></i> Boost TikTok</a></li>
-                    <li><a href="service-youtube.html"><i class="fab fa-youtube"></i> Boost YouTube</a></li>
-                    <li><a href="other-services.html"><i class="fas fa-plus"></i> Autres Services</a></li>
+                    <li><a href="Dashboard.html"><i class="fab fa-instagram"></i> Boost Instagram</a></li>
+                    <li><a href="Dashboard.html"><i class="fab fa-tiktok"></i> Boost TikTok</a></li>
+                    <li><a href="Dashboard.html"><i class="fab fa-youtube"></i> Boost YouTube</a></li>
+                    <li><a href="Dashboard.html"><i class="fas fa-plus"></i> Autres Services</a></li>
                 </ul>
             </div>
             
             <div class="footer-column">
                 <h3 class="footer-heading">Liens Rapides</h3>
                 <ul class="footer-links">
-                    <li><a href="about.html"><i class="fas fa-info-circle"></i> À propos</a></li>
-                    <li><a href="testimonials.html"><i class="fas fa-comments"></i> Témoignages</a></li>
-                    <li><a href="contact.html"><i class="fas fa-envelope"></i> Contact</a></li>
-                    <li><a href="login.html"><i class="fas fa-sign-in-alt"></i> Connexion</a></li>
+                    <li><a href="Dashboard.html"><i class="fas fa-info-circle"></i> À propos</a></li>
+                    <li><a href="Dashboard.html"><i class="fas fa-comments"></i> Témoignages</a></li>
+                    <li><a href="Dashboard.html"><i class="fas fa-envelope"></i> Contact</a></li>
+                    <li><a href="Dashboard.html"><i class="fas fa-sign-in-alt"></i> Connexion</a></li>
                 </ul>
             </div>
             
@@ -1064,7 +1076,7 @@
         </div>
         
         <div class="footer-bottom">
-            <p>&copy; 2025 MADIL. Tous droits réservés. | Site propulsé par MADIL Technologies</p>
+            <p>&copy; 2025 MADIL. Tous droits réservés. | Site propulsé par <a href="https://social-boost-horizon-new-sbh.vercel.app/" class="social-boost-link">Social Boost Horizon</a></p>
         </div>
     </footer>
 
@@ -1103,6 +1115,29 @@
                 element.style.transform = 'translateY(20px)';
                 element.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
                 observer.observe(element);
+            });
+            
+            // Contact form simulation
+            const contactForm = document.getElementById('contactForm');
+            contactForm.addEventListener('submit', function(e) {
+                e.preventDefault();
+                
+                // Simulate form submission
+                const submitButton = this.querySelector('button[type="submit"]');
+                const originalText = submitButton.innerHTML;
+                
+                submitButton.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Envoi en cours...';
+                submitButton.disabled = true;
+                
+                setTimeout(function() {
+                    // Show success message
+                    alert('Votre message a été bien reçu ! Nous vous répondrons dans les plus brefs délais.');
+                    
+                    // Reset form
+                    contactForm.reset();
+                    submitButton.innerHTML = originalText;
+                    submitButton.disabled = false;
+                }, 1500);
             });
         });
     </script>
