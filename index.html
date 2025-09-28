@@ -7,7 +7,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;800&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
-        /* VARIABLES DE COULEURS */
+        /* VARIABLES DE COULEURS - Identiques au dashboard */
         :root {
             --primary-orange: #FF7A59;
             --primary-brown: #8B4513;
@@ -21,9 +21,7 @@
             --gradient-brown: linear-gradient(135deg, var(--primary-brown) 0%, var(--dark-brown) 100%);
             --shadow: 0 5px 15px rgba(139, 69, 19, 0.2);
             --shadow-hover: 0 10px 25px rgba(139, 69, 19, 0.4);
-
-            /* NOUVELLE VARIABLE POUR LE FOND DE DASHBOARD */
-            --dashboard-bg: #F0F2F5; /* Gris très clair, souvent utilisé pour les Dashboards */
+            --dashboard-bg: #F0F2F5;
         }
 
         /* STYLES GÉNÉRAUX */
@@ -34,14 +32,12 @@
             font-family: 'Poppins', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         }
 
-        /* CHANGEMENT : COULEUR DE FOND DU BODY PLUS NEUTRE (style Dashboard) */
         body {
-            background-color: var(--dashboard-bg); /* Changé à un gris clair typique d'un Dashboard */
+            background-color: var(--dashboard-bg);
             color: var(--black);
             overflow-x: hidden;
         }
 
-        /* Le reste des styles généraux (container, animations...) est conservé */
         html { scroll-behavior: smooth; }
 
         .container {
@@ -50,7 +46,7 @@
             margin: 0 auto;
         }
 
-        /* ANIMATIONS (conservées) */
+        /* ANIMATIONS */
         @keyframes fadeIn {
             from { opacity: 0; transform: translateY(20px); }
             to { opacity: 1; transform: translateY(0); }
@@ -74,7 +70,7 @@
             100% { transform: translateY(0px); }
         }
 
-        /* HEADER ET NAVIGATION (conservés, utilisent le gradient marron) */
+        /* HEADER ET NAVIGATION */
         header {
             background: var(--gradient-brown);
             padding: 15px 0;
@@ -169,7 +165,7 @@
             box-shadow: var(--shadow-hover);
         }
 
-        /* MENU HAMBURGER (conservé) */
+        /* MENU HAMBURGER */
         .burger {
             display: none;
             cursor: pointer;
@@ -183,87 +179,74 @@
             transition: all 0.3s ease;
         }
 
-        /* --- DÉBUT MODIFICATION INDEX.HTML : SECTION HERO --- */
+        /* HERO SECTION - Style identique au dashboard */
         .hero {
-            /* Rétablit le style d'une grande section de bienvenue */
-            min-height: 85vh; /* Une grande hauteur d'écran */
-            padding: 150px 0 50px 0;
-            background-image: url('https://images.unsplash.com/photo-1550007897-408993717d3d?ixlib=rb-4.0.3&auto=format&fit=crop&w=1500&q=80'); /* Image de fond (vous pouvez la changer) */
-            background-size: cover;
-            background-position: center;
+            padding: 150px 0 100px 0;
+            background: var(--dashboard-bg);
+            color: var(--black);
             position: relative;
-            color: var(--white); /* Texte blanc sur l'image sombre */
-            display: flex;
-            align-items: center;
+            overflow: hidden;
+            text-align: center;
         }
-        /* Ajout d'un overlay sombre pour que le texte soit lisible */
-        .hero::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: rgba(0, 0, 0, 0.5); /* Overlay sombre */
-            z-index: 0;
-        }
-
-        /* Retirer la carte blanche du dashboard pour le hero de l'accueil */
         .hero-card {
-            background: rgba(255, 255, 255, 0.9); /* Fond légèrement transparent pour faire ressortir le contenu */
-            border-radius: 15px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
-            padding: 50px;
-            max-width: 700px;
-            margin: 0; /* Alignement à gauche ou ajusté */
+            background: var(--white);
+            border-radius: 20px;
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.1);
+            padding: 60px 40px;
+            max-width: 800px;
+            margin: 0 auto;
             animation: fadeIn 1s ease-out;
             position: relative;
             z-index: 1;
-            text-align: left; /* Rétablir l'alignement à gauche pour un look classique */
-            color: var(--dark-brown); /* Texte sombre sur fond clair */
         }
-        
         .hero-content {
-            /* Rétablir les styles de flex pour une présentation plus classique */
-            display: block;
-            flex-direction: none;
-            align-items: flex-start;
-            text-align: left;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
         }
-
         .hero h1 {
-            font-size: 3.5rem; /* Rendre le titre plus grand */
+            font-size: 3rem;
             margin-bottom: 20px;
             color: var(--dark-brown);
             font-family: 'Playfair Display', serif;
         }
         .hero p {
-            font-size: 1.3rem; /* Rendre le paragraphe plus grand */
+            font-size: 1.2rem;
             margin-bottom: 30px;
             max-width: 600px;
             color: var(--black);
         }
+        .hero-buttons {
+            display: flex;
+            gap: 20px;
+        }
+        .secondary-button {
+            background: transparent;
+            color: var(--primary-orange);
+            border: 2px solid var(--primary-orange);
+        }
+        .secondary-button:hover {
+            background: var(--primary-orange);
+            color: var(--white);
+        }
 
-        /* --- FIN MODIFICATION INDEX.HTML : SECTION HERO --- */
-
-        /* SECTIONS COMMUNES (Conservées pour la cohérence 'dashboard/cards') */
+        /* SECTIONS COMMUNES */
         section {
             padding: 80px 0;
-            background-color: var(--white); 
-            margin-bottom: 20px; 
-            border-radius: 15px; 
+            background-color: var(--white);
+            margin-bottom: 20px;
+            border-radius: 15px;
             box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
         }
-        
         .services, .about, .contact {
-            margin: 30px auto; 
+            margin: 30px auto;
             width: 90%;
             max-width: 1200px;
         }
 
-        /* La section Testimonials est l'exception pour la couleur de fond */
         .testimonials {
-            background: var(--gradient-brown); 
+            background: var(--gradient-brown);
             color: var(--white);
             border-radius: 15px;
             margin: 30px auto;
@@ -272,18 +255,18 @@
 
         .section-title {
             text-align: center;
-            margin-bottom: 40px; 
-            position: relative; /* Ajouté pour l'effet ::after */
+            margin-bottom: 40px;
+            position: relative;
         }
         .section-title h2 {
-            font-size: 2rem; 
+            font-size: 2rem;
             color: var(--dark-brown);
             margin-bottom: 10px;
         }
         .section-title::after {
             content: '';
             position: absolute;
-            width: 60px; 
+            width: 60px;
             height: 3px;
             background: var(--gradient-orange);
             bottom: -10px;
@@ -291,7 +274,6 @@
             transform: translateX(-50%);
             border-radius: 2px;
         }
-        /* Titre des témoignages en blanc */
         .testimonials .section-title h2 { color: var(--white); }
 
         /* SERVICES SECTION */
@@ -302,52 +284,73 @@
         }
         .service-card {
             background: var(--white);
-            padding: 30px;
-            text-align: center;
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
             border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
         }
         .service-card:hover {
             transform: translateY(-5px);
             box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
         }
         .service-icon {
+            height: 100px;
             display: flex;
-            justify-content: center;
             align-items: center;
-            height: 80px;
-            font-size: 2.5rem;
-            color: var(--primary-orange);
-            margin-bottom: 15px;
+            justify-content: center;
+            background: var(--gradient-orange);
+            color: var(--white);
+            font-size: 2rem;
         }
-        .service-content { padding: 0; } 
-        .service-content h3 { font-size: 1.3rem; margin-bottom: 10px; color: var(--dark-brown); }
+        .service-content { 
+            padding: 20px; 
+        }
+        .service-content h3 { 
+            font-size: 1.3rem; 
+            margin-bottom: 10px;
+            color: var(--dark-brown);
+        }
+        .service-content p {
+            margin-bottom: 15px;
+            color: var(--black);
+        }
         .service-link {
             color: var(--primary-orange);
             text-decoration: none;
             font-weight: 500;
-            display: inline-block;
-            margin-top: 15px;
+            transition: color 0.3s ease;
         }
-        
+        .service-link:hover {
+            color: var(--dark-orange);
+        }
+
         /* ABOUT SECTION */
         .about-content {
             display: flex;
             align-items: center;
             gap: 40px;
         }
-        .about-text, .about-image {
+        .about-text {
             flex: 1;
         }
-        .about-image img { 
+        .about-text h2 {
+            font-size: 2rem;
+            margin-bottom: 20px;
+            color: var(--dark-brown);
+            font-family: 'Playfair Display', serif;
+        }
+        .about-text p {
+            margin-bottom: 15px;
+            line-height: 1.6;
+        }
+        .about-image {
+            flex: 1;
+        }
+        .about-image img {
             width: 100%;
-            height: auto;
             border-radius: 10px;
             box-shadow: var(--shadow);
         }
-        .about-text h2 { margin-bottom: 20px; }
-        .about-text p { margin-bottom: 15px; line-height: 1.6; }
 
         /* TESTIMONIALS SECTION */
         .testimonials-grid {
@@ -356,12 +359,10 @@
             gap: 25px;
         }
         .testimonial-card {
-            background: var(--white);
-            color: var(--black);
-            padding: 30px;
+            background: rgba(255, 255, 255, 0.1);
             border-radius: 10px;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-            transition: transform 0.3s ease;
+            padding: 25px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
         }
         .testimonial-text {
             font-style: italic;
@@ -371,105 +372,116 @@
         .testimonial-author {
             display: flex;
             align-items: center;
-            gap: 15px;
         }
         .author-avatar {
             width: 50px;
             height: 50px;
-            background: var(--primary-orange);
-            color: var(--white);
             border-radius: 50%;
+            background: var(--primary-orange);
             display: flex;
-            justify-content: center;
             align-items: center;
+            justify-content: center;
+            color: var(--white);
             font-weight: bold;
-            font-size: 1.2rem;
+            margin-right: 15px;
         }
-        .author-details h4 { margin: 0; color: var(--dark-brown); }
-        .author-details p { margin: 0; font-size: 0.9rem; color: #666; }
+        .author-details h4 {
+            margin-bottom: 5px;
+        }
+        .author-details p {
+            font-size: 0.9rem;
+            opacity: 0.8;
+        }
 
         /* CONTACT SECTION */
         .contact-form {
             max-width: 600px;
             margin: 0 auto;
-            display: flex;
-            flex-direction: column;
-            gap: 15px;
         }
-        .contact-form input, .contact-form textarea {
+        .contact-form input,
+        .contact-form textarea {
+            width: 100%;
             padding: 15px;
+            margin-bottom: 20px;
             border: 1px solid #ddd;
             border-radius: 8px;
             font-size: 1rem;
-            width: 100%;
+            transition: border-color 0.3s ease;
         }
-        .contact-form textarea { resize: vertical; }
-        .contact-form button { margin-top: 10px; }
+        .contact-form input:focus,
+        .contact-form textarea:focus {
+            border-color: var(--primary-orange);
+            outline: none;
+        }
 
-        /* FOOTER (conservé, utilise des couleurs foncées pour le contraste) */
+        /* FOOTER */
         footer {
             background: var(--dark-brown);
             color: var(--white);
             padding: 50px 0 20px;
         }
         .footer-content {
-            display: flex;
-            justify-content: space-between;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
             gap: 30px;
-            padding-bottom: 30px;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-        }
-        .footer-column {
-            flex: 1;
-            min-width: 200px;
+            margin-bottom: 30px;
         }
         .footer-column h3 {
-            font-size: 1.4rem;
             margin-bottom: 20px;
+            font-size: 1.2rem;
             color: var(--primary-orange);
-        }
-        .footer-column p {
-            font-size: 0.95rem;
-            line-height: 1.6;
-            margin-bottom: 20px;
         }
         .footer-links {
             list-style: none;
         }
-        .footer-links li { margin-bottom: 10px; }
+        .footer-links li {
+            margin-bottom: 10px;
+        }
         .footer-links a {
             color: var(--white);
             text-decoration: none;
             transition: color 0.3s ease;
         }
-        .footer-links a:hover { color: var(--primary-orange); }
-        .footer-links i { margin-right: 10px; color: var(--primary-orange); }
-
-        .social-icons a {
-            color: var(--white);
-            font-size: 1.2rem;
-            margin-right: 15px;
-            transition: color 0.3s ease;
+        .footer-links a:hover {
+            color: var(--primary-orange);
         }
-        .social-icons a:hover { color: var(--primary-orange); }
-
+        .social-icons {
+            display: flex;
+            gap: 15px;
+            margin-top: 15px;
+        }
+        .social-icons a {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+            color: var(--white);
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+        .social-icons a:hover {
+            background: var(--primary-orange);
+            transform: translateY(-3px);
+        }
         .copyright {
             text-align: center;
-            font-size: 0.85rem;
-            margin-top: 20px;
+            padding-top: 20px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
         }
         .credit {
             text-align: center;
-            font-size: 0.8rem;
-            margin-top: 5px;
+            margin-top: 10px;
+            font-size: 0.9rem;
         }
         .credit a {
             color: var(--primary-orange);
             text-decoration: none;
         }
 
-
-        /* MODALE DE CONNEXION (conservée) */
+        /* MODALE DE CONNEXION */
         .modal-overlay {
             position: fixed;
             top: 0;
@@ -478,12 +490,12 @@
             height: 100%;
             background: rgba(0, 0, 0, 0.7);
             display: flex;
-            justify-content: center;
             align-items: center;
+            justify-content: center;
             z-index: 2000;
             opacity: 0;
             visibility: hidden;
-            transition: opacity 0.3s ease, visibility 0.3s ease;
+            transition: all 0.3s ease;
         }
         .modal-overlay.active {
             opacity: 1;
@@ -491,110 +503,88 @@
         }
         .modal-container {
             background: var(--white);
+            border-radius: 10px;
             padding: 30px;
-            border-radius: 10px; 
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
             width: 90%;
             max-width: 400px;
             position: relative;
-            transform: scale(0.9);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            transform: translateY(-20px);
             transition: transform 0.3s ease;
         }
         .modal-overlay.active .modal-container {
-            transform: scale(1);
+            transform: translateY(0);
         }
         .modal-close {
             position: absolute;
             top: 15px;
             right: 15px;
-            cursor: pointer;
             font-size: 1.2rem;
-            color: var(--black);
-        }
-        .modal-container h2 {
-            text-align: center;
-            margin-bottom: 25px;
+            cursor: pointer;
             color: var(--dark-brown);
         }
         .modal-form {
             display: flex;
             flex-direction: column;
-            gap: 15px;
         }
         .modal-form input {
-            padding: 12px;
+            width: 100%;
+            padding: 15px;
+            margin-bottom: 20px;
             border: 1px solid #ddd;
-            border-radius: 5px;
+            border-radius: 8px;
             font-size: 1rem;
         }
         #auth-error {
             color: var(--dark-orange);
-            text-align: center;
-            margin-top: 10px;
+            margin-bottom: 15px;
             display: none;
-            font-size: 0.9rem;
         }
 
-        /* RESPONSIVE DESIGN (conservé) */
+        /* RESPONSIVE DESIGN */
         @media (max-width: 992px) {
-            .nav-links {
-                position: fixed;
-                right: 0;
-                top: 80px; /* Ajusté pour l'en-tête */
-                height: 92vh;
-                background-color: var(--dark-brown);
-                display: flex;
-                flex-direction: column;
-                align-items: center;
-                width: 50%;
-                transform: translateX(100%);
-                transition: transform 0.5s ease-in;
-                padding-top: 50px;
-            }
-            .nav-links.nav-active {
-                transform: translateX(0);
-            }
-            .nav-links li {
-                opacity: 0;
-            }
-            .nav-links a {
-                color: var(--white);
-            }
-            .burger {
-                display: block;
-            }
-            .about-content {
-                flex-direction: column;
-            }
-            .about-text, .about-image {
-                flex: none;
-                width: 100%;
-            }
-            .hero-card {
-                padding: 40px 20px;
-                max-width: 100%;
-                margin: 0 auto;
-            }
-            .hero h1 { font-size: 2.5rem; }
-            .footer-content {
-                flex-direction: column;
-                text-align: center;
-            }
-            .footer-column {
-                min-width: 100%;
-                margin-bottom: 20px;
-            }
-            .social-icons {
-                justify-content: center;
-                display: flex;
-            }
+            .hero-card { padding: 40px 20px; }
+            .about-content { flex-direction: column; }
         }
         @media (max-width: 768px) {
             .hero h1 { font-size: 1.8rem; }
             .hero-buttons { flex-direction: column; gap: 15px; }
+            .nav-links {
+                position: absolute;
+                right: 0;
+                height: 100vh;
+                top: 0;
+                background: var(--gradient-brown);
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                justify-content: center;
+                width: 70%;
+                transform: translateX(100%);
+                transition: transform 0.5s ease-in;
+                z-index: 1000;
+            }
+            .nav-links.nav-active {
+                transform: translateX(0%);
+            }
+            .nav-links li {
+                margin: 20px 0;
+            }
+            .burger {
+                display: block;
+            }
+            .burger.toggle .line1 {
+                transform: rotate(-45deg) translate(-5px, 6px);
+            }
+            .burger.toggle .line2 {
+                opacity: 0;
+            }
+            .burger.toggle .line3 {
+                transform: rotate(45deg) translate(-5px, -6px);
+            }
         }
 
-        /* ANIMATION AU DÉFILEMENT (conservée) */
+        /* ANIMATION AU DÉFILEMENT */
         .animate-on-scroll {
             opacity: 0;
             transform: translateY(30px);
@@ -604,21 +594,6 @@
             opacity: 1;
             transform: translateY(0);
         }
-
-        /* ANIMATION MENU BURGER */
-        @keyframes navLinkFade {
-            from {
-                opacity: 0;
-                transform: translateX(50px);
-            }
-            to {
-                opacity: 1;
-                transform: translateX(0);
-            }
-        }
-        .toggle .line1 { transform: rotate(-45deg) translate(-5px, 6px); }
-        .toggle .line2 { opacity: 0; }
-        .toggle .line3 { transform: rotate(45deg) translate(-5px, -6px); }
     </style>
 </head>
 <body>
@@ -630,12 +605,12 @@
                     <span class="logo-text">Maestro Digit Lab</span>
                 </a>
                 <ul class="nav-links">
-                    <li><a href="#hero">Accueil</a></li>
-                    <li><a href="#services">Services</a></li>
-                    <li><a href="#about">À propos</a></li>
-                    <li><a href="#testimonials">Témoignages</a></li>
-                    <li><a href="#contact">Contact</a></li>
-                    <li><a href="#" class="cta-button" id="login-button">Connexion</a></li>
+                    <li><a href="index.html">Accueil</a></li>
+                    <li><a href="services.html">Services</a></li>
+                    <li><a href="about.html">À propos</a></li>
+                    <li><a href="testimonials.html">Témoignages</a></li>
+                    <li><a href="contact.html">Contact</a></li>
+                    <li><a href="login.html" class="cta-button" id="login-button">Connexion</a></li>
                 </ul>
                 <div class="burger">
                     <div class="line1"></div>
@@ -650,11 +625,11 @@
         <div class="container">
             <div class="hero-card">
                 <div class="hero-content">
-                    <h1 class="animate-on-scroll">Votre Vision, Notre Technologie : Boostez Votre Présence Digitale</h1>
-                    <p class="animate-on-scroll">Maestro Digit Lab est la plateforme de référence pour des services de boostage authentiques et efficaces sur tous vos réseaux sociaux. Atteignez de nouveaux sommets !</p>
+                    <h1 class="animate-on-scroll">Bienvenue chez MaestroDigitLab</h1>
+                    <p class="animate-on-scroll">Votre partenaire de confiance pour le boostage sur les réseaux sociaux et solutions digitales. Transformez votre présence en ligne avec nos services professionnels.</p>
                     <div class="hero-buttons animate-on-scroll">
-                        <a href="#services" class="cta-button">Découvrir nos Services</a>
-                        <a href="signup.html" class="cta-button secondary-button" style="border: 2px solid var(--dark-brown); color: var(--dark-brown);">Créer un compte</a>
+                        <a href="signup.html" class="cta-button">Créer un compte</a>
+                        <a href="#" class="cta-button secondary-button" id="dashboard-login-button">Découvrir nos services</a>
                     </div>
                 </div>
             </div>
@@ -747,7 +722,7 @@
     <section class="testimonials" id="testimonials">
         <div class="container">
             <div class="section-title">
-                <h2 class="animate-on-scroll" style="color: var(--white);">Ce Que Disent Nos Clients</h2>
+                <h2 class="animate-on-scroll">Ce Que Disent Nos Clients</h2>
             </div>
             <div class="testimonials-grid">
                 <div class="testimonial-card animate-on-scroll">
@@ -899,16 +874,21 @@
 
         // --- GESTION DE LA MODALE DE CONNEXION ---
         const loginButton = document.getElementById('login-button');
+        const dashboardLoginButton = document.getElementById('dashboard-login-button');
         const authModal = document.getElementById('auth-modal');
         const closeModalButton = document.getElementById('modal-close-button');
         const loginForm = document.getElementById('login-form');
         const authError = document.getElementById('auth-error');
-        
-        // Ajout du listener pour le bouton Connexion (dans la nav)
-        loginButton.addEventListener('click', (e) => {
+
+        // Ouvre la modale
+        const openModal = (e) => {
             e.preventDefault();
             authModal.classList.add('active');
-        });
+        };
+
+        // Ajout des listeners pour les deux boutons de connexion
+        loginButton.addEventListener('click', openModal);
+        dashboardLoginButton.addEventListener('click', openModal);
 
         // Ferme la modale
         const closeModal = () => {
@@ -922,9 +902,9 @@
             }
         });
 
-        // --- SIMULATION DE CONNEXION (Conservée) ---
+        // --- SIMULATION DE CONNEXION ---
         loginForm.addEventListener('submit', (e) => {
-            e.preventDefault();
+            e.preventDefault(); // Empêche le formulaire de recharger la page
             
             const email = document.getElementById('email').value;
             const password = document.getElementById('password').value;
