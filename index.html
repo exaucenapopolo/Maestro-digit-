@@ -7,7 +7,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;800&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
-        /* VARIABLES DE COULEURS - Identiques au dashboard */
+        /* VARIABLES DE COULEURS EXACTES DU DASHBOARD */
         :root {
             --primary-orange: #FF7A59;
             --primary-brown: #8B4513;
@@ -24,7 +24,7 @@
             --dashboard-bg: #F0F2F5;
         }
 
-        /* STYLES GÉNÉRAUX */
+        /* STYLES GÉNÉRAUX DU DASHBOARD */
         * {
             margin: 0;
             padding: 0;
@@ -46,7 +46,7 @@
             margin: 0 auto;
         }
 
-        /* ANIMATIONS */
+        /* ANIMATIONS DU DASHBOARD */
         @keyframes fadeIn {
             from { opacity: 0; transform: translateY(20px); }
             to { opacity: 1; transform: translateY(0); }
@@ -70,7 +70,7 @@
             100% { transform: translateY(0px); }
         }
 
-        /* HEADER ET NAVIGATION */
+        /* HEADER ET NAVIGATION EXACT DU DASHBOARD */
         header {
             background: var(--gradient-brown);
             padding: 15px 0;
@@ -165,7 +165,7 @@
             box-shadow: var(--shadow-hover);
         }
 
-        /* MENU HAMBURGER */
+        /* MENU HAMBURGER DU DASHBOARD */
         .burger {
             display: none;
             cursor: pointer;
@@ -179,7 +179,7 @@
             transition: all 0.3s ease;
         }
 
-        /* HERO SECTION - Style identique au dashboard */
+        /* HERO SECTION STYLE DASHBOARD */
         .hero {
             padding: 150px 0 100px 0;
             background: var(--dashboard-bg);
@@ -231,7 +231,7 @@
             color: var(--white);
         }
 
-        /* SECTIONS COMMUNES */
+        /* SECTIONS COMMUNES STYLE DASHBOARD */
         section {
             padding: 80px 0;
             background-color: var(--white);
@@ -276,7 +276,7 @@
         }
         .testimonials .section-title h2 { color: var(--white); }
 
-        /* SERVICES SECTION */
+        /* SERVICES SECTION STYLE DASHBOARD */
         .services-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
@@ -324,7 +324,7 @@
             color: var(--dark-orange);
         }
 
-        /* ABOUT SECTION */
+        /* ABOUT SECTION STYLE DASHBOARD */
         .about-content {
             display: flex;
             align-items: center;
@@ -352,7 +352,7 @@
             box-shadow: var(--shadow);
         }
 
-        /* TESTIMONIALS SECTION */
+        /* TESTIMONIALS SECTION STYLE DASHBOARD */
         .testimonials-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
@@ -393,7 +393,7 @@
             opacity: 0.8;
         }
 
-        /* CONTACT SECTION */
+        /* CONTACT SECTION STYLE DASHBOARD */
         .contact-form {
             max-width: 600px;
             margin: 0 auto;
@@ -414,7 +414,7 @@
             outline: none;
         }
 
-        /* FOOTER */
+        /* FOOTER EXACT DU DASHBOARD */
         footer {
             background: var(--dark-brown);
             color: var(--white);
@@ -481,7 +481,7 @@
             text-decoration: none;
         }
 
-        /* MODALE DE CONNEXION */
+        /* MODALE DE CONNEXION DU DASHBOARD */
         .modal-overlay {
             position: fixed;
             top: 0;
@@ -541,7 +541,7 @@
             display: none;
         }
 
-        /* RESPONSIVE DESIGN */
+        /* RESPONSIVE DESIGN DU DASHBOARD */
         @media (max-width: 992px) {
             .hero-card { padding: 40px 20px; }
             .about-content { flex-direction: column; }
@@ -584,7 +584,7 @@
             }
         }
 
-        /* ANIMATION AU DÉFILEMENT */
+        /* ANIMATION AU DÉFILEMENT DU DASHBOARD */
         .animate-on-scroll {
             opacity: 0;
             transform: translateY(30px);
@@ -597,12 +597,13 @@
     </style>
 </head>
 <body>
+    <!-- HEADER EXACT DU DASHBOARD -->
     <header>
         <div class="container">
             <nav class="navbar">
                 <a href="index.html" class="logo">
                     <i class="fas fa-crown logo-icon"></i>
-                    <span class="logo-text">Maestro Digit Lab</span>
+                    <span class="logo-text">MADIL</span>
                 </a>
                 <ul class="nav-links">
                     <li><a href="index.html">Accueil</a></li>
@@ -621,6 +622,7 @@
         </div>
     </header>
 
+    <!-- HERO SECTION AVEC CONTENU DE L'INDEX.HTML -->
     <section class="hero" id="hero">
         <div class="container">
             <div class="hero-card">
@@ -636,6 +638,7 @@
         </div>
     </section>
 
+    <!-- SERVICES SECTION AVEC CONTENU DE L'INDEX.HTML -->
     <section class="services" id="services">
         <div class="container">
             <div class="section-title">
@@ -702,6 +705,7 @@
         </div>
     </section>
 
+    <!-- ABOUT SECTION AVEC CONTENU DE L'INDEX.HTML -->
     <section class="about" id="about">
         <div class="container">
             <div class="about-content">
@@ -719,6 +723,7 @@
         </div>
     </section>
 
+    <!-- TESTIMONIALS SECTION AVEC CONTENU DE L'INDEX.HTML -->
     <section class="testimonials" id="testimonials">
         <div class="container">
             <div class="section-title">
@@ -756,6 +761,7 @@
         </div>
     </section>
 
+    <!-- CONTACT SECTION AVEC CONTENU DE L'INDEX.HTML -->
     <section class="contact" id="contact">
         <div class="container">
             <div class="section-title">
@@ -770,11 +776,12 @@
         </div>
     </section>
 
+    <!-- FOOTER EXACT DU DASHBOARD -->
     <footer>
         <div class="container">
             <div class="footer-content">
                 <div class="footer-column">
-                    <h3>MaestroDigitLab</h3>
+                    <h3>MADIL</h3>
                     <p>Votre partenaire de confiance pour le boostage sur les réseaux sociaux et solutions digitales depuis 2025.</p>
                     <div class="social-icons">
                         <a href="#"><i class="fab fa-facebook-f"></i></a>
@@ -811,7 +818,7 @@
                 </div>
             </div>
             <div class="copyright">
-                <p>&copy; 2025 MaestroDigitLab. Tous droits réservés.</p>
+                <p>&copy; 2025 MADIL. Tous droits réservés.</p>
             </div>
             <div class="credit">
                 <p>Site propulsé par <a href="https://social-boost-horizon-new-sbh.vercel.app" target="_blank">social boost horizon</a></p>
@@ -819,6 +826,7 @@
         </div>
     </footer>
 
+    <!-- MODALE DE CONNEXION DU DASHBOARD -->
     <div class="modal-overlay" id="auth-modal">
         <div class="modal-container">
             <i class="fas fa-times modal-close" id="modal-close-button"></i>
