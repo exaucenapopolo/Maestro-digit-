@@ -183,77 +183,87 @@
             transition: all 0.3s ease;
         }
 
-        /* CHANGEMENT MAJEUR : HERO SECTION (Style Panneau de Bienvenue / Card principale) */
+        /* --- DÉBUT MODIFICATION INDEX.HTML : SECTION HERO --- */
         .hero {
-            padding: 150px 0 100px 0; /* Moins d'espace pour un look moins 'pleine page' */
-            background: var(--dashboard-bg); /* S'assure que le Hero s'intègre au body */
-            color: var(--black);
+            /* Rétablit le style d'une grande section de bienvenue */
+            min-height: 85vh; /* Une grande hauteur d'écran */
+            padding: 150px 0 50px 0;
+            background-image: url('https://images.unsplash.com/photo-1550007897-408993717d3d?ixlib=rb-4.0.3&auto=format&fit=crop&w=1500&q=80'); /* Image de fond (vous pouvez la changer) */
+            background-size: cover;
+            background-position: center;
             position: relative;
-            overflow: hidden;
-            text-align: center; /* Centrage du contenu */
+            color: var(--white); /* Texte blanc sur l'image sombre */
+            display: flex;
+            align-items: center;
         }
-        /* NOUVEAUTÉ : Carte principale centrée dans le Hero */
+        /* Ajout d'un overlay sombre pour que le texte soit lisible */
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.5); /* Overlay sombre */
+            z-index: 0;
+        }
+
+        /* Retirer la carte blanche du dashboard pour le hero de l'accueil */
         .hero-card {
-            background: var(--white);
-            border-radius: 20px;
-            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.1);
-            padding: 60px 40px;
-            max-width: 800px;
-            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.9); /* Fond légèrement transparent pour faire ressortir le contenu */
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            padding: 50px;
+            max-width: 700px;
+            margin: 0; /* Alignement à gauche ou ajusté */
             animation: fadeIn 1s ease-out;
             position: relative;
             z-index: 1;
+            text-align: left; /* Rétablir l'alignement à gauche pour un look classique */
+            color: var(--dark-brown); /* Texte sombre sur fond clair */
         }
+        
         .hero-content {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            text-align: center;
+            /* Rétablir les styles de flex pour une présentation plus classique */
+            display: block;
+            flex-direction: none;
+            align-items: flex-start;
+            text-align: left;
         }
+
         .hero h1 {
-            font-size: 3rem; /* Légèrement plus petit */
+            font-size: 3.5rem; /* Rendre le titre plus grand */
             margin-bottom: 20px;
-            color: var(--dark-brown); /* Couleur de texte sombre */
+            color: var(--dark-brown);
             font-family: 'Playfair Display', serif;
         }
         .hero p {
-            font-size: 1.2rem; /* Légèrement plus petit */
+            font-size: 1.3rem; /* Rendre le paragraphe plus grand */
             margin-bottom: 30px;
             max-width: 600px;
             color: var(--black);
         }
-        .hero-buttons {
-            display: flex;
-            gap: 20px;
-        }
-        .secondary-button {
-            background: transparent;
-            color: var(--primary-orange);
-            border: 2px solid var(--primary-orange);
-        }
-        .secondary-button:hover {
-            background: var(--primary-orange);
-            color: var(--white);
-        }
 
-        /* SECTIONS COMMUNES */
+        /* --- FIN MODIFICATION INDEX.HTML : SECTION HERO --- */
+
+        /* SECTIONS COMMUNES (Conservées pour la cohérence 'dashboard/cards') */
         section {
-            padding: 80px 0; /* Un peu moins de padding */
-            background-color: var(--white); /* Par défaut, les sections sont blanches pour un look Dashboard */
-            margin-bottom: 20px; /* Ajout d'une petite marge pour séparer les sections */
-            border-radius: 15px; /* Coins arrondis pour un look moderne de carte */
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05); /* Ombre légère */
+            padding: 80px 0;
+            background-color: var(--white); 
+            margin-bottom: 20px; 
+            border-radius: 15px; 
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
         }
-        /* Pour que les sections remplissent la largeur dans le conteneur central du body */
+        
         .services, .about, .contact {
-            margin: 30px auto; /* Centrage des sections */
+            margin: 30px auto; 
             width: 90%;
             max-width: 1200px;
         }
 
         /* La section Testimonials est l'exception pour la couleur de fond */
         .testimonials {
-            background: var(--gradient-brown); /* Garde le gradient pour la section "Testimonials" */
+            background: var(--gradient-brown); 
             color: var(--white);
             border-radius: 15px;
             margin: 30px auto;
@@ -262,17 +272,18 @@
 
         .section-title {
             text-align: center;
-            margin-bottom: 40px; /* Moins de marge pour plus de compacité */
+            margin-bottom: 40px; 
+            position: relative; /* Ajouté pour l'effet ::after */
         }
         .section-title h2 {
-            font-size: 2rem; /* Légèrement plus petit */
+            font-size: 2rem; 
             color: var(--dark-brown);
             margin-bottom: 10px;
         }
         .section-title::after {
             content: '';
             position: absolute;
-            width: 60px; /* Plus petit */
+            width: 60px; 
             height: 3px;
             background: var(--gradient-orange);
             bottom: -10px;
@@ -287,23 +298,113 @@
         .services-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 25px; /* Moins d'espace */
+            gap: 25px;
         }
         .service-card {
-            /* Styles de carte conservés, mais plus de focus sur l'ombre */
+            background: var(--white);
+            padding: 30px;
+            text-align: center;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
             box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
             border-radius: 10px;
         }
-        .service-icon {
-            height: 100px; /* Plus petit */
-            font-size: 2rem;
+        .service-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
         }
-        .service-content { padding: 20px; } /* Moins de padding */
-        .service-content h3 { font-size: 1.3rem; }
+        .service-icon {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 80px;
+            font-size: 2.5rem;
+            color: var(--primary-orange);
+            margin-bottom: 15px;
+        }
+        .service-content { padding: 0; } 
+        .service-content h3 { font-size: 1.3rem; margin-bottom: 10px; color: var(--dark-brown); }
+        .service-link {
+            color: var(--primary-orange);
+            text-decoration: none;
+            font-weight: 500;
+            display: inline-block;
+            margin-top: 15px;
+        }
         
         /* ABOUT SECTION */
-        .about { background: var(--white); } /* On s'assure que l'arrière-plan est blanc */
-        .about-image img { border-radius: 10px; } /* Coins plus petits */
+        .about-content {
+            display: flex;
+            align-items: center;
+            gap: 40px;
+        }
+        .about-text, .about-image {
+            flex: 1;
+        }
+        .about-image img { 
+            width: 100%;
+            height: auto;
+            border-radius: 10px;
+            box-shadow: var(--shadow);
+        }
+        .about-text h2 { margin-bottom: 20px; }
+        .about-text p { margin-bottom: 15px; line-height: 1.6; }
+
+        /* TESTIMONIALS SECTION */
+        .testimonials-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 25px;
+        }
+        .testimonial-card {
+            background: var(--white);
+            color: var(--black);
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease;
+        }
+        .testimonial-text {
+            font-style: italic;
+            margin-bottom: 20px;
+            line-height: 1.6;
+        }
+        .testimonial-author {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        .author-avatar {
+            width: 50px;
+            height: 50px;
+            background: var(--primary-orange);
+            color: var(--white);
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-weight: bold;
+            font-size: 1.2rem;
+        }
+        .author-details h4 { margin: 0; color: var(--dark-brown); }
+        .author-details p { margin: 0; font-size: 0.9rem; color: #666; }
+
+        /* CONTACT SECTION */
+        .contact-form {
+            max-width: 600px;
+            margin: 0 auto;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+        .contact-form input, .contact-form textarea {
+            padding: 15px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-size: 1rem;
+            width: 100%;
+        }
+        .contact-form textarea { resize: vertical; }
+        .contact-form button { margin-top: 10px; }
 
         /* FOOTER (conservé, utilise des couleurs foncées pour le contraste) */
         footer {
@@ -311,21 +412,186 @@
             color: var(--white);
             padding: 50px 0 20px;
         }
+        .footer-content {
+            display: flex;
+            justify-content: space-between;
+            gap: 30px;
+            padding-bottom: 30px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        .footer-column {
+            flex: 1;
+            min-width: 200px;
+        }
+        .footer-column h3 {
+            font-size: 1.4rem;
+            margin-bottom: 20px;
+            color: var(--primary-orange);
+        }
+        .footer-column p {
+            font-size: 0.95rem;
+            line-height: 1.6;
+            margin-bottom: 20px;
+        }
+        .footer-links {
+            list-style: none;
+        }
+        .footer-links li { margin-bottom: 10px; }
+        .footer-links a {
+            color: var(--white);
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+        .footer-links a:hover { color: var(--primary-orange); }
+        .footer-links i { margin-right: 10px; color: var(--primary-orange); }
+
+        .social-icons a {
+            color: var(--white);
+            font-size: 1.2rem;
+            margin-right: 15px;
+            transition: color 0.3s ease;
+        }
+        .social-icons a:hover { color: var(--primary-orange); }
+
+        .copyright {
+            text-align: center;
+            font-size: 0.85rem;
+            margin-top: 20px;
+        }
+        .credit {
+            text-align: center;
+            font-size: 0.8rem;
+            margin-top: 5px;
+        }
+        .credit a {
+            color: var(--primary-orange);
+            text-decoration: none;
+        }
+
 
         /* MODALE DE CONNEXION (conservée) */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 2000;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.3s ease, visibility 0.3s ease;
+        }
+        .modal-overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
         .modal-container {
-            border-radius: 10px; /* Coins plus petits */
+            background: var(--white);
+            padding: 30px;
+            border-radius: 10px; 
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            width: 90%;
+            max-width: 400px;
+            position: relative;
+            transform: scale(0.9);
+            transition: transform 0.3s ease;
+        }
+        .modal-overlay.active .modal-container {
+            transform: scale(1);
+        }
+        .modal-close {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            cursor: pointer;
+            font-size: 1.2rem;
+            color: var(--black);
+        }
+        .modal-container h2 {
+            text-align: center;
+            margin-bottom: 25px;
+            color: var(--dark-brown);
+        }
+        .modal-form {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+        .modal-form input {
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 1rem;
+        }
+        #auth-error {
+            color: var(--dark-orange);
+            text-align: center;
+            margin-top: 10px;
+            display: none;
+            font-size: 0.9rem;
         }
 
         /* RESPONSIVE DESIGN (conservé) */
         @media (max-width: 992px) {
-            .hero-card { padding: 40px 20px; }
-            /* ... (autres styles responsives) ... */
+            .nav-links {
+                position: fixed;
+                right: 0;
+                top: 80px; /* Ajusté pour l'en-tête */
+                height: 92vh;
+                background-color: var(--dark-brown);
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                width: 50%;
+                transform: translateX(100%);
+                transition: transform 0.5s ease-in;
+                padding-top: 50px;
+            }
+            .nav-links.nav-active {
+                transform: translateX(0);
+            }
+            .nav-links li {
+                opacity: 0;
+            }
+            .nav-links a {
+                color: var(--white);
+            }
+            .burger {
+                display: block;
+            }
+            .about-content {
+                flex-direction: column;
+            }
+            .about-text, .about-image {
+                flex: none;
+                width: 100%;
+            }
+            .hero-card {
+                padding: 40px 20px;
+                max-width: 100%;
+                margin: 0 auto;
+            }
+            .hero h1 { font-size: 2.5rem; }
+            .footer-content {
+                flex-direction: column;
+                text-align: center;
+            }
+            .footer-column {
+                min-width: 100%;
+                margin-bottom: 20px;
+            }
+            .social-icons {
+                justify-content: center;
+                display: flex;
+            }
         }
         @media (max-width: 768px) {
             .hero h1 { font-size: 1.8rem; }
             .hero-buttons { flex-direction: column; gap: 15px; }
-            /* ... (autres styles responsives) ... */
         }
 
         /* ANIMATION AU DÉFILEMENT (conservée) */
@@ -338,6 +604,21 @@
             opacity: 1;
             transform: translateY(0);
         }
+
+        /* ANIMATION MENU BURGER */
+        @keyframes navLinkFade {
+            from {
+                opacity: 0;
+                transform: translateX(50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+        .toggle .line1 { transform: rotate(-45deg) translate(-5px, 6px); }
+        .toggle .line2 { opacity: 0; }
+        .toggle .line3 { transform: rotate(45deg) translate(-5px, -6px); }
     </style>
 </head>
 <body>
@@ -349,12 +630,12 @@
                     <span class="logo-text">Maestro Digit Lab</span>
                 </a>
                 <ul class="nav-links">
-                    <li><a href="index.html">Accueil</a></li>
-                    <li><a href="services.html">Services</a></li>
-                    <li><a href="about.html">À propos</a></li>
-                    <li><a href="testimonials.html">Témoignages</a></li>
-                    <li><a href="contact.html">Contact</a></li>
-                    <li><a href="login.html" class="cta-button" id="login-button">Connexion</a></li>
+                    <li><a href="#hero">Accueil</a></li>
+                    <li><a href="#services">Services</a></li>
+                    <li><a href="#about">À propos</a></li>
+                    <li><a href="#testimonials">Témoignages</a></li>
+                    <li><a href="#contact">Contact</a></li>
+                    <li><a href="#" class="cta-button" id="login-button">Connexion</a></li>
                 </ul>
                 <div class="burger">
                     <div class="line1"></div>
@@ -369,11 +650,11 @@
         <div class="container">
             <div class="hero-card">
                 <div class="hero-content">
-                    <h1 class="animate-on-scroll">Bienvenue sur votre Espace MaestroDigitLab</h1>
-                    <p class="animate-on-scroll">Connectez-vous pour accéder à votre tableau de bord personnel, suivre vos commandes de boostage et gérer vos services digitaux.</p>
+                    <h1 class="animate-on-scroll">Votre Vision, Notre Technologie : Boostez Votre Présence Digitale</h1>
+                    <p class="animate-on-scroll">Maestro Digit Lab est la plateforme de référence pour des services de boostage authentiques et efficaces sur tous vos réseaux sociaux. Atteignez de nouveaux sommets !</p>
                     <div class="hero-buttons animate-on-scroll">
-                        <a href="signup.html" class="cta-button">Créer un compte</a>
-                        <a href="#" class="cta-button secondary-button" id="dashboard-login-button">Accéder à mon Dashboard</a>
+                        <a href="#services" class="cta-button">Découvrir nos Services</a>
+                        <a href="signup.html" class="cta-button secondary-button" style="border: 2px solid var(--dark-brown); color: var(--dark-brown);">Créer un compte</a>
                     </div>
                 </div>
             </div>
@@ -618,30 +899,16 @@
 
         // --- GESTION DE LA MODALE DE CONNEXION ---
         const loginButton = document.getElementById('login-button');
-        const dashboardLoginButton = document.getElementById('dashboard-login-button'); // Nouveau bouton dans le Hero
         const authModal = document.getElementById('auth-modal');
         const closeModalButton = document.getElementById('modal-close-button');
         const loginForm = document.getElementById('login-form');
         const authError = document.getElementById('auth-error');
-
-        // Ouvre la modale
-        const openModal = (e) => {
-             // Empêche le lien de suivre le href
-            authModal.classList.add('active');
-        };
-
-        // Ajout des listeners pour les deux boutons de connexion
+        
+        // Ajout du listener pour le bouton Connexion (dans la nav)
         loginButton.addEventListener('click', (e) => {
-             // Empêche le lien de suivre le href
             e.preventDefault();
-            openModal(e);
+            authModal.classList.add('active');
         });
-        dashboardLoginButton.addEventListener('click', (e) => {
-             // Empêche le lien de suivre le href
-            e.preventDefault();
-            openModal(e);
-        });
-
 
         // Ferme la modale
         const closeModal = () => {
@@ -655,9 +922,9 @@
             }
         });
 
-        // --- SIMULATION DE CONNEXION ---
+        // --- SIMULATION DE CONNEXION (Conservée) ---
         loginForm.addEventListener('submit', (e) => {
-            e.preventDefault(); // Empêche le formulaire de recharger la page
+            e.preventDefault();
             
             const email = document.getElementById('email').value;
             const password = document.getElementById('password').value;
