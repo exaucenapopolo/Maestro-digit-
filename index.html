@@ -249,6 +249,32 @@
             text-shadow: 1px 1px 2px rgba(0,0,0,0.3);
         }
 
+        /* SIGNUP BUTTON SECTION */
+        .signup-section {
+            text-align: center;
+            padding: 60px 28px;
+            background: linear-gradient(180deg, var(--cream) 0%, #FFFDF8 100%);
+        }
+
+        .signup-container {
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .signup-title {
+            font-size: 2rem;
+            color: var(--primary-brown);
+            margin-bottom: 20px;
+            font-weight: 700;
+        }
+
+        .signup-subtitle {
+            font-size: 1.1rem;
+            color: var(--muted);
+            margin-bottom: 30px;
+            line-height: 1.6;
+        }
+
         /* MAIN CONTENT */
         .main {
             padding: 40px 28px;
@@ -627,6 +653,20 @@
             box-shadow: 0 8px 15px rgba(0,0,0,0.1);
         }
 
+        .btn-signup {
+            background: linear-gradient(90deg, var(--primary-orange), #ff5722);
+            color: #fff;
+            box-shadow: 0 8px 20px rgba(255, 122, 89, 0.25);
+            font-size: 1.1rem;
+            padding: 18px 40px;
+        }
+
+        .btn-signup:hover {
+            background: linear-gradient(90deg, #ff5722, var(--primary-orange));
+            transform: translateY(-3px);
+            box-shadow: 0 12px 25px rgba(255, 122, 89, 0.35);
+        }
+
         /* FOOTER EXACT DU DASHBOARD */
         .footer {
             background: linear-gradient(90deg, var(--primary-brown), var(--primary-blue));
@@ -795,6 +835,14 @@
                 font-size: 1rem;
             }
             
+            .signup-section {
+                padding: 40px 20px;
+            }
+            
+            .signup-title {
+                font-size: 1.7rem;
+            }
+            
             .main {
                 padding: 30px 20px;
             }
@@ -816,6 +864,14 @@
             
             .welcome-title {
                 font-size: 1.8rem;
+            }
+            
+            .signup-section {
+                padding: 30px 15px;
+            }
+            
+            .signup-title {
+                font-size: 1.5rem;
             }
             
             .section-title {
@@ -874,6 +930,18 @@
                 <div class="balance-label">Votre vision, notre technologie</div>
                 <div class="balance-amount">🚀 Boostez votre présence</div>
             </div>
+        </div>
+    </section>
+
+    <!-- SIGNUP BUTTON SECTION -->
+    <section class="signup-section fade-in">
+        <div class="signup-container">
+            <h2 class="signup-title">Prêt à booster votre présence digitale ?</h2>
+            <p class="signup-subtitle">Rejoignez notre communauté dès aujourd'hui et découvrez comment nos services peuvent transformer votre visibilité en ligne. Créez votre compte en quelques secondes.</p>
+            <a href="signup.html" class="btn btn-signup">
+                <i class="fas fa-user-plus"></i>
+                Créer un compte
+            </a>
         </div>
     </section>
 
