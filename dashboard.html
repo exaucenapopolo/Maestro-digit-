@@ -12,6 +12,7 @@
     <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🚀</text></svg>">
 
     <style>
+        /* CSS PRÉCÉDENT (NON MODIFIÉ) */
         :root {
             --primary-orange: #FF7A59;
             --primary-brown: #8B4513;
@@ -393,7 +394,8 @@
         /* Platform selection with icons */
         .platform-options {
             display: grid;
-            grid-template-columns: repeat(5, 1fr);
+            /* Modifié pour plus de plateformes */
+            grid-template-columns: repeat(auto-fit, minmax(70px, 1fr));
             gap: 10px;
             margin-bottom: 20px;
         }
@@ -456,7 +458,7 @@
             color: var(--muted);
         }
 
-        select, input[type="text"], input[type="number"] {
+        select, input[type="text"], input[type="number"], textarea {
             padding: 14px 16px;
             border-radius: 10px;
             border: 1px solid #E8E8E8;
@@ -466,8 +468,13 @@
             background: #fff;
             width: 100%;
         }
+        
+        textarea {
+            resize: vertical;
+            min-height: 120px;
+        }
 
-        select:focus, input:focus {
+        select:focus, input:focus, textarea:focus {
             outline: none;
             border-color: var(--primary-blue);
             box-shadow: 0 6px 18px rgba(66,133,244,0.12);
@@ -922,7 +929,8 @@
             }
             
             .platform-options {
-                grid-template-columns: repeat(2, 1fr);
+                /* Ajusté pour 4 colonnes sur mobile si possible */
+                grid-template-columns: repeat(4, 1fr); 
             }
         }
 
@@ -962,7 +970,6 @@
 </head>
 <body>
 
-<!-- HEADER -->
 <header class="main-header">
     <div class="logo-container">
         <img src="https://ui-avatars.com/api/?name=MADIL&background=FF7A59&color=fff" alt="logo MADIL">
@@ -1006,7 +1013,6 @@
     </div>
 </header>
 
-<!-- WELCOME SECTION -->
 <section class="welcome-section">
     <div class="welcome-content">
         <h1 class="welcome-title">Bienvenue, John Doe</h1>
@@ -1018,11 +1024,8 @@
     </div>
 </section>
 
-<!-- MAIN CONTENT -->
 <main class="main">
-    <!-- TOP AREA: balance / quick order -->
     <section class="top-area">
-        <!-- Balance & quick actions -->
         <div class="card balance-card fade-in">
             <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:15px">
                 <div>
@@ -1053,17 +1056,15 @@
             </div>
         </div>
 
-        <!-- Order form -->
         <div class="card quick-order fade-in delay-1" id="orderCard">
             <div class="title">
                 <div>
                     <strong>Formulaire de commande</strong>
-                    <div class="muted" style="font-size:.9rem">Plateforme → Service → Quantité → Qualité</div>
+                    <div class="muted" style="font-size:.9rem">Plateforme → Service → Quantité/Commentaire → Qualité</div>
                 </div>
                 <div class="info">Prix estimé en temps réel</div>
             </div>
 
-            <!-- Platform selection -->
             <div class="platform-options">
                 <div class="platform-option active" data-platform="facebook">
                     <i class="fab fa-facebook" style="color: #3b5998;"></i>
@@ -1085,33 +1086,65 @@
                     <i class="fab fa-telegram" style="color: #0088cc;"></i>
                     <div class="platform-name">Télégramme</div>
                 </div>
+                <div class="platform-option" data-platform="twitter">
+                    <i class="fab fa-twitter" style="color: #1DA1F2;"></i>
+                    <div class="platform-name">Twitter</div>
+                </div>
+                <div class="platform-option" data-platform="whatsapp">
+                    <i class="fab fa-whatsapp" style="color: #25D366;"></i>
+                    <div class="platform-name">WhatsApp</div>
+                </div>
+                <div class="platform-option" data-platform="spotify">
+                    <i class="fab fa-spotify" style="color: #1ED760;"></i>
+                    <div class="platform-name">Spotify</div>
+                </div>
+                <div class="platform-option" data-platform="linkedin">
+                    <i class="fab fa-linkedin" style="color: #0077B5;"></i>
+                    <div class="platform-name">LinkedIn</div>
+                </div>
             </div>
 
             <form id="orderForm" autocomplete="off" novalidate>
-                <!-- Service -->
                 <div class="field">
                     <label for="service"><i class="fas fa-cog"></i> Service</label>
                     <select id="service" required aria-describedby="serviceHelp">
-                        <!-- rempli par JS -->
-                    </select>
+                        </select>
                     <div class="muted" id="serviceHelp">Sélectionnez le service désiré</div>
+                </div>
+                
+                <div class="field" id="subOptionField" style="display: none;">
+                    <label for="subOption"><i class="fas fa-list"></i> <span id="subOptionLabel">Option</span></label>
+                    <select id="subOption" required aria-describedby="subOptionHelp">
+                        </select>
+                    <div class="muted" id="subOptionHelp">Sélectionnez l'option de service désirée</div>
                 </div>
 
                 <div class="inline-row">
-                    <div class="field">
+                    <div class="field" id="quantityField">
                         <label for="quantity"><i class="fas fa-hashtag"></i> Quantité</label>
                         <input id="quantity" type="number" min="1" value="1000" required aria-describedby="quantityHelp">
-                        <div class="muted" id="quantityHelp">Saisissez la quantité désirée</div>
+                        <div class="muted" id="quantityHelp">Saisissez la quantité désirée (par 1000)</div>
+                    </div>
+                    
+                    <div class="field" id="commentsField" style="display: none;">
+                        <label for="comments"><i class="fas fa-comment"></i> Vos Commentaires (<span id="commentCount">0</span> lignes)</label>
+                        <textarea id="comments" placeholder="Un commentaire par ligne..." required aria-describedby="commentsHelp"></textarea>
+                        <div class="muted" id="commentsHelp">Entrez un commentaire par ligne (1 ligne = 1 quantité)</div>
                     </div>
 
-                    <div class="field">
+                    <div class="field" id="qualityField">
                         <label for="quality"><i class="fas fa-star"></i> Qualité</label>
                         <select id="quality" aria-describedby="qualityHelp">
-                            <option value="standard">Standard</option>
-                            <option value="high">Haute qualité (+100%)</option>
+                            <option value="medium">Standard (Medium)</option>
+                            <option value="high">Haute qualité (High)</option>
                         </select>
                         <div class="muted" id="qualityHelp">Choisissez la qualité souhaitée</div>
                     </div>
+                </div>
+                
+                <div class="field" id="remarkField" style="display: none; border-left: 3px solid var(--primary-orange); padding-left: 15px;">
+                    <label><i class="fas fa-info-circle"></i> Remarque Importante</label>
+                    <div class="muted" id="serviceRemark" style="font-size: 0.9rem; color: var(--primary-brown);"></div>
                 </div>
 
                 <div class="field">
@@ -1137,7 +1170,6 @@
         </div>
     </section>
 
-    <!-- RECENT ORDERS -->
     <section class="card fade-in delay-2" id="services">
         <div class="section-title">
             <i class="fas fa-history"></i> Commandes Récentes
@@ -1158,14 +1190,12 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <!-- Rempli par JS (localStorage) -->
-                </tbody>
+                    </tbody>
             </table>
         </div>
     </section>
 </main>
 
-<!-- FOOTER -->
 <footer class="footer">
     <div class="footer-content">
         <div class="footer-about">
@@ -1212,507 +1242,854 @@
     </div>
 </footer>
 
-<!-- Toast notification -->
 <div class="toast" id="toast" role="alert" aria-live="assertive"></div>
 
 <script>
-/* ====== Données de tarification avec paliers ====== */
-const pricing = {
-    facebook: {
-        "Followers": [
-            { quantity: 1000, price: 2100 },
-            { quantity: 5000, price: 9500 },
-            { quantity: 10000, price: 19200 }
-        ],
-        "Likes publication et vues de vidéos ou réel": [
-            { quantity: 1000, price: 1500 },
-            { quantity: 5000, price: 6500 },
-            { quantity: 10000, price: 11500 }
-        ],
-        "J’aime pour votre page": [
-            { quantity: 1000, price: 2800 },
-            { quantity: 5000, price: 7000 },
-            { quantity: 10000, price: 11000 }
-        ],
-        "Commentaires": [
-            { quantity: 10, price: 850 }
-        ],
-        "Partage pour votre publication ou Avis pour votre page": [
-            { quantity: 1000, price: 800 },
-            { quantity: 5000, price: 4000 },
-            { quantity: 10000, price: 9000 }
-        ],
-        "Membres pour votre groupe": [
-            { quantity: 1000, price: 2000 },
-            { quantity: 5000, price: 9000 }
-        ]
-    },
-    tiktok: {
-        "Abonnees": [
-            { quantity: 1000, price: 2500 },
-            { quantity: 2000, price: 5000 },
-            { quantity: 5000, price: 9500 },
-            { quantity: 10000, price: 19500 }
-        ],
-        "Likes vidéo": [
-            { quantity: 1000, price: 1000 },
-            { quantity: 5000, price: 4500 },
-            { quantity: 10000, price: 8000 }
-        ],
-        "Vues de vidéos": [
-            { quantity: 1000, price: 800 },
-            { quantity: 5000, price: 3500 },
-            { quantity: 10000, price: 5000 }
-        ],
-        "Sauvegarde et partage de vidéos & j’aime pour votre direct": [
-            { quantity: 1000, price: 500 },
-            { quantity: 5000, price: 2000 },
-            { quantity: 10000, price: 3500 }
-        ],
-        "Commentaires personnalisés": [
-            { quantity: 10, price: 500 },
-            { quantity: 1000, price: 5000 }
-        ]
-    },
-    instagram: {
-        "Abonnees": [
-            { quantity: 1000, price: 2500 },
-            { quantity: 2000, price: 5000 },
-            { quantity: 5000, price: 9500 },
-            { quantity: 10000, price: 19500 }
-        ],
-        "Likes vidéo": [
-            { quantity: 1000, price: 1000 },
-            { quantity: 5000, price: 4500 },
-            { quantity: 10000, price: 8000 }
-        ],
-        "Vues de vidéos": [
-            { quantity: 1000, price: 500 },
-            { quantity: 5000, price: 2000 },
-            { quantity: 10000, price: 3000 }
-        ],
-        "Commentaires personnalisés": [
-            { quantity: 10, price: 300 },
-            { quantity: 1000, price: 3000 }
-        ],
-        "Vues de story": [
-            { quantity: 1000, price: 500 },
-            { quantity: 5000, price: 2000 },
-            { quantity: 10000, price: 4000 }
-        ]
-    },
-    youtube: {
-        "Abonnees": [
-            { quantity: 1000, price: 5000 },
-            { quantity: 2000, price: 9500 },
-            { quantity: 5000, price: 24500 },
-            { quantity: 10000, price: 50000 }
-        ],
-        "Vues et j’aime la vidéo": [
-            { quantity: 1000, price: 1500 },
-            { quantity: 2000, price: 3000 },
-            { quantity: 5000, price: 7000 },
-            { quantity: 10000, price: 13500 }
-        ]
-    },
-    telegram: {
-        "Abonnés": [
-            { quantity: 1000, price: 3500 },
-            { quantity: 5000, price: 15000 }
-        ],
-        "Vues": [
-            { quantity: 1000, price: 1200 },
-            { quantity: 5000, price: 5000 }
-        ],
-        "Réactions": [
-            { quantity: 100, price: 800 },
-            { quantity: 500, price: 3500 }
-        ]
-    }
-};
-
-const serviceMap = {
-    facebook: Object.keys(pricing.facebook),
-    tiktok: Object.keys(pricing.tiktok),
-    instagram: Object.keys(pricing.instagram),
-    youtube: Object.keys(pricing.youtube),
-    telegram: Object.keys(pricing.telegram)
-};
-
-const formatFCFA = (n) => {
-    if (isNaN(n)) return "-- FCFA";
-    return new Intl.NumberFormat('fr-FR').format(Math.round(n)) + " FCFA";
-}
-
-// Elements
-const platformOptions = document.querySelectorAll('.platform-option');
-const serviceEl = document.getElementById('service');
-const quantityEl = document.getElementById('quantity');
-const qualityEl = document.getElementById('quality');
-const linkEl = document.getElementById('link');
-const priceEl = document.getElementById('priceEstimate');
-const orderForm = document.getElementById('orderForm');
-const ordersTableBody = document.querySelector('#ordersTable tbody');
-const balanceAmountEl = document.getElementById('balanceAmount');
-const quantityHelp = document.getElementById('quantityHelp');
-const toastEl = document.getElementById('toast');
-const submitBtn = document.getElementById('submitBtn');
-const submitText = document.getElementById('submitText');
-const submitSpinner = document.getElementById('submitSpinner');
-const quickOrderBtn = document.getElementById('quickOrderBtn');
-const resetFormBtn = document.getElementById('resetForm');
-const activeOrdersEl = document.getElementById('activeOrders');
-const completedOrdersEl = document.getElementById('completedOrders');
-const menuBtn = document.getElementById('menuBtn');
-const dropdownMenu = document.getElementById('dropdownMenu');
-
-let balance = 25000; // valeur initiale
-balanceAmountEl.textContent = formatFCFA(balance);
-let currentPlatform = 'instagram';
-
-// Gestion du menu hamburger
-menuBtn.addEventListener('click', function(e) {
-    e.stopPropagation();
-    menuBtn.classList.toggle('active');
-    dropdownMenu.classList.toggle('active');
-});
-
-// Fermer le menu en cliquant à l'extérieur
-document.addEventListener('click', function(e) {
-    if (dropdownMenu.classList.contains('active') && !dropdownMenu.contains(e.target) && !menuBtn.contains(e.target)) {
-        menuBtn.classList.remove('active');
-        dropdownMenu.classList.remove('active');
-    }
-});
-
-// Afficher les paliers disponibles pour le service sélectionné
-function updateQuantityHelp() {
-    const service = serviceEl.value;
+    /* ====== DONNÉES DE SERVICES (MODIFIÉES) ====== */
+    const servicesData = {
+        facebook: {
+            "Followers (page)": {
+                medium: { price: 1994, time: "3 h" },
+                high: { price: 2500, time: "2 h" },
+                remark: "VOTRE COMMANDE PEUT PRENDRE UN PEU PLUS DE TEMPS QUE D'HABITUDE EN CAS DE MISE A JOUR DE FACEBOOK (min: 100)"
+            },
+            "Followers (profil)": {
+                medium: { price: 1994, time: "3 h" },
+                high: { price: 2550, time: "2 h" },
+                remark: "ASSUREZ-VOUS QUE LE PROFIL FACEBOOK EST EN MODE PROFESSIONNEL.SI VOUS NE SAVEZ PAS COMMENT FAIRE, REGARDEZ LE TUTORIEL SUR NOTRE CHAINE YOUTUBE (min: 100)"
+            },
+            "J’aime (page)": {
+                medium: { price: 2200, time: "3 h" },
+                high: { price: 2800, time: "2 h" },
+                remark: "Vous obtiendrez des followers en bonus. C'EST L'AVANTAGE DE CE SERVICE.Assurez vous que vous envoyez les j'aime à une page et non à un profil ! (min: 100)"
+            },
+            "J’aime (publication)": {
+                medium: { price: 955, time: "2 h" },
+                high: { price: 1100, time: "1 h" },
+                remark: "Si la publication provient d'un compte facebook, Assurez-vous que ces publication sont publiques (min: 100)"
+            },
+            "Partages": {
+                medium: { price: 930, time: "3 h" },
+                high: { price: 1330, time: "2 h" },
+                remark: "Assurez-vous que la publication est publique.Si la publication provient d'un compte Facebook, assurez vous que les publications du compte sont publiques ! (min: 1000)"
+            },
+            "Membres de groupe": {
+                medium: { price: 2000, time: "6 h" },
+                high: { price: 2500, time: "4 h" },
+                remark: "Le groupe doit être public, sinon votre commande sera annulée. (min: 100)"
+            },
+            "Vues de vidéo": {
+                medium: { price: 270, time: "4 h" },
+                high: { price: 560, time: "3 h" },
+                remark: "Lien direct de la vidéo publique requis. Elle doit être publique (min: 500)"
+            },
+            "Commentaires personnalisés": {
+                medium: { price: 984, time: "24 h" },
+                high: { price: 1150, time: "18 h" },
+                remark: "Ce sont des comptes masculins américains qui commenteront. **Un commentaire par ligne.** (min: 10)"
+            },
+            "Réaction Emoji": {
+                subOptionLabel: "Emoji à choisir",
+                options: {
+                    "Reaction 🥰": { medium: { price: 900, time: "3 h" }, high: { price: 1100, time: "2 h" } },
+                    "Reaction ❤️": { medium: { price: 900, time: "3 h" }, high: { price: 1100, time: "2 h" } },
+                    "Reaction 😂": { medium: { price: 900, time: "3 h" }, high: { price: 1100, time: "2 h" } },
+                    "Reaction 😮": { medium: { price: 900, time: "3 h" }, high: { price: 1100, time: "2 h" } },
+                    "Reaction 😢": { medium: { price: 900, time: "3 h" }, high: { price: 1100, time: "2 h" } },
+                    "Reaction 😡": { medium: { price: 900, time: "3 h" }, high: { price: 1100, time: "2 h" } }
+                },
+                remark: "Choisissez l’emoji à appliquer aux publications.Si la publication provient d'un compte Facebook, assurez vous que les publications du compte sont publiques ! (min: 100)"
+            }
+        },
+        instagram: {
+            "Followers": {
+                medium: { price: 2250, time: "20 min" },
+                high: { price: 3650, time: "10 min" },
+                remark: "Ne changez pas votre nom d’utilisateur.NB: En raison d'une récente mise à jour d'instagram, vous devez maintenant désactiver l'option « À VÉRIFIER » sur votre compte instagram avant d'acheter des followers, cette option est automatiquement activée pour TOUS les comptes instagram et c'est à vous de la désactiver.VOUS N'OBTIENDREZ AUCUN FOLLOWER ET PERDREZ VOTRE ARGENT SI VOUS NE LE DÉSACTIVEZ PAS AVANT D'ACHETER, N'APPUYEZ PAS SUR ACHETER SI VOUS N'ÊTES PAS SÛR À 100% QU'IL EST DÉSACTIVÉ. (min: 100)"
+            },
+            "J’aime": {
+                medium: { price: 250, time: "30 min" },
+                high: { price: 500, time: "15 min" },
+                remark: "Baisse de 3–5 % des likes. video publique obligatoire (min: 100)"
+            },
+            "Vues de vidéos": {
+                medium: { price: 245, time: "30 min" },
+                high: { price: 495, time: "10 min" },
+                remark: "Assurez vous que la vidéo provient d'un compte instagram qui n'est pas privé ! (min: 1000)"
+            },
+            "Commentaires personnalisés": {
+                medium: { price: 419, time: "12 h" },
+                high: { price: 559, time: "10 h" },
+                remark: "Veuillez ne pas insérer de “@” ni “#” dans vos commentaires. **Un commentaire par ligne.** (min: 10)"
+            },
+            "Vues de story": {
+                medium: { price: 350, time: "30 min" },
+                high: { price: 557, time: "15 min" },
+                remark: "Ce sont des spectateurs asiatiques qui regarderont votre story. (min: 100)"
+            }
+        },
+        youtube: {
+            "Abonnés": {
+                medium: { price: 18315, time: "24 h" },
+                high: { price: 20060, time: "15 h" },
+                remark: "Il faut vous attendre à une baisse de 1–5 % d'abonnés après quelques semaines suivant la livraison pour la qualité moyenne uniquement. (min: 50)"
+            },
+            "Vues": {
+                medium: { price: 1350, time: "9 h" },
+                high: { price: 1980, time: "8 h" },
+                remark: "Presque aucune baisse de vues. Ce sont des vues de haute qualité : ils regarderont toute votre vidéo jusqu'à la fin (min: 500)"
+            },
+            "J’aime": {
+                medium: { price: 1390, time: "2 h" },
+                high: { price: 1750, time: "1 h" },
+                remark: "Presque aucune baisse de j'aimes. (min: 200)"
+            },
+            "Commentaires personnalisés": {
+                medium: { price: 250, time: "24 h" },
+                high: { price: 500, time: "18 h" },
+                remark: "Veuillez ne pas insérer de “@” ni “#” dans vos commentaires. **Un commentaire par ligne.** (min: 10)"
+            }
+        },
+        tiktok: {
+            "Followers": {
+                medium: { price: 1990, time: "2 h" },
+                high: { price: 3500, time: "1 h" },
+                remark: "Assurez-vous que le compte Tiktok n'est pas privé, et ne changez pas le nom d'utilisateur du compte pendant que des followers sont ajoutés !. Il faut s'attendre à une légère baisse de 1–2 % après quelques semaines pour la qualité moyenne. (min: 100)"
+            },
+            "J’aime": {
+                medium: { price: 279, time: "20 min" },
+                high: { price: 510, time: "10 min" },
+                remark: "Lien direct de la vidéo. (min: 50)"
+            },
+            "Vues": {
+                medium: { price: 98, time: "10 min" },
+                high: { price: 290, time: "05 min" },
+                remark: "Vidéo publique. Aucune baisse.ASSUREZ-VOUS QUE LE LIEN QUE VOUS SOUMETTEZ IS LE LIEN D'UNE VIDÉO DE VOTRE COMPTE TIKTOK, ET NON LE LIEN DE VOTRE COMPTE TIKTOK ! !!! (min: 500)"
+            },
+            "Sauvegarde de vidéos": {
+                medium: { price: 300, time: "20 min" },
+                high: { price: 500, time: "10 min" },
+                remark: "Vidéo publique requise.ASSUREZ-VOUS QUE LE LIEN QUE VOUS SOUMETTEZ IS LE LIEN D'UNE VIDÉO DE VOTRE COMPTE TIKTOK, ET NON LE LIEN DE VOTRE COMPTE TIKTOK ! !!! (min: 100)"
+            },
+            "Partages de vidéos": {
+                medium: { price: 150, time: "30 min" },
+                high: { price: 480, time: "15 min" },
+                remark: "Vidéo publique.ASSUREZ-VOUS QUE LE LIEN QUE VOUS SOUMETTEZ IS LE LIEN D'UNE VIDÉO DE VOTRE COMPTE TIKTOK, ET NON LE LIEN DE VOTRE COMPTE TIKTOK ! !!! (min: 100)"
+            },
+            "Commentaires personnalisés": {
+                medium: { price: 390, time: "4 h" },
+                high: { price: 569, time: "2 h" },
+                remark: "Assurez-vous de ne pas insérer de “@” ni “#” dans vos commentaires. **Un commentaire par ligne.** (min: 10)"
+            },
+            "J’aime pour direct": {
+                medium: { price: 250, time: "15 mi n" },
+                high: { price: 560, time: "10 mi n" },
+                remark: "Les likes viendront 15 ou 10 minutes après votre achat. (min : 100)"
+            },
+            "Téléspectateur en direct": {
+                subOptionLabel: "Durée",
+                options: {
+                    "20 min": { medium: { price: 2750, time: "20 min" }, high: { price: 3010, time: "20 min" } },
+                    "1 h": { medium: { price: 3800, time: "1 h" }, high: { price: 4010, time: "1 h" } },
+                    "1 h 30": { medium: { price: 5850, time: "1 h 30" }, high: { price: 6500, time: "1 h 30" } }
+                },
+                remark: "Spectateurs en live sur votre direct TikTok.ceux de haute Qualité, commenteront, et vont beaucoup intereagir (min: 50)"
+            }
+        },
+        telegram: {
+            "Membres groupe/canal": {
+                medium: { price: 1200, time: "3 h" },
+                high: { price: 2250, time: "3 h" },
+                remark: "Lien d’invitation public requis. (min: 500)"
+            },
+            "Vues publication spécifique": {
+                subOptionLabel: "Qualité des vues",
+                options: {
+                    "Qualité moyenne": { medium: { price: 150, time: "Instantané" }, high: { price: 150, time: "Instantané" } },
+                    "Haute qualité": { medium: { price: 299, time: "Instantané" }, high: { price: 299, time: "Instantané" } }
+                },
+                remark: "Vues sur la publication spécifique."
+            },
+            "Vues des publications précédentes": {
+                subOptionLabel: "Nombre de vues",
+                options: {
+                    "20 vues": { medium: { price: 880, time: "Instantané" }, high: { price: 1000, time: "Instantané" } },
+                    "50 vues": { medium: { price: 1356, time: "Instantané" }, high: { price: 1771, time: "Instantané" } },
+                    "100 vues": { medium: { price: 2357, time: "Instantané" }, high: { price: 2887, time: "Instantané" } }
+                },
+                remark: "Choisissez le nombre de vues."
+            },
+            "Vues futures publications": {
+                subOptionLabel: "Nombre de vues futures",
+                options: {
+                    "20 futures vues": { medium: { price: 970, time: "Instantané" }, high: { price: 1277, time: "Instantané" } },
+                    "50 futures vues": { medium: { price: 1995, time: "Instantané" }, high: { price: 2357, time: "Instantané" } },
+                    "100 futures vues": { medium: { price: 3999, time: "Instantané" }, high: { price: 4599, time: "Instantané" } }
+                },
+                remark: "Vues programmées pour futures publications."
+            },
+            "Réactions publication spécifique": {
+                medium: { price: 210, time: "Instantané" },
+                high: { price: 455, time: "Instantané" },
+                remark: "Réaction (👍😏😅🔥🤩😭) sur la publication spécifique. (min: 10)"
+            },
+            "Réactions précédentes": {
+                subOptionLabel: "Nombre de réactions",
+                options: {
+                    "20 réactions": { medium: { price: 1250, time: "Instantané" }, high: { price: 1250, time: "Instantané" } },
+                    "50 réactions": { medium: { price: 3000, time: "Instantané" }, high: { price: 3000, time: "Instantané" } },
+                    "100 réactions": { medium: { price: 5000, time: "Instantané" }, high: { price: 5000, time: "Instantané" } }
+                },
+                remark: "Réactions (🤩🥳💚🥰😎👍) sur publications précédentes selon votre nombre sélectionné."
+            },
+            "Réactions futures": {
+                subOptionLabel: "Nombre de réactions futures",
+                options: {
+                    "20 réactions": { medium: { price: 1250, time: "Instantané" }, high: { price: 1250, time: "Instantané" } },
+                    "50 réactions": { medium: { price: 3000, time: "Instantané" }, high: { price: 3000, time: "Instantané" } },
+                    "100 réactions": { medium: { price: 5000, time: "Instantané" }, high: { price: 5000, time: "Instantané" } }
+                },
+                remark: "Réactions (😹🥰🤩💚😏👍) sur vos futures publications."
+            }
+        },
+        twitter: {
+            "Followers": {
+                medium: { price: 6580, time: "4 h" },
+                high: { price: 7321, time: "3 h" },
+                remark: "Profil public requis. (min: 100)"
+            },
+            "Likes (J'aime)": {
+                medium: { price: 2070, time: "2 h" },
+                high: { price: 2480, time: "1 h" },
+                remark: "Lien direct du tweet public. (min: 50)"
+            },
+            "Retweets": {
+                medium: { price: 1880, time: "3 h" },
+                high: { price: 2010, time: "2 h" },
+                remark: "Tweet public requis. (min: 50)"
+            },
+            "Vues de vidéo (Twitter)": {
+                medium: { price: 5000, time: "5 h" },
+                high: { price: 7000, time: "4 h" },
+                remark: "Lien de la vidéo Twitter. (min: 500)"
+            },
+            "Commentaires personnalisés": {
+                medium: { price: 900, time: "20 h" },
+                high: { price: 1200, time: "18 h" },
+                remark: "Un commentaire par ligne. **Un commentaire par ligne.** (min: 10)"
+            }
+        },
+        whatsapp: {
+            "Abonnés internationaux": {
+                medium: { price: 3030, time: "3 h" },
+                high: { price: 4010, time: "2 h" },
+                remark: "Abonnés de pays aléatoires. (min: 100)"
+            },
+            "Abonnés américains": {
+                medium: { price: 4430, time: "3 h" },
+                high: { price: 5500, time: "3 h" },
+                remark: "Abonnés ciblés uniquement USA. (min: 100)"
+            },
+            "Abonnés indiens": {
+                medium: { price: 4430, time: "3 h" },
+                high: { price: 5500, time: "3 h" },
+                remark: "Abonnés ciblés uniquement de l'Inde. (min: 100)"
+            },
+            "Réaction Emoji": {
+                subOptionLabel: "Emoji à choisir",
+                options: {
+                    "Reaction 👍": { medium: { price: 2040, time: "Instantané" }, high: { price: 2780, time: "Instantané" } },
+                    "Reaction ❤️": { medium: { price: 2040, time: "Instantané" }, high: { price: 2780, time: "Instantané" } },
+                    "Reaction 😂": { medium: { price: 2040, time: "Instantané" }, high: { price: 2780, time: "Instantané" } },
+                    "Reaction aléatoires": { medium: { price: 2900, time: "30 min" }, high: { price: 3500, time: "15 min" } }
+                },
+                remark: "Emoji react sur vos messages. (min: 100)"
+            }
+        },
+        spotify: {
+            "Followers": {
+                medium: { price: 3950, time: "3 h" },
+                high: { price: 4510, time: "2 h" },
+                remark: "Profil public requis. Ne touchez à rien pendant le travail. (min: 500)"
+            },
+            "Abonnés à la playlist": {
+                medium: { price: 3500, time: "2 h" },
+                high: { price: 4150, time: "1 h" },
+                remark: "Lien de la playlist requis. (min: 500)"
+            }
+        },
+        linkedin: {
+            "Abonnés pour votre page": {
+                medium: { price: 7500, time: "5 h" },
+                high: { price: 8000, time: "4 h" },
+                remark: "Page publique requise. (min: 500)"
+            },
+            "Abonnés pour votre profil": {
+                medium: { price: 7700, time: "5 h" },
+                high: { price: 8700, time: "4 h" },
+                remark: "Profil professionnel requis. (min: 500)"
+            },
+            "Likes postes": {
+                medium: { price: 35000, time: "7 h" },
+                high: { price: 40000, time: "6 h" },
+                remark: "Posts publics requis. (min: 100)"
+            }
+        }
+    };
     
-    if (pricing[currentPlatform] && pricing[currentPlatform][service]) {
-        const tiers = pricing[currentPlatform][service];
-        const tierQuantities = tiers.map(tier => tier.quantity.toLocaleString('fr-FR'));
-        quantityHelp.textContent = `Quantités disponibles: ${tierQuantities.join(', ')}`;
-    } else {
-    quantityHelp.textContent = 'Saisissez la quantité désirée';
-    }
-}
-
-// Populate services depending on platform
-function populateServices(platform){
-    serviceEl.innerHTML = '';
-    
-    // Add default option
-    const defaultOpt = document.createElement('option');
-    defaultOpt.value = '';
-    defaultOpt.textContent = 'Sélectionnez un service';
-    serviceEl.appendChild(defaultOpt);
-    
-    serviceMap[platform].forEach(s => {
-        const opt = document.createElement('option');
-        opt.value = s;
-        opt.textContent = s;
-        serviceEl.appendChild(opt);
-    });
-    updateQuantityHelp();
-    updatePrice();
-}
-
-// Trouver le prix pour une quantité donnée selon les paliers
-function findPriceForQuantity(platform, service, quantity) {
-    if (!pricing[platform] || !pricing[platform][service]) return 0;
-    
-    const tiers = pricing[platform][service];
-    
-    // Si la quantité demandée correspond exactement à un palier
-    const exactMatch = tiers.find(tier => tier.quantity === quantity);
-    if (exactMatch) return exactMatch.price;
-    
-    // Si la quantité est inférieure au plus petit palier
-    const minTier = tiers.reduce((min, tier) => tier.quantity < min.quantity ? tier : min, tiers[0]);
-    if (quantity < minTier.quantity) {
-        return (minTier.price / minTier.quantity) * quantity;
-    }
-    
-    // Si la quantité est supérieure au plus grand palier
-    const maxTier = tiers.reduce((max, tier) => tier.quantity > max.quantity ? tier : max, tiers[0]);
-    if (quantity > maxTier.quantity) {
-        return (maxTier.price / maxTier.quantity) * quantity;
-    }
-    
-    // Trouver les paliers inférieur et supérieur pour interpolation
-    let lowerTier = null;
-    let upperTier = null;
-    
-    for (let i = 0; i < tiers.length - 1; i++) {
-        if (quantity >= tiers[i].quantity && quantity <= tiers[i+1].quantity) {
-            lowerTier = tiers[i];
-            upperTier = tiers[i+1];
-            break;
+    /* ====== LOGIQUE DE MISE À JOUR DES PRIX (Multiplication par deux) ====== */
+    // Fonction pour appliquer la multiplication par deux aux prix
+    function updateServicePrices(data) {
+        for (const platform in data) {
+            for (const service in data[platform]) {
+                const serviceInfo = data[platform][service];
+                
+                // Si le service a des sous-options (ex: Réactions Emoji, Vues précédentes)
+                if (serviceInfo.options) {
+                    for (const option in serviceInfo.options) {
+                        serviceInfo.options[option].medium.price *= 2;
+                        serviceInfo.options[option].high.price *= 2;
+                    }
+                } 
+                // Si le service a les prix 'medium' et 'high' directement
+                else if (serviceInfo.medium && serviceInfo.high) {
+                    serviceInfo.medium.price *= 2;
+                    serviceInfo.high.price *= 2;
+                }
+            }
         }
     }
     
-    if (!lowerTier || !upperTier) return 0;
+    // Appliquer la règle de multiplication par 2
+    updateServicePrices(servicesData);
     
-    // Interpolation linéaire entre les deux paliers
-    const pricePerUnitLower = lowerTier.price / lowerTier.quantity;
-    const pricePerUnitUpper = upperTier.price / upperTier.quantity;
-    
-    // Utiliser une interpolation pondérée
-    const ratio = (quantity - lowerTier.quantity) / (upperTier.quantity - lowerTier.quantity);
-    const interpolatedPricePerUnit = pricePerUnitLower + (pricePerUnitUpper - pricePerUnitLower) * ratio;
-    
-    return interpolatedPricePerUnit * quantity;
-}
-
-// Price calculation
-function calculatePrice(){
-    const service = serviceEl.value;
-    const qty = Number(quantityEl.value) || 0;
-    const quality = qualityEl.value;
-
-    if (!service || qty <= 0) return 0;
-
-    const basePrice = findPriceForQuantity(currentPlatform, service, qty);
-    const qualMultiplier = (quality === 'high') ? 2 : 1;
-    const price = basePrice * qualMultiplier;
-    
-    return price;
-}
-
-function updatePrice(){
-    const price = calculatePrice();
-    priceEl.textContent = formatFCFA(price);
-    
-    // Animation du changement de prix
-    priceEl.style.transform = 'scale(1.1)';
-    setTimeout(() => {
-        priceEl.style.transform = 'scale(1)';
-    }, 300);
-}
-
-// Afficher une notification toast
-function showToast(message, type = 'success') {
-    // Remove any existing toasts
-    toastEl.className = 'toast';
-    
-    // Set icon based on type
-    let icon = 'check-circle';
-    if (type === 'error') icon = 'exclamation-circle';
-    if (type === 'warning') icon = 'exclamation-triangle';
-    
-    toastEl.innerHTML = `<i class="fas fa-${icon}"></i> ${message}`;
-    toastEl.classList.add(type, 'show');
-    
-    setTimeout(() => {
-        toastEl.classList.remove('show');
-    }, 4000);
-}
-
-// LocalStorage orders handling
-function loadOrders(){
-    const raw = localStorage.getItem('mdl_orders_v1');
-    if (!raw) return [];
-    try { return JSON.parse(raw) } catch(e) { return [] }
-}
-function saveOrders(list){
-    localStorage.setItem('mdl_orders_v1', JSON.stringify(list));
-}
-function addOrder(order){
-    const list = loadOrders();
-    list.unshift(order); // add at top
-    saveOrders(list);
-    renderOrders();
-}
-
-function updateOrderCounts() {
-    const orders = loadOrders();
-    let activeCount = 0;
-    let completedCount = 0;
-    
-    orders.forEach(order => {
-        if (order.statusClass === 'processing' || order.statusClass === 'pending') {
-            activeCount++;
-        } else if (order.statusClass === 'completed') {
-            completedCount++;
-        }
-    });
-    
-    activeOrdersEl.textContent = activeCount;
-    completedOrdersEl.textContent = completedCount;
-}
-
-function renderOrders(){
-    const orders = loadOrders();
-    ordersTableBody.innerHTML = '';
-    if (orders.length === 0){
-        const tr = document.createElement('tr');
-        tr.innerHTML = '<td colspan="8" style="text-align:center;color:#888;padding:30px"><i class="fas fa-inbox" style="font-size:2rem;margin-bottom:10px;display:block;opacity:0.5"></i>Aucune commande enregistrée — passez votre première commande !</td>';
-        ordersTableBody.appendChild(tr);
-        return;
+    /* ====== VARIABLES GLOBALES ET ÉLÉMENTS DU DOM ====== */
+    const formatFCFA = (n) => {
+        if (isNaN(n)) return "-- FCFA";
+        // Correction: utiliser Math.ceil pour s'assurer que le prix est au moins le prix unitaire
+        return new Intl.NumberFormat('fr-FR').format(Math.ceil(n)) + " FCFA"; 
     }
 
-    orders.forEach(o => {
-        const tr = document.createElement('tr');
-        tr.innerHTML = `
-            <td>${o.id}</td>
-            <td>${o.platform} • ${o.service}</td>
-            <td style="max-width:200px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${o.link}</td>
-            <td>${o.quantity.toLocaleString('fr-FR')}</td>
-            <td>${o.qualityLabel}</td>
-            <td>${formatFCFA(o.price)}</td>
-            <td><span class="status ${o.statusClass}">${o.statusLabel}</span></td>
-            <td>${o.date}</td>
-        `;
-        ordersTableBody.appendChild(tr);
+    // Elements
+    const platformOptions = document.querySelectorAll('.platform-option');
+    const serviceEl = document.getElementById('service');
+    const subOptionField = document.getElementById('subOptionField');
+    const subOptionLabelEl = document.getElementById('subOptionLabel');
+    const subOptionEl = document.getElementById('subOption');
+    const quantityField = document.getElementById('quantityField');
+    const quantityEl = document.getElementById('quantity');
+    const quantityHelp = document.getElementById('quantityHelp');
+    const commentsField = document.getElementById('commentsField');
+    const commentsEl = document.getElementById('comments');
+    const commentCountEl = document.getElementById('commentCount');
+    const qualityField = document.getElementById('qualityField');
+    const qualityEl = document.getElementById('quality');
+    const linkEl = document.getElementById('link');
+    const priceEl = document.getElementById('priceEstimate');
+    const orderForm = document.getElementById('orderForm');
+    const ordersTableBody = document.querySelector('#ordersTable tbody');
+    const balanceAmountEl = document.getElementById('balanceAmount');
+    const toastEl = document.getElementById('toast');
+    const submitText = document.getElementById('submitText');
+    const submitSpinner = document.getElementById('submitSpinner');
+    const submitBtn = document.getElementById('submitBtn');
+    const quickOrderBtn = document.getElementById('quickOrderBtn');
+    const resetFormBtn = document.getElementById('resetForm');
+    const activeOrdersEl = document.getElementById('activeOrders');
+    const completedOrdersEl = document.getElementById('completedOrders');
+    const menuBtn = document.getElementById('menuBtn');
+    const dropdownMenu = document.getElementById('dropdownMenu');
+    const remarkField = document.getElementById('remarkField');
+    const serviceRemarkEl = document.getElementById('serviceRemark');
+
+    let balance = 25000; // valeur initiale
+    balanceAmountEl.textContent = formatFCFA(balance);
+    let currentPlatform = 'facebook'; // Changé pour facebook qui est par défaut actif dans le HTML
+
+    /* ====== GESTION DES ÉVÉNEMENTS DU MENU ET DU SOLDE ====== */
+    // Gestion du menu hamburger
+    menuBtn.addEventListener('click', function (e) {
+        e.stopPropagation();
+        menuBtn.classList.toggle('active');
+        dropdownMenu.classList.toggle('active');
     });
-    
-    updateOrderCounts();
-}
 
-// Helpers
-function uid(prefix='MDL'){
-    return prefix + Math.floor(Math.random()*900000 + 100000);
-}
-function todayStr(){
-    const now = new Date();
-    return now.toLocaleString('fr-FR', {year:'numeric',month:'2-digit',day:'2-digit',hour:'2-digit',minute:'2-digit'});
-}
-
-// EVENTS
-// Platform selection
-platformOptions.forEach(option => {
-    option.addEventListener('click', () => {
-        // Remove active class from all options
-        platformOptions.forEach(opt => opt.classList.remove('active'));
-        
-        // Add active class to clicked option
-        option.classList.add('active');
-        
-        // Update current platform
-        currentPlatform = option.dataset.platform;
-        
-        // Update services dropdown
-        populateServices(currentPlatform);
-        updateQuantityHelp();
+    // Fermer le menu en cliquant à l'extérieur
+    document.addEventListener('click', function (e) {
+        if (dropdownMenu.classList.contains('active') && !dropdownMenu.contains(e.target) && !menuBtn.contains(e.target)) {
+            menuBtn.classList.remove('active');
+            dropdownMenu.classList.remove('active');
+        }
     });
-});
 
-serviceEl.addEventListener('change', () => {
-    updatePrice();
-    updateQuantityHelp();
-});
-quantityEl.addEventListener('input', updatePrice);
-qualityEl.addEventListener('change', updatePrice);
+    // Afficher une notification toast
+    function showToast(message, type = 'success') {
+        toastEl.className = 'toast';
+        let icon = 'check-circle';
+        if (type === 'error') icon = 'exclamation-circle';
+        if (type === 'warning') icon = 'exclamation-triangle';
+        
+        toastEl.innerHTML = `<i class="fas fa-${icon}"></i> ${message}`;
+        toastEl.classList.add(type, 'show');
+        
+        setTimeout(() => {
+            toastEl.classList.remove('show');
+        }, 4000);
+    }
 
-// quick order button scrolls to form and focuses link
-quickOrderBtn.addEventListener('click', () => {
-    document.getElementById('link').focus();
-    window.scrollTo({top: document.getElementById('orderCard').offsetTop - 100, behavior:'smooth'});
-});
+    /* ====== LOGIQUE DE COMMANDE ET DE PRIX (MODIFIÉE) ====== */
 
-// reset form
-resetFormBtn.addEventListener('click', () => {
-    if (confirm('Êtes-vous sûr de vouloir réinitialiser le formulaire ?')) {
-        populateServices(currentPlatform);
-        quantityEl.value = 1000;
-        qualityEl.value = 'standard';
-        linkEl.value = '';
+    // Récupérer les données pour le service/sous-option sélectionné
+    function getSelectedServiceData() {
+        const platform = currentPlatform;
+        const serviceName = serviceEl.value;
+        const subOptionName = subOptionEl.value;
+        
+        if (!platform || !serviceName || !servicesData[platform] || !servicesData[platform][serviceName]) {
+            return null;
+        }
+        
+        const serviceInfo = servicesData[platform][serviceName];
+        
+        // Gérer les services avec sous-options
+        if (serviceInfo.options && subOptionName) {
+            return serviceInfo.options[subOptionName];
+        } 
+        // Gérer les services sans sous-options
+        else if (!serviceInfo.options) {
+            return serviceInfo;
+        }
+        
+        return null;
+    }
+
+    // Mettre à jour les champs de quantité/commentaire et la remarque
+    function updateFormFields(serviceName) {
+        const serviceInfo = servicesData[currentPlatform][serviceName];
+        const isCommentService = serviceName.includes('Commentaires personnalisés');
+
+        // 1. Afficher/Masquer le champ Commentaires
+        if (isCommentService) {
+            quantityField.style.display = 'none';
+            commentsField.style.display = 'flex';
+        } else {
+            quantityField.style.display = 'flex';
+            commentsField.style.display = 'none';
+        }
+        
+        // 2. Afficher/Masquer le champ Sous-Option
+        if (serviceInfo.options) {
+            subOptionField.style.display = 'flex';
+            subOptionLabelEl.textContent = serviceInfo.subOptionLabel;
+            populateSubOptions(serviceInfo.options);
+            // Masquer le champ Qualité si les options ont les prix directement dedans
+            qualityField.style.display = 'none'; 
+        } else {
+            subOptionField.style.display = 'none';
+            // Afficher le champ Qualité s'il n'y a pas de sous-option
+            qualityField.style.display = 'flex';
+        }
+
+        // 3. Afficher la Remarque
+        if (serviceInfo.remark) {
+            remarkField.style.display = 'block';
+            serviceRemarkEl.innerHTML = serviceInfo.remark;
+        } else {
+            remarkField.style.display = 'none';
+            serviceRemarkEl.textContent = '';
+        }
+
         updatePrice();
-        showToast('Formulaire réinitialisé', 'success');
-    }
-});
-
-// submit order
-orderForm.addEventListener('submit', async function(e){
-    e.preventDefault();
-
-    const service = serviceEl.value;
-    const quantity = Number(quantityEl.value);
-    const quality = qualityEl.value;
-    const link = linkEl.value.trim();
-
-    // Validation
-    if (!service) {
-        showToast('Veuillez sélectionner un service.', 'error');
-        serviceEl.focus();
-        return;
     }
     
-    if (!link){
-        showToast('Veuillez entrer un lien / identifiant valide.', 'error');
-        linkEl.focus();
-        return;
+    // Fonction principale de calcul du prix
+    function calculatePrice() {
+        const service = serviceEl.value;
+        const quality = qualityEl.value;
+        
+        if (!service) return 0;
+        
+        const serviceData = getSelectedServiceData();
+        if (!serviceData) return 0;
+        
+        let basePricePer1000 = 0;
+        let finalQuantity = 0;
+        
+        // 1. Détermination du Prix de Base et de la Quantité
+        const isCommentService = service.includes('Commentaires personnalisés');
+        
+        if (isCommentService) {
+            // Pour les commentaires : Quantité = nombre de lignes
+            const commentsText = commentsEl.value.trim();
+            // Compter les lignes non vides
+            finalQuantity = commentsText ? commentsText.split('\n').filter(line => line.trim() !== '').length : 0;
+            
+            // Le prix des commentaires est par 10 unités (dans ton bloc initial, par 10)
+            // Or le prix dans servicesData est le prix total pour le minimum (min: 10), mais pour simplifier, 
+            // nous allons le considérer comme le prix pour 10 unités.
+            
+            // On prend le prix pour la qualité sélectionnée (medium ou high)
+            const priceFor10Units = serviceData[quality] ? serviceData[quality].price : serviceData.medium.price;
+            
+            // Prix par unité (pour 1)
+            const pricePerUnit = priceFor10Units / 10;
+            
+            // Le prix total est : Prix par unité * quantité de lignes
+            return pricePerUnit * finalQuantity;
+
+        } else if (serviceData.medium && serviceData.high) {
+            // Pour les services sans sous-options
+            finalQuantity = Number(quantityEl.value) || 0;
+            // Prix est un prix par 1000 (selon tes règles)
+            basePricePer1000 = serviceData[quality] ? serviceData[quality].price : serviceData.medium.price;
+            
+            // Calcul du prix : (Prix pour 1000 / 1000) * Quantité
+            return (basePricePer1000 / 1000) * finalQuantity;
+            
+        } else if (serviceData.medium && !serviceInfo.options) {
+             // Cas où le service vient d'une sous-option (son prix est déjà le prix pour l'action)
+             finalQuantity = Number(quantityEl.value) || 0;
+             basePricePer1000 = serviceData.medium.price; // Le prix est le prix total/fixe pour la sous-option
+             // On utilise le prix tel quel. On suppose que la quantité n'est pas par 1000 mais la quantité réelle
+             // si c'est un service à prix fixe (comme les vues précédentes Telegram).
+             // Pour les sous-options comme '20 vues' ou '20 réactions', on prend le prix fixe, la quantité n'est pas modifiable.
+             // On va vérifier si le prix contient 'vues' ou 'réactions' pour éviter le calcul par 1000 inutilement.
+             
+             // Si le nom de la sous-option contient une quantité explicite, on ignore l'input quantité
+             if (serviceName.includes('Vues') || serviceName.includes('Réactions') || serviceName.includes('Téléspectateur')) {
+                 // Prix fixe pour la sous-option (ex: '20 vues' a un prix)
+                 return basePricePer1000;
+             }
+             
+             // Pour les autres services (avec quantity) on revient au calcul par 1000 (très peu probable dans ce bloc)
+             return (basePricePer1000 / 1000) * finalQuantity;
+        }
+
+        return 0; // Prix par défaut si non trouvé
+    }
+
+    function updatePrice() {
+        const price = calculatePrice();
+        priceEl.textContent = formatFCFA(price);
+        
+        // Animation du changement de prix
+        priceEl.style.transform = 'scale(1.1)';
+        setTimeout(() => {
+            priceEl.style.transform = 'scale(1)';
+        }, 300);
     }
     
-    if (!quantity || quantity < 1){
-        showToast('Veuillez entrer une quantité valide (> 0).', 'error');
-        quantityEl.focus();
-        return;
+    // Mettre à jour le nombre de commentaires (lignes)
+    commentsEl.addEventListener('input', () => {
+        const commentsText = commentsEl.value.trim();
+        const count = commentsText ? commentsText.split('\n').filter(line => line.trim() !== '').length : 0;
+        commentCountEl.textContent = count.toLocaleString('fr-FR');
+        updatePrice();
+    });
+
+    /* ====== GESTION DES LISTES DÉROULANTES ====== */
+    
+    // Remplir les services pour la plateforme sélectionnée
+    function populateServices(platform) {
+        serviceEl.innerHTML = '';
+        
+        // Add default option
+        const defaultOpt = document.createElement('option');
+        defaultOpt.value = '';
+        defaultOpt.textContent = 'Sélectionnez un service';
+        serviceEl.appendChild(defaultOpt);
+        
+        const serviceNames = Object.keys(servicesData[platform] || {});
+        serviceNames.forEach(s => {
+            const opt = document.createElement('option');
+            opt.value = s;
+            opt.textContent = s;
+            serviceEl.appendChild(opt);
+        });
+        
+        // Cacher les champs qui seront gérés par le service 'change'
+        quantityField.style.display = 'flex';
+        commentsField.style.display = 'none';
+        subOptionField.style.display = 'none';
+        qualityField.style.display = 'flex';
+        remarkField.style.display = 'none';
+
+        updatePrice();
+    }
+    
+    // Remplir les sous-options pour le service sélectionné (Réactions, Vues antérieures, etc.)
+    function populateSubOptions(options) {
+        subOptionEl.innerHTML = '';
+        const defaultOpt = document.createElement('option');
+        defaultOpt.value = '';
+        defaultOpt.textContent = 'Sélectionnez une option';
+        subOptionEl.appendChild(defaultOpt);
+        
+        Object.keys(options).forEach(o => {
+            const opt = document.createElement('option');
+            opt.value = o;
+            opt.textContent = o;
+            subOptionEl.appendChild(opt);
+        });
     }
 
-    const price = calculatePrice();
+    /* ====== ÉVÉNEMENTS DU FORMULAIRE ET INITIALISATION ====== */
 
-    // Afficher l'indicateur de chargement
-    submitText.style.display = 'none';
-    submitSpinner.style.display = 'inline-block';
-    submitBtn.disabled = true;
+    // Platform selection
+    platformOptions.forEach(option => {
+        option.addEventListener('click', () => {
+            platformOptions.forEach(opt => opt.classList.remove('active'));
+            option.classList.add('active');
+            currentPlatform = option.dataset.platform;
+            
+            // Mise à jour de la liste des services
+            populateServices(currentPlatform);
+        });
+    });
 
-    // Simuler un délai de traitement
-    await new Promise(resolve => setTimeout(resolve, 1500));
+    // Sélection d'un service
+    serviceEl.addEventListener('change', () => {
+        const serviceName = serviceEl.value;
+        if (serviceName) {
+            updateFormFields(serviceName);
+        } else {
+            // Réinitialiser l'affichage si l'option par défaut est sélectionnée
+            quantityField.style.display = 'flex';
+            commentsField.style.display = 'none';
+            subOptionField.style.display = 'none';
+            qualityField.style.display = 'flex';
+            remarkField.style.display = 'none';
+            updatePrice();
+        }
+    });
+    
+    // Sélection d'une sous-option
+    subOptionEl.addEventListener('change', updatePrice);
+    
+    // Changement de Quantité ou de Qualité
+    quantityEl.addEventListener('input', updatePrice);
+    qualityEl.addEventListener('change', updatePrice);
 
-    // Simple balance check (optionnel)
-    if (price > balance){
-        if(!confirm('Le prix est ' + formatFCFA(price) + ' mais votre solde est ' + formatFCFA(balance) + '. Continuer et créer la commande (paiement différé) ?')) {
-            submitText.style.display = 'inline-block';
-            submitSpinner.style.display = 'none';
-            submitBtn.disabled = false;
+    // quick order button scrolls to form and focuses link
+    quickOrderBtn.addEventListener('click', () => {
+        document.getElementById('link').focus();
+        window.scrollTo({ top: document.getElementById('orderCard').offsetTop - 100, behavior: 'smooth' });
+    });
+
+    // reset form
+    resetFormBtn.addEventListener('click', () => {
+        if (confirm('Êtes-vous sûr de vouloir réinitialiser le formulaire ?')) {
+            populateServices(currentPlatform);
+            quantityEl.value = 1000;
+            commentsEl.value = '';
+            commentsEl.dispatchEvent(new Event('input'));
+            qualityEl.value = 'medium'; // Valeur par défaut
+            linkEl.value = '';
+            updatePrice();
+            showToast('Formulaire réinitialisé', 'success');
+        }
+    });
+    
+    // submit order
+    orderForm.addEventListener('submit', async function(e){
+        e.preventDefault();
+
+        const service = serviceEl.value;
+        const serviceData = getSelectedServiceData();
+        const isCommentService = service.includes('Commentaires personnalisés');
+        
+        let quantity, link, qualityLabel, finalService;
+        let baseQuantity = 0;
+
+        if (!service) {
+            showToast('Veuillez sélectionner un service.', 'error');
+            serviceEl.focus();
             return;
         }
-    } else {
-        // débiter le solde local (si tu veux gérer via Firestore, remplace ici)
-        balance = Math.max(0, balance - price);
-        balanceAmountEl.textContent = formatFCFA(balance);
+
+        link = linkEl.value.trim();
+        if (!link){
+            showToast('Veuillez entrer un lien / identifiant valide.', 'error');
+            linkEl.focus();
+            return;
+        }
+
+        if (isCommentService) {
+            // Pour les commentaires : Quantité = nombre de lignes
+            baseQuantity = commentsEl.value.trim() ? commentsEl.value.split('\n').filter(line => line.trim() !== '').length : 0;
+            quantity = baseQuantity;
+            if (quantity === 0) {
+                 showToast('Veuillez entrer au moins un commentaire par ligne.', 'error');
+                 commentsEl.focus();
+                 return;
+            }
+            finalService = service;
+            qualityLabel = qualityEl.value === 'high' ? 'Haute' : 'Standard';
+
+        } else if (serviceData.options) {
+            // Pour les services avec sous-options (Réactions, Vues précédentes...)
+            finalService = service + ' - ' + subOptionEl.value;
+            quantity = 1; // La quantité est implicite dans le nom de la sous-option
+            baseQuantity = quantity;
+            if (!subOptionEl.value) {
+                showToast('Veuillez sélectionner une option de service.', 'error');
+                subOptionEl.focus();
+                return;
+            }
+            qualityLabel = 'N/A'; // La qualité est souvent fixée par l'option elle-même
+            
+        } else {
+            // Pour les services classiques (Followers, Likes, Vues...)
+            quantity = Number(quantityEl.value);
+            baseQuantity = quantity;
+            if (!quantity || quantity < 1){
+                showToast('Veuillez entrer une quantité valide (> 0).', 'error');
+                quantityEl.focus();
+                return;
+            }
+            finalService = service;
+            qualityLabel = qualityEl.value === 'high' ? 'Haute' : 'Standard';
+        }
+
+        const price = calculatePrice();
+        if (price <= 0) {
+            showToast('Le prix calculé est nul. Veuillez vérifier la quantité ou le service.', 'error');
+            return;
+        }
+
+        // Afficher l'indicateur de chargement
+        submitText.style.display = 'none';
+        submitSpinner.style.display = 'inline-block';
+        submitBtn.disabled = true;
+
+        // Simuler un délai de traitement
+        await new Promise(resolve => setTimeout(resolve, 1500));
+
+        // Simple balance check (optionnel)
+        if (price > balance){
+            if(!confirm('Le prix est ' + formatFCFA(price) + ' mais votre solde est ' + formatFCFA(balance) + '. Continuer et créer la commande (paiement différé) ?')) {
+                submitText.style.display = 'inline-block';
+                submitSpinner.style.display = 'none';
+                submitBtn.disabled = false;
+                return;
+            }
+        } else {
+            // débiter le solde local
+            balance = Math.max(0, balance - price);
+            balanceAmountEl.textContent = formatFCFA(balance);
+        }
+
+        const order = {
+            id: uid('#MDL'),
+            platform: currentPlatform.charAt(0).toUpperCase() + currentPlatform.slice(1),
+            service: finalService,
+            link,
+            quantity: baseQuantity,
+            qualityLabel: qualityLabel,
+            price: price,
+            statusLabel: 'En cours',
+            statusClass: 'processing',
+            date: todayStr()
+        };
+
+        addOrder(order);
+
+        // réinitialiser les champs spécifiques à la commande
+        linkEl.value = '';
+        if (isCommentService) {
+            commentsEl.value = '';
+            commentsEl.dispatchEvent(new Event('input')); // Pour mettre à jour le count et le prix
+        } else {
+            quantityEl.value = 1000;
+        }
+        qualityEl.value = 'medium';
+        serviceEl.value = ''; // Réinitialiser le service pour forcer l'utilisateur à resélectionner
+        serviceEl.dispatchEvent(new Event('change')); // Déclenche la mise à jour des champs/prix
+
+        // feedback utilisateur
+        showToast(`Commande créée : ${order.id} — Prix: ${formatFCFA(order.price)}`);
+
+        // Réactiver le bouton
+        submitText.style.display = 'inline-block';
+        submitSpinner.style.display = 'none';
+        submitBtn.disabled = false;
+    });
+
+    /* ====== GESTION DES COMMANDES (LocalStorage) ====== */
+    function loadOrders(){
+        const raw = localStorage.getItem('mdl_orders_v1');
+        if (!raw) return [];
+        try { return JSON.parse(raw) } catch(e) { return [] }
+    }
+    function saveOrders(list){
+        localStorage.setItem('mdl_orders_v1', JSON.stringify(list));
+    }
+    function addOrder(order){
+        const list = loadOrders();
+        list.unshift(order); // add at top
+        saveOrders(list);
+        renderOrders();
+    }
+    function updateOrderCounts() {
+        const orders = loadOrders();
+        let activeCount = 0;
+        let completedCount = 0;
+        
+        orders.forEach(order => {
+            if (order.statusClass === 'processing' || order.statusClass === 'pending') {
+                activeCount++;
+            } else if (order.statusClass === 'completed') {
+                completedCount++;
+            }
+        });
+        
+        activeOrdersEl.textContent = activeCount;
+        completedOrdersEl.textContent = completedCount;
+    }
+    function renderOrders(){
+        const orders = loadOrders();
+        ordersTableBody.innerHTML = '';
+        if (orders.length === 0){
+            const tr = document.createElement('tr');
+            tr.innerHTML = '<td colspan="8" style="text-align:center;color:#888;padding:30px"><i class="fas fa-inbox" style="font-size:2rem;margin-bottom:10px;display:block;opacity:0.5"></i>Aucune commande enregistrée — passez votre première commande !</td>';
+            ordersTableBody.appendChild(tr);
+            return;
+        }
+
+        orders.forEach(o => {
+            const tr = document.createElement('tr');
+            tr.innerHTML = `
+                <td>${o.id}</td>
+                <td>${o.platform} • ${o.service}</td>
+                <td style="max-width:200px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis" title="${o.link}">${o.link}</td>
+                <td>${o.quantity.toLocaleString('fr-FR')}</td>
+                <td>${o.qualityLabel}</td>
+                <td>${formatFCFA(o.price)}</td>
+                <td><span class="status ${o.statusClass}">${o.statusLabel}</span></td>
+                <td>${o.date}</td>
+            `;
+            ordersTableBody.appendChild(tr);
+        });
+        
+        updateOrderCounts();
     }
 
-    const order = {
-        id: uid('#MDL'),
-        platform: currentPlatform.charAt(0).toUpperCase() + currentPlatform.slice(1),
-        service,
-        link,
-        quantity,
-        qualityLabel: (quality === 'high') ? 'Haute' : 'Standard',
-        price,
-        statusLabel: 'En cours',
-        statusClass: 'processing',
-        date: todayStr()
-    };
+    // Helpers
+    function uid(prefix='MDL'){
+        return prefix + Math.floor(Math.random()*900000 + 100000);
+    }
+    function todayStr(){
+        const now = new Date();
+        return now.toLocaleString('fr-FR', {year:'numeric',month:'2-digit',day:'2-digit',hour:'2-digit',minute:'2-digit'});
+    }
 
-    addOrder(order);
 
-    // reset some fields
-    linkEl.value = '';
-    quantityEl.value = 1000;
-    qualityEl.value = 'standard';
-    updatePrice();
+    // INITIALIZE
+    // Set Facebook as default platform and load services
+    populateServices(currentPlatform);
+    renderOrders();
 
-    // feedback utilisateur
-    showToast(`Commande créée : ${order.id} — Prix: ${formatFCFA(order.price)}`);
-
-    // Réactiver le bouton
-    submitText.style.display = 'inline-block';
-    submitSpinner.style.display = 'none';
-    submitBtn.disabled = false;
-});
-
-// INITIALIZE
-// Set Instagram as default platform
-populateServices(currentPlatform);
-updatePrice();
-renderOrders();
-
-/* Console friendly message */
-console.log('Dashboard initialisé — formulaire de commande centralisé prêt.');
+    console.log('Dashboard initialisé avec la nouvelle tarification et les services de commentaires.');
 </script>
 </body>
 </html>
