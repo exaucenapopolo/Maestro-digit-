@@ -5,21 +5,32 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Inscription - MaestroDigitLab</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Luckiest+Guy&display=swap" rel="stylesheet">
+    <!-- Firebase App (the core Firebase SDK) -->
+    <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js"></script>
+    <!-- Firebase Auth -->
+    <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-auth-compat.js"></script>
+    <!-- Firebase Firestore -->
+    <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-firestore-compat.js"></script>
     <style>
         :root {
             --primary-orange: #FF7A59;
             --primary-brown: #8B4513;
-            --dark-brown: #5D4037;
-            --light-orange: #FFE0B2;
-            --dark-orange: #E64A19;
+            --primary-blue: #4285F4;
+            --primary-green: #34A853;
             --cream: #FBE9E7;
             --white: #FFFFFF;
-            --black: #333333;
-            --gradient-orange: linear-gradient(135deg, var(--primary-orange) 0%, var(--dark-orange) 100%);
-            --gradient-brown: linear-gradient(135deg, var(--primary-brown) 0%, var(--dark-brown) 100%);
-            --shadow: 0 5px 15px rgba(139, 69, 19, 0.2);
-            --shadow-hover: 0 10px 25px rgba(139, 69, 19, 0.4);
+            --muted: #9E9E9E;
+            --card-shadow: 0 8px 30px rgba(0,0,0,0.08);
+            --accent-yellow: #FFD64D;
+            --glass: rgba(255,255,255,0.7);
+            --success: #4CAF50;
+            --warning: #FF9800;
+            --error: #F44336;
+            --sidebar-width: 240px;
+            --transition-speed: 0.3s;
+            --border-radius: 14px;
+            --header-height: 70px;
         }
 
         * {
@@ -29,27 +40,166 @@
             font-family: 'Poppins', sans-serif;
         }
 
+        /* HEADER STYLES */
+        .main-header {
+            background: linear-gradient(90deg, var(--primary-brown), var(--primary-blue));
+            color: var(--white);
+            padding: 0 28px;
+            height: var(--header-height);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+
+        .logo-container {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .logo-text {
+            font-family: "Luckiest Guy", "Poppins", sans-serif;
+            font-size: 1.5rem;
+            color: var(--accent-yellow);
+            letter-spacing: 0.5px;
+        }
+
+        /* Hamburger Menu */
+        .hamburger-menu {
+            position: relative;
+            display: flex;
+            align-items: center;
+        }
+
+        .menu-btn {
+            background: rgba(255,255,255,0.15);
+            border: none;
+            border-radius: 50%;
+            width: 45px;
+            height: 45px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all var(--transition-speed) ease;
+            backdrop-filter: blur(10px);
+        }
+
+        .menu-btn:hover {
+            background: rgba(255,255,255,0.25);
+            transform: translateY(-2px);
+        }
+
+        .menu-btn span {
+            display: block;
+            width: 20px;
+            height: 2px;
+            background: var(--white);
+            margin: 2px 0;
+            transition: all var(--transition-speed) ease;
+        }
+
+        .menu-btn.active span:nth-child(1) {
+            transform: rotate(45deg) translate(5px, 5px);
+        }
+
+        .menu-btn.active span:nth-child(2) {
+            opacity: 0;
+        }
+
+        .menu-btn.active span:nth-child(3) {
+            transform: rotate(-45deg) translate(5px, -5px);
+        }
+
+        .dropdown-menu {
+            position: absolute;
+            top: 100%;
+            right: 0;
+            background: var(--white);
+            border-radius: var(--border-radius);
+            box-shadow: var(--card-shadow);
+            width: 280px;
+            padding: 10px 0;
+            z-index: 1001;
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(-10px);
+            transition: all var(--transition-speed) ease;
+        }
+
+        .dropdown-menu.active {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(10px);
+        }
+
+        .dropdown-menu ul {
+            list-style: none;
+        }
+
+        .dropdown-menu li {
+            padding: 0;
+            margin: 0;
+        }
+
+        .dropdown-menu a {
+            display: flex;
+            align-items: center;
+            padding: 12px 20px;
+            color: var(--primary-brown);
+            text-decoration: none;
+            transition: all var(--transition-speed) ease;
+            border-left: 3px solid transparent;
+        }
+
+        .dropdown-menu a:hover {
+            background: rgba(66, 133, 244, 0.1);
+            border-left-color: var(--primary-blue);
+            padding-left: 25px;
+        }
+
+        .dropdown-menu i {
+            width: 24px;
+            margin-right: 12px;
+            color: var(--primary-blue);
+        }
+
+        .menu-divider {
+            height: 1px;
+            background: #eee;
+            margin: 8px 0;
+        }
+
+        /* BODY STYLES */
         body {
             background-color: var(--cream);
             color: var(--black);
             display: flex;
-            justify-content: center;
-            align-items: center;
+            flex-direction: column;
             min-height: 100vh;
-            padding: 20px;
+            padding-top: var(--header-height);
         }
 
         .signup-container {
             background-color: var(--white);
             border-radius: 15px;
-            box-shadow: var(--shadow);
+            box-shadow: var(--card-shadow);
             width: 100%;
             max-width: 500px;
             overflow: hidden;
+            margin: 40px auto;
+            flex-grow: 1;
         }
 
         .signup-header {
-            background: var(--gradient-brown);
+            background: linear-gradient(90deg, var(--primary-brown), var(--primary-blue));
             padding: 30px;
             text-align: center;
             color: var(--white);
@@ -77,7 +227,7 @@
             display: block;
             margin-bottom: 8px;
             font-weight: 500;
-            color: var(--dark-brown);
+            color: var(--primary-brown);
         }
 
         .form-group input,
@@ -133,22 +283,31 @@
         }
 
         .signup-button {
-            background: var(--gradient-orange);
+            background: linear-gradient(90deg, var(--primary-blue), #1a56db);
             color: white;
             border: none;
             padding: 15px;
-            border-radius: 50px;
+            border-radius: 10px;
             font-weight: bold;
             cursor: pointer;
             transition: all 0.3s ease;
             width: 100%;
             font-size: 1.1rem;
             margin-bottom: 20px;
+            box-shadow: 0 8px 20px rgba(26,86,219,0.18);
         }
 
         .signup-button:hover {
-            transform: translateY(-3px);
-            box-shadow: var(--shadow-hover);
+            background: linear-gradient(90deg, #1a56db, var(--primary-blue));
+            transform: translateY(-2px);
+            box-shadow: 0 12px 25px rgba(26,86,219,0.25);
+        }
+
+        .signup-button:disabled {
+            background: var(--muted);
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
         }
 
         .login-link {
@@ -168,7 +327,47 @@
         }
 
         .login-link a:hover {
-            color: var(--dark-orange);
+            color: var(--primary-blue);
+            text-decoration: underline;
+        }
+
+        .error-message {
+            color: var(--error);
+            font-size: 0.9rem;
+            margin-top: 5px;
+            display: none;
+        }
+
+        .success-message {
+            color: var(--success);
+            font-size: 0.9rem;
+            margin-top: 5px;
+            display: none;
+        }
+
+        /* FOOTER STYLES */
+        .footer {
+            background: linear-gradient(90deg, var(--primary-brown), var(--primary-blue));
+            color: white;
+            padding: 20px 28px;
+            text-align: center;
+            margin-top: auto;
+        }
+
+        .footer-bottom {
+            opacity: 0.8;
+            font-size: 0.9rem;
+        }
+
+        .social-boost-link {
+            color: var(--accent-yellow);
+            text-decoration: none;
+            font-weight: 600;
+            transition: all var(--transition-speed) ease;
+        }
+
+        .social-boost-link:hover {
+            color: var(--primary-orange);
             text-decoration: underline;
         }
 
@@ -182,6 +381,7 @@
         @media (max-width: 480px) {
             .signup-container {
                 border-radius: 10px;
+                margin: 20px;
             }
             
             .signup-header {
@@ -195,13 +395,39 @@
     </style>
 </head>
 <body>
+    <!-- HEADER -->
+    <header class="main-header">
+        <div class="logo-container">
+            <span class="logo-text">MADIL</span>
+        </div>
+        
+        <div class="hamburger-menu">
+            <button class="menu-btn" id="menuBtn">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+            
+            <div class="dropdown-menu" id="dropdownMenu">
+                <ul>
+                    <li><a href="Dashboard.html"><i class="fas fa-home"></i> Accueil</a></li>
+                    <li><a href="Dashboard.html"><i class="fas fa-rocket"></i> Services</a></li>
+                    <li><a href="Dashboard.html"><i class="fas fa-info-circle"></i> À propos</a></li>
+                    <div class="menu-divider"></div>
+                    <li><a href="login.html" class="btn-primary" style="display: flex; margin: 10px;"><i class="fas fa-sign-in-alt"></i> Connexion</a></li>
+                </ul>
+            </div>
+        </div>
+    </header>
+
+    <!-- SIGNUP FORM -->
     <div class="signup-container">
         <div class="signup-header">
             <h1>Inscription</h1>
             <p>Rejoignez la communauté MaestroDigitLab</p>
         </div>
         
-        <form class="signup-form">
+        <form class="signup-form" id="signupForm">
             <div class="form-row">
                 <div class="form-group">
                     <label for="firstName">Prénom</label>
@@ -246,11 +472,13 @@
                 <div class="form-group">
                     <label for="password">Mot de passe</label>
                     <input type="password" id="password" placeholder="Créez un mot de passe" required>
+                    <div class="error-message" id="passwordError"></div>
                 </div>
                 
                 <div class="form-group">
                     <label for="confirmPassword">Confirmation</label>
                     <input type="password" id="confirmPassword" placeholder="Confirmez le mot de passe" required>
+                    <div class="error-message" id="confirmPasswordError"></div>
                 </div>
             </div>
             
@@ -259,7 +487,15 @@
                 <label for="terms">J'accepte les <a href="#">Conditions d'utilisation</a> et la <a href="#">Politique de confidentialité</a> de MaestroDigitLab</label>
             </div>
             
-            <button type="submit" class="signup-button">Créer un compte</button>
+            <button type="submit" class="signup-button" id="signupButton">
+                <span id="buttonText">Créer un compte</span>
+                <span id="buttonSpinner" style="display: none;">
+                    <i class="fas fa-spinner fa-spin"></i> Création en cours...
+                </span>
+            </button>
+            
+            <div class="success-message" id="successMessage"></div>
+            <div class="error-message" id="generalError"></div>
             
             <div class="login-link">
                 <p>Vous avez déjà un compte? <a href="login.html">Se connecter</a></p>
@@ -267,34 +503,171 @@
         </form>
     </div>
 
+    <!-- FOOTER -->
+    <footer class="footer">
+        <div class="footer-bottom">
+            <p>&copy; 2025 MADIL. Tous droits réservés. | Site propulsé par <a href="https://social-boost-horizon-new-sbh.vercel.app/" class="social-boost-link">Social Boost Horizon</a></p>
+        </div>
+    </footer>
+
     <script>
+        // Firebase configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyCQpfXddMLX3AbWp-cw0Y8z7QCdG6quuT0",
+            authDomain: "madil-be5be.firebaseapp.com",
+            projectId: "madil-be5be",
+            storageBucket: "madil-be5be.firebasestorage.app",
+            messagingSenderId: "2892375937",
+            appId: "1:2892375937:web:ab00dfbedac2ff8a8aaa80",
+            measurementId: "G-FJ8QK7KHXM"
+        };
+
+        // Initialize Firebase
+        firebase.initializeApp(firebaseConfig);
+        const auth = firebase.auth();
+        const db = firebase.firestore();
+
+        // Menu mobile functionality
         document.addEventListener('DOMContentLoaded', function() {
-            const signupForm = document.querySelector('.signup-form');
+            const menuBtn = document.getElementById('menuBtn');
+            const dropdownMenu = document.getElementById('dropdownMenu');
+            
+            menuBtn.addEventListener('click', function() {
+                this.classList.toggle('active');
+                dropdownMenu.classList.toggle('active');
+            });
+            
+            // Close dropdown when clicking outside
+            document.addEventListener('click', function(event) {
+                if (!menuBtn.contains(event.target) && !dropdownMenu.contains(event.target)) {
+                    menuBtn.classList.remove('active');
+                    dropdownMenu.classList.remove('active');
+                }
+            });
+            
+            // Form validation and submission
+            const signupForm = document.getElementById('signupForm');
             const passwordInput = document.getElementById('password');
             const confirmPasswordInput = document.getElementById('confirmPassword');
+            const passwordError = document.getElementById('passwordError');
+            const confirmPasswordError = document.getElementById('confirmPasswordError');
+            const signupButton = document.getElementById('signupButton');
+            const buttonText = document.getElementById('buttonText');
+            const buttonSpinner = document.getElementById('buttonSpinner');
+            const successMessage = document.getElementById('successMessage');
+            const generalError = document.getElementById('generalError');
             
             // Fonction pour valider que les mots de passe correspondent
             function validatePassword() {
-                if (passwordInput.value !== confirmPasswordInput.value) {
-                    confirmPasswordInput.setCustomValidity("Les mots de passe ne correspondent pas");
-                } else {
-                    confirmPasswordInput.setCustomValidity("");
+                const password = passwordInput.value;
+                const confirmPassword = confirmPasswordInput.value;
+                
+                // Reset errors
+                passwordError.style.display = 'none';
+                confirmPasswordError.style.display = 'none';
+                
+                // Check password length
+                if (password.length < 6) {
+                    passwordError.textContent = "Le mot de passe doit contenir au moins 6 caractères";
+                    passwordError.style.display = 'block';
+                    return false;
                 }
+                
+                // Check if passwords match
+                if (password !== confirmPassword) {
+                    confirmPasswordError.textContent = "Les mots de passe ne correspondent pas";
+                    confirmPasswordError.style.display = 'block';
+                    return false;
+                }
+                
+                return true;
             }
             
             passwordInput.addEventListener('change', validatePassword);
             confirmPasswordInput.addEventListener('keyup', validatePassword);
             
-            signupForm.addEventListener('submit', function(e) {
+            signupForm.addEventListener('submit', async function(e) {
                 e.preventDefault();
                 
-                // Validation des mots de passe
-                validatePassword();
+                // Reset messages
+                successMessage.style.display = 'none';
+                generalError.style.display = 'none';
                 
-                if (signupForm.checkValidity()) {
-                    // Simulation d'inscription réussie
-                    alert('Inscription réussie! Vous allez être redirigé vers la page de connexion.');
-                    window.location.href = 'login.html';
+                // Validate form
+                if (!signupForm.checkValidity() || !validatePassword()) {
+                    return;
+                }
+                
+                // Show loading state
+                buttonText.style.display = 'none';
+                buttonSpinner.style.display = 'inline';
+                signupButton.disabled = true;
+                
+                try {
+                    // Get form values
+                    const firstName = document.getElementById('firstName').value;
+                    const lastName = document.getElementById('lastName').value;
+                    const username = document.getElementById('username').value;
+                    const email = document.getElementById('email').value;
+                    const phone = document.getElementById('phone').value;
+                    const country = document.getElementById('country').value;
+                    const password = passwordInput.value;
+                    
+                    // Create user with Firebase Auth
+                    const userCredential = await auth.createUserWithEmailAndPassword(email, password);
+                    const user = userCredential.user;
+                    
+                    // Save additional user data to Firestore
+                    await db.collection('users').doc(user.uid).set({
+                        firstName: firstName,
+                        lastName: lastName,
+                        username: username,
+                        email: email,
+                        phone: phone,
+                        country: country,
+                        createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+                        updatedAt: firebase.firestore.FieldValue.serverTimestamp()
+                    });
+                    
+                    // Show success message
+                    successMessage.textContent = "Inscription réussie! Redirection vers le tableau de bord...";
+                    successMessage.style.display = 'block';
+                    
+                    // Redirect to dashboard after a short delay
+                    setTimeout(() => {
+                        window.location.href = 'Dashboard.html';
+                    }, 2000);
+                    
+                } catch (error) {
+                    // Handle errors
+                    console.error("Error during signup:", error);
+                    
+                    let errorMessage = "Une erreur s'est produite lors de l'inscription.";
+                    
+                    switch (error.code) {
+                        case 'auth/email-already-in-use':
+                            errorMessage = "Cette adresse email est déjà utilisée.";
+                            break;
+                        case 'auth/invalid-email':
+                            errorMessage = "L'adresse email n'est pas valide.";
+                            break;
+                        case 'auth/operation-not-allowed':
+                            errorMessage = "L'inscription par email/mot de passe n'est pas activée.";
+                            break;
+                        case 'auth/weak-password':
+                            errorMessage = "Le mot de passe est trop faible.";
+                            break;
+                        default:
+                            errorMessage = error.message;
+                    }
+                    
+                    generalError.textContent = errorMessage;
+                    generalError.style.display = 'block';
+                    
+                    // Reset button state
+                    buttonText.style.display = 'inline';
+                    buttonSpinner.style.display = 'none';
+                    signupButton.disabled = false;
                 }
             });
         });
