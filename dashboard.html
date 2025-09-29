@@ -10,6 +10,11 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Luckiest+Guy&display=swap" rel="stylesheet">
     <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🚀</text></svg>">
+    
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-firestore-compat.js"></script>
 
     <style>
         /* CSS PRÉCÉDENT (NON MODIFIÉ) */
@@ -1007,7 +1012,7 @@
                 
                 <div class="menu-divider"></div>
                 
-                <li><a href="#"><i class="fas fa-sign-out-alt"></i> Déconnexion</a></li>
+                <li><a href="#" id="logoutBtn"><i class="fas fa-sign-out-alt"></i> Déconnexion</a></li>
             </ul>
         </div>
     </div>
@@ -1015,11 +1020,11 @@
 
 <section class="welcome-section">
     <div class="welcome-content">
-        <h1 class="welcome-title">Bienvenue, John Doe</h1>
+        <h1 class="welcome-title" id="welcomeUserName">Bienvenue, Utilisateur</h1>
         <p class="welcome-subtitle">Suivez votre tableau de bord et gérez vos services en un seul endroit</p>
         <div class="balance-display">
             <div class="balance-label">Solde disponible</div>
-            <div class="balance-amount" id="balanceAmount">25 000 FCFA</div>
+            <div class="balance-amount" id="balanceAmount">0 FCFA</div>
         </div>
     </div>
 </section>
@@ -1245,6 +1250,27 @@
 <div class="toast" id="toast" role="alert" aria-live="assertive"></div>
 
 <script>
+    // Configuration Firebase
+    const firebaseConfig = {
+        apiKey: "AIzaSyCQpfXddMLX3AbWp-cw0Y8z7QCdG6quuT0",
+        authDomain: "madil-be5be.firebaseapp.com",
+        projectId: "madil-be5be",
+        storageBucket: "madil-be5be.firebasestorage.app",
+        messagingSenderId: "2892375937",
+        appId: "1:2892375937:web:ab00dfbedac2ff8a8aaa80",
+        measurementId: "G-FJ8QK7KHXM"
+    };
+
+    // Initialiser Firebase
+    firebase.initializeApp(firebaseConfig);
+    const auth = firebase.auth();
+    const db = firebase.firestore();
+
+    // Variables globales
+    let currentUser = null;
+    let userData = null;
+    let userBalance = 0;
+
     /* ====== DONNÉES DE SERVICES (MODIFIÉES) ====== */
     const servicesData = {
         facebook: {
@@ -1298,16 +1324,16 @@
                     "Reaction 😢": { medium: { price: 900, time: "3 h" }, high: { price: 1100, time: "2 h" } },
                     "Reaction 😡": { medium: { price: 900, time: "3 h" }, high: { price: 1100, time: "2 h" } }
                 },
-                remark: "Choisissez l’emoji à appliquer aux publications.Si la publication provient d'un compte Facebook, assurez vous que les publications du compte sont publiques ! (min: 100)"
+                remark: "Choisissez l'emoji à appliquer aux publications.Si la publication provient d'un compte Facebook, assurez vous que les publications du compte sont publiques ! (min: 100)"
             }
         },
         instagram: {
             "Followers": {
                 medium: { price: 2250, time: "20 min" },
                 high: { price: 3650, time: "10 min" },
-                remark: "Ne changez pas votre nom d’utilisateur.NB: En raison d'une récente mise à jour d'instagram, vous devez maintenant désactiver l'option « À VÉRIFIER » sur votre compte instagram avant d'acheter des followers, cette option est automatiquement activée pour TOUS les comptes instagram et c'est à vous de la désactiver.VOUS N'OBTIENDREZ AUCUN FOLLOWER ET PERDREZ VOTRE ARGENT SI VOUS NE LE DÉSACTIVEZ PAS AVANT D'ACHETER, N'APPUYEZ PAS SUR ACHETER SI VOUS N'ÊTES PAS SÛR À 100% QU'IL EST DÉSACTIVÉ. (min: 100)"
+                remark: "Ne changez pas votre nom d'utilisateur.NB: En raison d'une récente mise à jour d'instagram, vous devez maintenant désactiver l'option « À VÉRIFIER » sur votre compte instagram avant d'acheter des followers, cette option est automatiquement activée pour TOUS les comptes instagram et c'est à vous de la désactiver.VOUS N'OBTIENDREZ AUCUN FOLLOWER ET PERDREZ VOTRE ARGENT SI VOUS NE LE DÉSACTIVEZ PAS AVANT D'ACHETER, N'APPUYEZ PAS SUR ACHETER SI VOUS N'ÊTES PAS SÛR À 100% QU'IL EST DÉSACTIVÉ. (min: 100)"
             },
-            "J’aime": {
+            "J'aime": {
                 medium: { price: 250, time: "30 min" },
                 high: { price: 500, time: "15 min" },
                 remark: "Baisse de 3–5 % des likes. video publique obligatoire (min: 100)"
@@ -1320,7 +1346,7 @@
             "Commentaires personnalisés": {
                 medium: { price: 419, time: "12 h" },
                 high: { price: 559, time: "10 h" },
-                remark: "Veuillez ne pas insérer de “@” ni “#” dans vos commentaires. **Un commentaire par ligne.** (min: 10)"
+                remark: "Veuillez ne pas insérer de '@' ni '#' dans vos commentaires. **Un commentaire par ligne.** (min: 10)"
             },
             "Vues de story": {
                 medium: { price: 350, time: "30 min" },
@@ -1339,7 +1365,7 @@
                 high: { price: 1980, time: "8 h" },
                 remark: "Presque aucune baisse de vues. Ce sont des vues de haute qualité : ils regarderont toute votre vidéo jusqu'à la fin (min: 500)"
             },
-            "J’aime": {
+            "J'aime": {
                 medium: { price: 1390, time: "2 h" },
                 high: { price: 1750, time: "1 h" },
                 remark: "Presque aucune baisse de j'aimes. (min: 200)"
@@ -1347,7 +1373,7 @@
             "Commentaires personnalisés": {
                 medium: { price: 250, time: "24 h" },
                 high: { price: 500, time: "18 h" },
-                remark: "Veuillez ne pas insérer de “@” ni “#” dans vos commentaires. **Un commentaire par ligne.** (min: 10)"
+                remark: "Veuillez ne pas insérer de '@' ni '#' dans vos commentaires. **Un commentaire par ligne.** (min: 10)"
             }
         },
         tiktok: {
@@ -1356,7 +1382,7 @@
                 high: { price: 3500, time: "1 h" },
                 remark: "Assurez-vous que le compte Tiktok n'est pas privé, et ne changez pas le nom d'utilisateur du compte pendant que des followers sont ajoutés !. Il faut s'attendre à une légère baisse de 1–2 % après quelques semaines pour la qualité moyenne. (min: 100)"
             },
-            "J’aime": {
+            "J'aime": {
                 medium: { price: 279, time: "20 min" },
                 high: { price: 510, time: "10 min" },
                 remark: "Lien direct de la vidéo. (min: 50)"
@@ -1379,9 +1405,9 @@
             "Commentaires personnalisés": {
                 medium: { price: 390, time: "4 h" },
                 high: { price: 569, time: "2 h" },
-                remark: "Assurez-vous de ne pas insérer de “@” ni “#” dans vos commentaires. **Un commentaire par ligne.** (min: 10)"
+                remark: "Assurez-vous de ne pas insérer de '@' ni '#' dans vos commentaires. **Un commentaire par ligne.** (min: 10)"
             },
-            "J’aime pour direct": {
+            "J'aime pour direct": {
                 medium: { price: 250, time: "15 mi n" },
                 high: { price: 560, time: "10 mi n" },
                 remark: "Les likes viendront 15 ou 10 minutes après votre achat. (min : 100)"
@@ -1400,7 +1426,7 @@
             "Membres groupe/canal": {
                 medium: { price: 1200, time: "3 h" },
                 high: { price: 2250, time: "3 h" },
-                remark: "Lien d’invitation public requis. (min: 500)"
+                remark: "Lien d'invitation public requis. (min: 500)"
             },
             "Vues publication spécifique": {
                 subOptionLabel: "Qualité des vues",
@@ -1601,10 +1627,112 @@
     const dropdownMenu = document.getElementById('dropdownMenu');
     const remarkField = document.getElementById('remarkField');
     const serviceRemarkEl = document.getElementById('serviceRemark');
+    const welcomeUserName = document.getElementById('welcomeUserName');
+    const logoutBtn = document.getElementById('logoutBtn');
 
-    let balance = 25000; // valeur initiale
-    balanceAmountEl.textContent = formatFCFA(balance);
     let currentPlatform = 'facebook'; // Changé pour facebook qui est par défaut actif dans le HTML
+
+    /* ====== FONCTIONS FIREBASE ====== */
+    
+    // Vérifier l'authentification et charger les données utilisateur
+    function checkAuth() {
+        auth.onAuthStateChanged(async (user) => {
+            if (user) {
+                currentUser = user;
+                await loadUserData();
+                initializeDashboard();
+            } else {
+                // Rediriger vers la page de connexion si non authentifié
+                window.location.href = 'login.html';
+            }
+        });
+    }
+
+    // Charger les données utilisateur depuis Firestore
+    async function loadUserData() {
+        try {
+            const userDoc = await db.collection('users').doc(currentUser.uid).get();
+            if (userDoc.exists) {
+                userData = userDoc.data();
+                
+                // Mettre à jour l'affichage du nom
+                const userName = userData.firstName + ' ' + userData.lastName;
+                welcomeUserName.textContent = `Bienvenue, ${userName}`;
+                
+                // Mettre à jour le solde (créer le champ s'il n'existe pas)
+                userBalance = userData.balance || 0;
+                if (!userData.hasOwnProperty('balance')) {
+                    // Créer le champ balance avec valeur 0 s'il n'existe pas
+                    await db.collection('users').doc(currentUser.uid).update({
+                        balance: 0
+                    });
+                }
+                
+                balanceAmountEl.textContent = formatFCFA(userBalance);
+            } else {
+                console.error("Document utilisateur non trouvé");
+                showToast("Erreur de chargement des données utilisateur", "error");
+            }
+        } catch (error) {
+            console.error("Erreur lors du chargement des données:", error);
+            showToast("Erreur de connexion à la base de données", "error");
+        }
+    }
+
+    // Mettre à jour le solde de l'utilisateur
+    async function updateUserBalance(newBalance) {
+        try {
+            await db.collection('users').doc(currentUser.uid).update({
+                balance: newBalance
+            });
+            userBalance = newBalance;
+            balanceAmountEl.textContent = formatFCFA(userBalance);
+        } catch (error) {
+            console.error("Erreur lors de la mise à jour du solde:", error);
+            throw error;
+        }
+    }
+
+    // Envoyer une commande au backend
+    async function sendOrderToBackend(orderData) {
+        // URL du backend Replit (à modifier plus tard)
+        const backendUrl = 'https://votre-backend-replit.repl.co/api/orders';
+        
+        try {
+            const response = await fetch(backendUrl, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    ...orderData,
+                    userId: currentUser.uid,
+                    userEmail: currentUser.email
+                })
+            });
+
+            if (!response.ok) {
+                throw new Error('Erreur lors de l\'envoi de la commande');
+            }
+
+            return await response.json();
+        } catch (error) {
+            console.error('Erreur backend:', error);
+            // En cas d'erreur, on sauvegarde localement et on retry plus tard
+            saveOrderLocally(orderData);
+            throw error;
+        }
+    }
+
+    // Sauvegarder la commande localement en attendant
+    function saveOrderLocally(orderData) {
+        const pendingOrders = JSON.parse(localStorage.getItem('pendingOrders') || '[]');
+        pendingOrders.push({
+            ...orderData,
+            timestamp: new Date().toISOString()
+        });
+        localStorage.setItem('pendingOrders', JSON.stringify(pendingOrders));
+    }
 
     /* ====== GESTION DES ÉVÉNEMENTS DU MENU ET DU SOLDE ====== */
     // Gestion du menu hamburger
@@ -1620,6 +1748,14 @@
             menuBtn.classList.remove('active');
             dropdownMenu.classList.remove('active');
         }
+    });
+
+    // Déconnexion
+    logoutBtn.addEventListener('click', function(e) {
+        e.preventDefault();
+        auth.signOut().then(() => {
+            window.location.href = 'login.html';
+        });
     });
 
     // Afficher une notification toast
@@ -1962,57 +2098,64 @@
         submitSpinner.style.display = 'inline-block';
         submitBtn.disabled = true;
 
-        // Simuler un délai de traitement
-        await new Promise(resolve => setTimeout(resolve, 1500));
-
-        // Simple balance check (optionnel)
-        if (price > balance){
-            if(!confirm('Le prix est ' + formatFCFA(price) + ' mais votre solde est ' + formatFCFA(balance) + '. Continuer et créer la commande (paiement différé) ?')) {
-                submitText.style.display = 'inline-block';
-                submitSpinner.style.display = 'none';
-                submitBtn.disabled = false;
-                return;
+        try {
+            // Simple balance check
+            if (price > userBalance){
+                if(!confirm('Le prix est ' + formatFCFA(price) + ' mais votre solde est ' + formatFCFA(userBalance) + '. Continuer et créer la commande (paiement différé) ?')) {
+                    submitText.style.display = 'inline-block';
+                    submitSpinner.style.display = 'none';
+                    submitBtn.disabled = false;
+                    return;
+                }
+            } else {
+                // Débiter le solde de l'utilisateur
+                const newBalance = userBalance - price;
+                await updateUserBalance(newBalance);
             }
-        } else {
-            // débiter le solde local
-            balance = Math.max(0, balance - price);
-            balanceAmountEl.textContent = formatFCFA(balance);
+
+            const order = {
+                id: uid('#MDL'),
+                platform: currentPlatform.charAt(0).toUpperCase() + currentPlatform.slice(1),
+                service: finalService,
+                link,
+                quantity: baseQuantity,
+                qualityLabel: qualityLabel,
+                price: price,
+                statusLabel: 'En cours',
+                statusClass: 'processing',
+                date: todayStr()
+            };
+
+            // Envoyer la commande au backend
+            await sendOrderToBackend(order);
+            
+            // Ajouter la commande à l'historique local
+            addOrder(order);
+
+            // réinitialiser les champs spécifiques à la commande
+            linkEl.value = '';
+            if (isCommentService) {
+                commentsEl.value = '';
+                commentsEl.dispatchEvent(new Event('input')); // Pour mettre à jour le count et le prix
+            } else {
+                quantityEl.value = 1000;
+            }
+            qualityEl.value = 'medium';
+            serviceEl.value = ''; // Réinitialiser le service pour forcer l'utilisateur à resélectionner
+            serviceEl.dispatchEvent(new Event('change')); // Déclenche la mise à jour des champs/prix
+
+            // feedback utilisateur
+            showToast(`Commande créée : ${order.id} — Prix: ${formatFCFA(order.price)}`);
+
+        } catch (error) {
+            console.error("Erreur lors de la création de la commande:", error);
+            showToast("Erreur lors de la création de la commande", "error");
+        } finally {
+            // Réactiver le bouton
+            submitText.style.display = 'inline-block';
+            submitSpinner.style.display = 'none';
+            submitBtn.disabled = false;
         }
-
-        const order = {
-            id: uid('#MDL'),
-            platform: currentPlatform.charAt(0).toUpperCase() + currentPlatform.slice(1),
-            service: finalService,
-            link,
-            quantity: baseQuantity,
-            qualityLabel: qualityLabel,
-            price: price,
-            statusLabel: 'En cours',
-            statusClass: 'processing',
-            date: todayStr()
-        };
-
-        addOrder(order);
-
-        // réinitialiser les champs spécifiques à la commande
-        linkEl.value = '';
-        if (isCommentService) {
-            commentsEl.value = '';
-            commentsEl.dispatchEvent(new Event('input')); // Pour mettre à jour le count et le prix
-        } else {
-            quantityEl.value = 1000;
-        }
-        qualityEl.value = 'medium';
-        serviceEl.value = ''; // Réinitialiser le service pour forcer l'utilisateur à resélectionner
-        serviceEl.dispatchEvent(new Event('change')); // Déclenche la mise à jour des champs/prix
-
-        // feedback utilisateur
-        showToast(`Commande créée : ${order.id} — Prix: ${formatFCFA(order.price)}`);
-
-        // Réactiver le bouton
-        submitText.style.display = 'inline-block';
-        submitSpinner.style.display = 'none';
-        submitBtn.disabled = false;
     });
 
     /* ====== GESTION DES COMMANDES (LocalStorage) ====== */
@@ -2083,13 +2226,18 @@
         return now.toLocaleString('fr-FR', {year:'numeric',month:'2-digit',day:'2-digit',hour:'2-digit',minute:'2-digit'});
     }
 
+    // Initialiser le dashboard
+    function initializeDashboard() {
+        // Set Facebook as default platform and load services
+        populateServices(currentPlatform);
+        renderOrders();
+        console.log('Dashboard initialisé avec la nouvelle tarification et les services de commentaires.');
+    }
 
-    // INITIALIZE
-    // Set Facebook as default platform and load services
-    populateServices(currentPlatform);
-    renderOrders();
-
-    console.log('Dashboard initialisé avec la nouvelle tarification et les services de commentaires.');
+    // DÉMARRAGE DE L'APPLICATION
+    document.addEventListener('DOMContentLoaded', function() {
+        checkAuth();
+    });
 </script>
 </body>
 </html>
