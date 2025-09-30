@@ -1562,554 +1562,663 @@
             }
         }
     };
-    
-    /* ====== LOGIQUE DE MISE À JOUR DES PRIX (Multiplication par deux) ====== */
-    // Fonction pour appliquer la multiplication par deux aux prix
-    function updateServicePrices(data) {
-        for (const platform in data) {
-            for (const service in data[platform]) {
-                const serviceInfo = data[platform][service];
-                
-                // Si le service a des sous-options (ex: Réactions Emoji, Vues précédentes)
-                if (serviceInfo.options) {
-                    for (const option in serviceInfo.options) {
-                        serviceInfo.options[option].medium.price *= 2;
-                        serviceInfo.options[option].high.price *= 2;
+/* ====== LOGIQUE DE MISE À JOUR DES PRIX (sécurisée — évite double multiplication) ====== */
+(function applyPriceMultiplierIfNeeded() {
+    try {
+        if (!servicesData || typeof servicesData !== 'object') {
+            console.warn('[SERVICES] servicesData absent ou invalide, skip price update.');
+            return;
+        }
+        // marqueur pour ne pas multiplier deux fois
+        if (servicesData.__pricesDoubled) {
+            console.log('[SERVICES] prix déjà multipliés auparavant — skip.');
+            return;
+        }
+
+        console.log('[SERVICES] Application éventuelle de la règle x2 sur les prix (si nécessaire).');
+
+        for (const platform in servicesData) {
+            if (!servicesData.hasOwnProperty(platform)) continue;
+            const platformObj = servicesData[platform];
+            for (const serviceName in platformObj) {
+                if (!platformObj.hasOwnProperty(serviceName)) continue;
+                const serviceInfo = platformObj[serviceName];
+
+                // si le service a des sous-options
+                if (serviceInfo && serviceInfo.options && typeof serviceInfo.options === 'object') {
+                    for (const opt in serviceInfo.options) {
+                        if (!serviceInfo.options.hasOwnProperty(opt)) continue;
+                        const o = serviceInfo.options[opt];
+                        if (o && o.medium && typeof o.medium.price === 'number') o.medium.price = Math.ceil(o.medium.price * 2);
+                        if (o && o.high && typeof o.high.price === 'number') o.high.price = Math.ceil(o.high.price * 2);
                     }
-                } 
-                // Si le service a les prix 'medium' et 'high' directement
-                else if (serviceInfo.medium && serviceInfo.high) {
-                    serviceInfo.medium.price *= 2;
-                    serviceInfo.high.price *= 2;
+                } else if (serviceInfo && serviceInfo.medium && typeof serviceInfo.medium.price === 'number') {
+                    // cas standard medium/high
+                    serviceInfo.medium.price = Math.ceil(serviceInfo.medium.price * 2);
+                    if (serviceInfo.high && typeof serviceInfo.high.price === 'number') {
+                        serviceInfo.high.price = Math.ceil(serviceInfo.high.price * 2);
+                    }
                 }
             }
         }
+
+        // définir le marqueur
+        try { servicesData.__pricesDoubled = true; } catch(e){ /* can't set - ignore */ }
+        console.log('[SERVICES] Multiplication x2 appliquée aux prix (ou skipped si déjà fait).');
+    } catch (err) {
+        console.error('[SERVICES] Erreur lors de la mise à jour des prix :', err);
     }
-    
-    // Appliquer la règle de multiplication par 2
-    updateServicePrices(servicesData);
-    
-    /* ====== VARIABLES GLOBALES ET ÉLÉMENTS DU DOM ====== */
-    const formatFCFA = (n) => {
-        if (isNaN(n)) return "-- FCFA";
-        // Correction: utiliser Math.ceil pour s'assurer que le prix est au moins le prix unitaire
-        return new Intl.NumberFormat('fr-FR').format(Math.ceil(n)) + " FCFA"; 
+})();
+
+/* ====== UTILITAIRES & SÉLECTEURS ====== */
+
+// Helpers
+const formatFCFA = (n) => {
+    if (n === null || n === undefined || isNaN(Number(n))) return "-- FCFA";
+    return new Intl.NumberFormat('fr-FR').format(Math.ceil(Number(n))) + " FCFA";
+};
+
+function uid(prefix='MDL') {
+    return prefix + Math.floor(Math.random() * 900000 + 100000);
+}
+function todayStr() {
+    const now = new Date();
+    return now.toLocaleString('fr-FR', {year:'numeric',month:'2-digit',day:'2-digit',hour:'2-digit',minute:'2-digit'});
+}
+
+function showToast(message, type = 'success') {
+    // type: success | error | warning
+    try {
+        const toastEl = document.getElementById('toast');
+        if (!toastEl) { console.log('[TOAST]', type, message); return; }
+        toastEl.className = 'toast';
+        let icon = 'check-circle';
+        if (type === 'error') icon = 'exclamation-circle';
+        if (type === 'warning') icon = 'exclamation-triangle';
+        toastEl.innerHTML = `<i class="fas fa-${icon}"></i> ${message}`;
+        toastEl.classList.add(type, 'show');
+        setTimeout(() => { toastEl.classList.remove('show'); }, 4000);
+    } catch (err) {
+        console.log('[TOAST] fallback ->', type, message);
     }
+}
 
-    // Elements
-    const platformOptions = document.querySelectorAll('.platform-option');
-    const serviceEl = document.getElementById('service');
-    const subOptionField = document.getElementById('subOptionField');
-    const subOptionLabelEl = document.getElementById('subOptionLabel');
-    const subOptionEl = document.getElementById('subOption');
-    const quantityField = document.getElementById('quantityField');
-    const quantityEl = document.getElementById('quantity');
-    const quantityHelp = document.getElementById('quantityHelp');
-    const commentsField = document.getElementById('commentsField');
-    const commentsEl = document.getElementById('comments');
-    const commentCountEl = document.getElementById('commentCount');
-    const qualityField = document.getElementById('qualityField');
-    const qualityEl = document.getElementById('quality');
-    const linkEl = document.getElementById('link');
-    const priceEl = document.getElementById('priceEstimate');
-    const orderForm = document.getElementById('orderForm');
-    const ordersTableBody = document.querySelector('#ordersTable tbody');
-    const balanceAmountEl = document.getElementById('balanceAmount');
-    const toastEl = document.getElementById('toast');
-    const submitText = document.getElementById('submitText');
-    const submitSpinner = document.getElementById('submitSpinner');
-    const submitBtn = document.getElementById('submitBtn');
-    const quickOrderBtn = document.getElementById('quickOrderBtn');
-    const resetFormBtn = document.getElementById('resetForm');
-    const activeOrdersEl = document.getElementById('activeOrders');
-    const completedOrdersEl = document.getElementById('completedOrders');
-    const menuBtn = document.getElementById('menuBtn');
-    const dropdownMenu = document.getElementById('dropdownMenu');
-    const remarkField = document.getElementById('remarkField');
-    const serviceRemarkEl = document.getElementById('serviceRemark');
-    const welcomeUserName = document.getElementById('welcomeUserName');
-    const logoutBtn = document.getElementById('logoutBtn');
+/* ---------- SÉLECTEURS DOM (sécurisés) ---------- */
+const platformOptions = document.querySelectorAll('.platform-option');
+const serviceEl = document.getElementById('service');
+const subOptionField = document.getElementById('subOptionField');
+const subOptionLabelEl = document.getElementById('subOptionLabel');
+const subOptionEl = document.getElementById('subOption');
+const quantityField = document.getElementById('quantityField');
+const quantityEl = document.getElementById('quantity');
+const commentsField = document.getElementById('commentsField');
+const commentsEl = document.getElementById('comments');
+const commentCountEl = document.getElementById('commentCount');
+const qualityField = document.getElementById('qualityField');
+const qualityEl = document.getElementById('quality');
+const linkEl = document.getElementById('link');
+const priceEl = document.getElementById('priceEstimate');
+const orderForm = document.getElementById('orderForm');
+const ordersTableBody = document.querySelector('#ordersTable tbody');
+const balanceAmountEl = document.getElementById('balanceAmount');
+const submitText = document.getElementById('submitText');
+const submitSpinner = document.getElementById('submitSpinner');
+const submitBtn = document.getElementById('submitBtn');
+const quickOrderBtn = document.getElementById('quickOrderBtn');
+const resetFormBtn = document.getElementById('resetForm');
+const activeOrdersEl = document.getElementById('activeOrders');
+const completedOrdersEl = document.getElementById('completedOrders');
+const menuBtn = document.getElementById('menuBtn');
+const dropdownMenu = document.getElementById('dropdownMenu');
+const remarkField = document.getElementById('remarkField');
+const serviceRemarkEl = document.getElementById('serviceRemark');
+const welcomeUserName = document.getElementById('welcomeUserName');
+const logoutBtn = document.getElementById('logoutBtn');
 
-    let currentPlatform = 'facebook'; // Changé pour facebook qui est par défaut actif dans le HTML
+/* ====== VARIABLES GLOBALES ====== */
+let currentPlatform = 'facebook';
+/* currentUser, userData, userBalance sont initialisés par checkAuth/loadUserData */
+let currentUser = null;
+let userData = null;
+let userBalance = 0;
 
-    /* ====== FONCTIONS FIREBASE ====== */
-    
-    // Vérifier l'authentification et charger les données utilisateur
-    function checkAuth() {
-        auth.onAuthStateChanged(async (user) => {
-            if (user) {
-                currentUser = user;
-                await loadUserData();
-                initializeDashboard();
-            } else {
-                // Rediriger vers la page de connexion si non authentifié
-                window.location.href = 'login.html';
-            }
+/* IMPORTANT: on suppose que Firebase a déjà été initialisé AVANT servicesData. */
+/* On récupère auth et db si disponibles (on ne les redéclare pas si présents). */
+const auth = (typeof firebase !== 'undefined' && firebase.auth) ? firebase.auth() : (window.auth || null);
+const db = (typeof firebase !== 'undefined' && firebase.firestore) ? firebase.firestore() : (window.db || null);
+
+console.log('[BOOT] auth present?', !!auth, 'db present?', !!db);
+
+/* ====== GESTION DES SERVICES (UI) ====== */
+
+function populateSubOptions(options) {
+    try {
+        if (!subOptionEl) return;
+        subOptionEl.innerHTML = '';
+        const defaultOpt = document.createElement('option');
+        defaultOpt.value = '';
+        defaultOpt.textContent = 'Sélectionnez une option';
+        subOptionEl.appendChild(defaultOpt);
+
+        Object.keys(options || {}).forEach(o => {
+            const opt = document.createElement('option');
+            opt.value = o;
+            opt.textContent = o;
+            subOptionEl.appendChild(opt);
         });
+        console.log('[UI] Sous-options remplies');
+    } catch (err) {
+        console.error('[UI] populateSubOptions erreur:', err);
     }
+}
 
-    // Charger les données utilisateur depuis Firestore
-    async function loadUserData() {
-        try {
-            const userDoc = await db.collection('users').doc(currentUser.uid).get();
-            if (userDoc.exists) {
-                userData = userDoc.data();
-                
-                // Mettre à jour l'affichage du nom
-                const userName = userData.firstName + ' ' + userData.lastName;
-                welcomeUserName.textContent = `Bienvenue, ${userName}`;
-                
-                // Mettre à jour le solde (créer le champ s'il n'existe pas)
-                userBalance = userData.balance || 0;
-                if (!userData.hasOwnProperty('balance')) {
-                    // Créer le champ balance avec valeur 0 s'il n'existe pas
-                    await db.collection('users').doc(currentUser.uid).update({
-                        balance: 0
-                    });
-                }
-                
-                balanceAmountEl.textContent = formatFCFA(userBalance);
-            } else {
-                console.error("Document utilisateur non trouvé");
-                showToast("Erreur de chargement des données utilisateur", "error");
+function populateServices(platform) {
+    try {
+        console.log('[UI] populateServices -> platform=', platform);
+        if (!serviceEl) { console.warn('[UI] serviceEl introuvable'); return; }
+        serviceEl.innerHTML = '';
+
+        const defaultOpt = document.createElement('option');
+        defaultOpt.value = '';
+        defaultOpt.textContent = 'Sélectionnez un service';
+        serviceEl.appendChild(defaultOpt);
+
+        const platformServices = (servicesData && servicesData[platform]) ? Object.keys(servicesData[platform]) : [];
+        if (!platformServices || platformServices.length === 0) {
+            const opt = document.createElement('option');
+            opt.value = '';
+            opt.textContent = 'Aucun service disponible';
+            serviceEl.appendChild(opt);
+
+            // masquer champs dépendants
+            if (quantityField) quantityField.style.display = 'none';
+            if (commentsField) commentsField.style.display = 'none';
+            if (subOptionField) subOptionField.style.display = 'none';
+            if (qualityField) qualityField.style.display = 'none';
+            if (remarkField) remarkField.style.display = 'none';
+            if (priceEl) priceEl.textContent = '-- FCFA';
+
+            console.warn('[UI] Aucun service pour la plateforme', platform);
+            return;
+        }
+
+        platformServices.forEach(s => {
+            const opt = document.createElement('option');
+            opt.value = s;
+            opt.textContent = s;
+            serviceEl.appendChild(opt);
+        });
+
+        // reset UI
+        if (quantityField) quantityField.style.display = 'flex';
+        if (commentsField) commentsField.style.display = 'none';
+        if (subOptionField) subOptionField.style.display = 'none';
+        if (qualityField) qualityField.style.display = 'flex';
+        if (remarkField) remarkField.style.display = 'none';
+        updatePrice();
+
+        console.log('[UI] Services remplis pour', platform);
+    } catch (err) {
+        console.error('[UI] populateServices erreur:', err);
+    }
+}
+
+function getSelectedServiceData() {
+    try {
+        const platform = currentPlatform;
+        const serviceName = serviceEl ? serviceEl.value : '';
+        const subOptionName = subOptionEl ? subOptionEl.value : '';
+
+        if (!platform || !serviceName) return null;
+        if (!servicesData || !servicesData[platform]) return null;
+
+        const serviceInfo = servicesData[platform][serviceName];
+        if (!serviceInfo) return null;
+
+        if (serviceInfo.options && subOptionName) {
+            return serviceInfo.options[subOptionName];
+        } else if (!serviceInfo.options) {
+            return serviceInfo;
+        }
+        return null;
+    } catch (err) {
+        console.error('[SERVICES] getSelectedServiceData error:', err);
+        return null;
+    }
+}
+
+function updateFormFields(serviceName) {
+    try {
+        if (!serviceName) {
+            if (quantityField) quantityField.style.display = 'flex';
+            if (commentsField) commentsField.style.display = 'none';
+            if (subOptionField) subOptionField.style.display = 'none';
+            if (qualityField) qualityField.style.display = 'flex';
+            if (remarkField) remarkField.style.display = 'none';
+            updatePrice();
+            return;
+        }
+
+        const serviceInfo = (servicesData && servicesData[currentPlatform] && servicesData[currentPlatform][serviceName]) ? servicesData[currentPlatform][serviceName] : null;
+        const isCommentService = serviceName.includes('Commentaires personnalisés');
+
+        // Commentaire -> masquer quantité
+        if (isCommentService) {
+            if (quantityField) quantityField.style.display = 'none';
+            if (commentsField) commentsField.style.display = 'flex';
+        } else {
+            if (quantityField) quantityField.style.display = 'flex';
+            if (commentsField) commentsField.style.display = 'none';
+        }
+
+        // Sous-options
+        if (serviceInfo && serviceInfo.options) {
+            if (subOptionField) subOptionField.style.display = 'flex';
+            if (subOptionLabelEl) subOptionLabelEl.textContent = serviceInfo.subOptionLabel || 'Option';
+            populateSubOptions(serviceInfo.options);
+            if (qualityField) qualityField.style.display = 'none';
+        } else {
+            if (subOptionField) subOptionField.style.display = 'none';
+            if (qualityField) qualityField.style.display = 'flex';
+        }
+
+        // Remarque
+        if (serviceInfo && serviceInfo.remark) {
+            if (remarkField) remarkField.style.display = 'block';
+            if (serviceRemarkEl) serviceRemarkEl.innerHTML = serviceInfo.remark;
+        } else {
+            if (remarkField) remarkField.style.display = 'none';
+            if (serviceRemarkEl) serviceRemarkEl.textContent = '';
+        }
+
+        updatePrice();
+        console.log('[UI] updateFormFields pour', serviceName);
+    } catch (err) {
+        console.error('[UI] updateFormFields erreur:', err);
+    }
+}
+
+/* ====== PRIX ====== */
+function calculatePrice() {
+    try {
+        const service = serviceEl ? serviceEl.value : '';
+        const quality = qualityEl ? (qualityEl.value || 'medium') : 'medium';
+        if (!service) return 0;
+
+        const serviceData = getSelectedServiceData();
+        if (!serviceData) return 0;
+
+        // Cas commentaires personnalisés
+        const isCommentService = service.includes('Commentaires personnalisés');
+        if (isCommentService) {
+            const commentsText = (commentsEl && commentsEl.value) ? commentsEl.value.trim() : '';
+            const lines = commentsText ? commentsText.split('\n').filter(l => l.trim() !== '') : [];
+            const finalQuantity = lines.length;
+            const priceFor10Units = (serviceData[quality] && serviceData[quality].price) ? serviceData[quality].price : (serviceData.medium ? serviceData.medium.price : 0);
+            const pricePerUnit = priceFor10Units / 10;
+            const total = pricePerUnit * finalQuantity;
+            console.log('[PRICE] comments -> qty=', finalQuantity, 'total=', total);
+            return total;
+        }
+
+        // Services avec medium/high (par 1000)
+        if (serviceData.medium && serviceData.high) {
+            const finalQuantity = Number(quantityEl ? quantityEl.value : 0) || 0;
+            const basePricePer1000 = serviceData[quality] ? serviceData[quality].price : serviceData.medium.price;
+            const total = (basePricePer1000 / 1000) * finalQuantity;
+            console.log('[PRICE] per1000 -> qty=', finalQuantity, 'unitPricePer1000=', basePricePer1000, 'total=', total);
+            return total;
+        }
+
+        // Services provenant d'une sous-option (prix fixe probable)
+        if (serviceData.medium && !serviceData.options) {
+            const basePrice = (serviceData.medium && typeof serviceData.medium.price === 'number') ? serviceData.medium.price : (serviceData.price || 0);
+            const optionName = subOptionEl ? (subOptionEl.value || '') : '';
+            if (optionName.match(/\d/) || service.toLowerCase().includes('vues') || service.toLowerCase().includes('réactions') || service.toLowerCase().includes('téléspectateur')) {
+                console.log('[PRICE] option prix fixe ->', basePrice);
+                return basePrice;
             }
-        } catch (error) {
-            console.error("Erreur lors du chargement des données:", error);
-            showToast("Erreur de connexion à la base de données", "error");
+            const finalQuantity = Number(quantityEl ? quantityEl.value : 0) || 0;
+            const total = (basePrice / 1000) * finalQuantity;
+            console.log('[PRICE] option with quantity -> qty=', finalQuantity, 'basePrice=', basePrice, 'total=', total);
+            return total;
         }
-    }
 
-    // Mettre à jour le solde de l'utilisateur
-    async function updateUserBalance(newBalance) {
-        try {
-            await db.collection('users').doc(currentUser.uid).update({
-                balance: newBalance
-            });
-            userBalance = newBalance;
-            balanceAmountEl.textContent = formatFCFA(userBalance);
-        } catch (error) {
-            console.error("Erreur lors de la mise à jour du solde:", error);
-            throw error;
+        console.warn('[PRICE] Aucun cas applicable trouvé pour serviceData:', serviceData);
+        return 0;
+    } catch (err) {
+        console.error('[PRICE] calculatePrice erreur:', err);
+        return 0;
+    }
+}
+
+function updatePrice() {
+    try {
+        const price = calculatePrice();
+        if (priceEl) priceEl.textContent = formatFCFA(price);
+        if (priceEl) {
+            priceEl.style.transform = 'scale(1.06)';
+            setTimeout(() => { priceEl.style.transform = 'scale(1)'; }, 220);
         }
+    } catch (err) {
+        console.error('[UI] updatePrice erreur:', err);
     }
+}
 
-    // Envoyer une commande au backend
-    async function sendOrderToBackend(orderData) {
-        // URL du backend Replit (à modifier plus tard)
-        const backendUrl = 'https://votre-backend-replit.repl.co/api/orders';
-        
-        try {
-            const response = await fetch(backendUrl, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({
-                    ...orderData,
-                    userId: currentUser.uid,
-                    userEmail: currentUser.email
-                })
-            });
+/* ====== BACKEND & LOCAL STORAGE ====== */
 
-            if (!response.ok) {
-                throw new Error('Erreur lors de l\'envoi de la commande');
-            }
-
-            return await response.json();
-        } catch (error) {
-            console.error('Erreur backend:', error);
-            // En cas d'erreur, on sauvegarde localement et on retry plus tard
-            saveOrderLocally(orderData);
-            throw error;
-        }
-    }
-
-    // Sauvegarder la commande localement en attendant
-    function saveOrderLocally(orderData) {
+function saveOrderLocally(orderData) {
+    try {
         const pendingOrders = JSON.parse(localStorage.getItem('pendingOrders') || '[]');
         pendingOrders.push({
             ...orderData,
             timestamp: new Date().toISOString()
         });
         localStorage.setItem('pendingOrders', JSON.stringify(pendingOrders));
+        console.log('[LOCAL] Commande sauvegardée localement (pendingOrders).');
+    } catch (err) {
+        console.error('[LOCAL] Erreur saveOrderLocally:', err);
     }
+}
 
-    /* ====== GESTION DES ÉVÉNEMENTS DU MENU ET DU SOLDE ====== */
-    // Gestion du menu hamburger
+async function sendOrderToBackend(orderData) {
+    // Remarque: adapte les endpoints de ton backend selon ton serveur
+    const backendBase = 'https://Madil-exaucenapopolo2.replit.app';
+    const triedUrls = [
+        backendBase + '/orders',
+        backendBase + '/api/orders',
+        backendBase + '/'
+    ];
+    let lastErr = null;
+    for (const url of triedUrls) {
+        try {
+            console.log('[HTTP] POST ->', url, 'payload=', orderData);
+            const response = await fetch(url, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    ...orderData,
+                    userId: currentUser ? currentUser.uid : null,
+                    userEmail: currentUser ? currentUser.email : null
+                })
+            });
+
+            const text = await response.text();
+            let payload;
+            try { payload = JSON.parse(text); } catch (e) { payload = text; }
+
+            console.log('[HTTP] réponse reçue:', response.status, payload);
+
+            if (!response.ok) {
+                const errMsg = (payload && (payload.error || payload.message)) ? (payload.error || payload.message) : `HTTP ${response.status}`;
+                throw new Error(errMsg);
+            }
+
+            return payload;
+        } catch (err) {
+            console.error('[HTTP] Erreur fetch ->', url, err);
+            lastErr = err;
+            // essayer suivant
+        }
+    }
+    // toutes les routes ont échoué
+    saveOrderLocally(orderData);
+    throw lastErr || new Error('Impossible de joindre le backend');
+}
+
+/* ====== FIREBASE: auth + user data (si firebase présent) ====== */
+
+function checkAuth() {
+    if (!auth || !auth.onAuthStateChanged) {
+        console.warn('[AUTH] Firebase auth non disponible, mode dégradé (dev).');
+        // initialise le dashboard en mode local
+        initializeDashboard();
+        return;
+    }
+    auth.onAuthStateChanged(async (user) => {
+        if (user) {
+            currentUser = user;
+            console.log('[AUTH] Utilisateur connecté:', user.uid, user.email);
+            try { await loadUserData(); } catch(e) { console.error('[AUTH] erreur loadUserData:', e); }
+            initializeDashboard();
+        } else {
+            console.log('[AUTH] Pas d’utilisateur connecté. Mode démo/local.');
+            // si tu veux forcer la redirection: window.location.href = 'login.html';
+            initializeDashboard();
+        }
+    });
+}
+
+async function loadUserData() {
+    if (!db || !currentUser) {
+        console.warn('[USER] db ou currentUser manquant; skip loadUserData.');
+        return;
+    }
+    try {
+        const userDoc = await db.collection('users').doc(currentUser.uid).get();
+        if (userDoc.exists) {
+            userData = userDoc.data();
+            const userName = (userData.firstName || '') + ' ' + (userData.lastName || '');
+            if (welcomeUserName) welcomeUserName.textContent = userName ? `Bienvenue, ${userName}` : 'Bienvenue';
+            userBalance = Number(userData.balance) || 0;
+            if (!userData.hasOwnProperty('balance')) {
+                // essaie d'initialiser, sans bloquer si erreur
+                db.collection('users').doc(currentUser.uid).update({ balance: 0 }).catch(e => console.warn('[USER] init balance failed:', e));
+            }
+            if (balanceAmountEl) balanceAmountEl.textContent = formatFCFA(userBalance);
+            console.log('[USER] Données chargées:', userData);
+        } else {
+            console.warn('[USER] Document utilisateur non trouvé');
+            showToast("Utilisateur non trouvé en base.", "warning");
+        }
+    } catch (error) {
+        console.error('[USER] Erreur loadUserData:', error);
+        showToast("Erreur de connexion à la base de données", "error");
+    }
+}
+
+async function updateUserBalance(newBalance) {
+    if (!db || !currentUser) {
+        console.warn('[USER] updateUserBalance impossible — db ou currentUser manquant.');
+        userBalance = newBalance;
+        if (balanceAmountEl) balanceAmountEl.textContent = formatFCFA(userBalance);
+        return;
+    }
+    try {
+        await db.collection('users').doc(currentUser.uid).update({
+            balance: newBalance
+        });
+        userBalance = newBalance;
+        if (balanceAmountEl) balanceAmountEl.textContent = formatFCFA(userBalance);
+        console.log('[USER] Solde mis à jour:', userBalance);
+    } catch (error) {
+        console.error('[USER] Erreur lors de la mise à jour du solde:', error);
+        throw error;
+    }
+}
+
+/* ====== GESTION DES ÉVÉNEMENTS UI ====== */
+
+// Menu hamburger
+if (menuBtn) {
     menuBtn.addEventListener('click', function (e) {
         e.stopPropagation();
         menuBtn.classList.toggle('active');
-        dropdownMenu.classList.toggle('active');
+        if (dropdownMenu) dropdownMenu.classList.toggle('active');
     });
-
-    // Fermer le menu en cliquant à l'extérieur
-    document.addEventListener('click', function (e) {
-        if (dropdownMenu.classList.contains('active') && !dropdownMenu.contains(e.target) && !menuBtn.contains(e.target)) {
-            menuBtn.classList.remove('active');
-            dropdownMenu.classList.remove('active');
-        }
-    });
-
-    // Déconnexion
+}
+document.addEventListener('click', function (e) {
+    if (dropdownMenu && dropdownMenu.classList.contains('active') && !dropdownMenu.contains(e.target) && menuBtn && !menuBtn.contains(e.target)) {
+        menuBtn.classList.remove('active');
+        dropdownMenu.classList.remove('active');
+    }
+});
+if (logoutBtn) {
     logoutBtn.addEventListener('click', function(e) {
         e.preventDefault();
-        auth.signOut().then(() => {
-            window.location.href = 'login.html';
-        });
-    });
-
-    // Afficher une notification toast
-    function showToast(message, type = 'success') {
-        toastEl.className = 'toast';
-        let icon = 'check-circle';
-        if (type === 'error') icon = 'exclamation-circle';
-        if (type === 'warning') icon = 'exclamation-triangle';
-        
-        toastEl.innerHTML = `<i class="fas fa-${icon}"></i> ${message}`;
-        toastEl.classList.add(type, 'show');
-        
-        setTimeout(() => {
-            toastEl.classList.remove('show');
-        }, 4000);
-    }
-
-    /* ====== LOGIQUE DE COMMANDE ET DE PRIX (MODIFIÉE) ====== */
-
-    // Récupérer les données pour le service/sous-option sélectionné
-    function getSelectedServiceData() {
-        const platform = currentPlatform;
-        const serviceName = serviceEl.value;
-        const subOptionName = subOptionEl.value;
-        
-        if (!platform || !serviceName || !servicesData[platform] || !servicesData[platform][serviceName]) {
-            return null;
-        }
-        
-        const serviceInfo = servicesData[platform][serviceName];
-        
-        // Gérer les services avec sous-options
-        if (serviceInfo.options && subOptionName) {
-            return serviceInfo.options[subOptionName];
-        } 
-        // Gérer les services sans sous-options
-        else if (!serviceInfo.options) {
-            return serviceInfo;
-        }
-        
-        return null;
-    }
-
-    // Mettre à jour les champs de quantité/commentaire et la remarque
-    function updateFormFields(serviceName) {
-        const serviceInfo = servicesData[currentPlatform][serviceName];
-        const isCommentService = serviceName.includes('Commentaires personnalisés');
-
-        // 1. Afficher/Masquer le champ Commentaires
-        if (isCommentService) {
-            quantityField.style.display = 'none';
-            commentsField.style.display = 'flex';
+        if (auth && auth.signOut) {
+            auth.signOut().then(() => {
+                console.log('[AUTH] Déconnexion réussie.');
+                // window.location.href = 'login.html';
+            }).catch(err => console.error('[AUTH] logout error:', err));
         } else {
-            quantityField.style.display = 'flex';
-            commentsField.style.display = 'none';
+            console.warn('[AUTH] logout not available.');
         }
-        
-        // 2. Afficher/Masquer le champ Sous-Option
-        if (serviceInfo.options) {
-            subOptionField.style.display = 'flex';
-            subOptionLabelEl.textContent = serviceInfo.subOptionLabel;
-            populateSubOptions(serviceInfo.options);
-            // Masquer le champ Qualité si les options ont les prix directement dedans
-            qualityField.style.display = 'none'; 
-        } else {
-            subOptionField.style.display = 'none';
-            // Afficher le champ Qualité s'il n'y a pas de sous-option
-            qualityField.style.display = 'flex';
-        }
-
-        // 3. Afficher la Remarque
-        if (serviceInfo.remark) {
-            remarkField.style.display = 'block';
-            serviceRemarkEl.innerHTML = serviceInfo.remark;
-        } else {
-            remarkField.style.display = 'none';
-            serviceRemarkEl.textContent = '';
-        }
-
-        updatePrice();
-    }
-    
-    // Fonction principale de calcul du prix
-    function calculatePrice() {
-        const service = serviceEl.value;
-        const quality = qualityEl.value;
-        
-        if (!service) return 0;
-        
-        const serviceData = getSelectedServiceData();
-        if (!serviceData) return 0;
-        
-        let basePricePer1000 = 0;
-        let finalQuantity = 0;
-        
-        // 1. Détermination du Prix de Base et de la Quantité
-        const isCommentService = service.includes('Commentaires personnalisés');
-        
-        if (isCommentService) {
-            // Pour les commentaires : Quantité = nombre de lignes
-            const commentsText = commentsEl.value.trim();
-            // Compter les lignes non vides
-            finalQuantity = commentsText ? commentsText.split('\n').filter(line => line.trim() !== '').length : 0;
-            
-            // Le prix des commentaires est par 10 unités (dans ton bloc initial, par 10)
-            // Or le prix dans servicesData est le prix total pour le minimum (min: 10), mais pour simplifier, 
-            // nous allons le considérer comme le prix pour 10 unités.
-            
-            // On prend le prix pour la qualité sélectionnée (medium ou high)
-            const priceFor10Units = serviceData[quality] ? serviceData[quality].price : serviceData.medium.price;
-            
-            // Prix par unité (pour 1)
-            const pricePerUnit = priceFor10Units / 10;
-            
-            // Le prix total est : Prix par unité * quantité de lignes
-            return pricePerUnit * finalQuantity;
-
-        } else if (serviceData.medium && serviceData.high) {
-            // Pour les services sans sous-options
-            finalQuantity = Number(quantityEl.value) || 0;
-            // Prix est un prix par 1000 (selon tes règles)
-            basePricePer1000 = serviceData[quality] ? serviceData[quality].price : serviceData.medium.price;
-            
-            // Calcul du prix : (Prix pour 1000 / 1000) * Quantité
-            return (basePricePer1000 / 1000) * finalQuantity;
-            
-        } else if (serviceData.medium && !serviceInfo.options) {
-             // Cas où le service vient d'une sous-option (son prix est déjà le prix pour l'action)
-             finalQuantity = Number(quantityEl.value) || 0;
-             basePricePer1000 = serviceData.medium.price; // Le prix est le prix total/fixe pour la sous-option
-             // On utilise le prix tel quel. On suppose que la quantité n'est pas par 1000 mais la quantité réelle
-             // si c'est un service à prix fixe (comme les vues précédentes Telegram).
-             // Pour les sous-options comme '20 vues' ou '20 réactions', on prend le prix fixe, la quantité n'est pas modifiable.
-             // On va vérifier si le prix contient 'vues' ou 'réactions' pour éviter le calcul par 1000 inutilement.
-             
-             // Si le nom de la sous-option contient une quantité explicite, on ignore l'input quantité
-             if (serviceName.includes('Vues') || serviceName.includes('Réactions') || serviceName.includes('Téléspectateur')) {
-                 // Prix fixe pour la sous-option (ex: '20 vues' a un prix)
-                 return basePricePer1000;
-             }
-             
-             // Pour les autres services (avec quantity) on revient au calcul par 1000 (très peu probable dans ce bloc)
-             return (basePricePer1000 / 1000) * finalQuantity;
-        }
-
-        return 0; // Prix par défaut si non trouvé
-    }
-
-    function updatePrice() {
-        const price = calculatePrice();
-        priceEl.textContent = formatFCFA(price);
-        
-        // Animation du changement de prix
-        priceEl.style.transform = 'scale(1.1)';
-        setTimeout(() => {
-            priceEl.style.transform = 'scale(1)';
-        }, 300);
-    }
-    
-    // Mettre à jour le nombre de commentaires (lignes)
-    commentsEl.addEventListener('input', () => {
-        const commentsText = commentsEl.value.trim();
-        const count = commentsText ? commentsText.split('\n').filter(line => line.trim() !== '').length : 0;
-        commentCountEl.textContent = count.toLocaleString('fr-FR');
-        updatePrice();
     });
+}
 
-    /* ====== GESTION DES LISTES DÉROULANTES ====== */
-    
-    // Remplir les services pour la plateforme sélectionnée
-    function populateServices(platform) {
-        serviceEl.innerHTML = '';
-        
-        // Add default option
-        const defaultOpt = document.createElement('option');
-        defaultOpt.value = '';
-        defaultOpt.textContent = 'Sélectionnez un service';
-        serviceEl.appendChild(defaultOpt);
-        
-        const serviceNames = Object.keys(servicesData[platform] || {});
-        serviceNames.forEach(s => {
-            const opt = document.createElement('option');
-            opt.value = s;
-            opt.textContent = s;
-            serviceEl.appendChild(opt);
-        });
-        
-        // Cacher les champs qui seront gérés par le service 'change'
-        quantityField.style.display = 'flex';
-        commentsField.style.display = 'none';
-        subOptionField.style.display = 'none';
-        qualityField.style.display = 'flex';
-        remarkField.style.display = 'none';
-
-        updatePrice();
-    }
-    
-    // Remplir les sous-options pour le service sélectionné (Réactions, Vues antérieures, etc.)
-    function populateSubOptions(options) {
-        subOptionEl.innerHTML = '';
-        const defaultOpt = document.createElement('option');
-        defaultOpt.value = '';
-        defaultOpt.textContent = 'Sélectionnez une option';
-        subOptionEl.appendChild(defaultOpt);
-        
-        Object.keys(options).forEach(o => {
-            const opt = document.createElement('option');
-            opt.value = o;
-            opt.textContent = o;
-            subOptionEl.appendChild(opt);
-        });
-    }
-
-    /* ====== ÉVÉNEMENTS DU FORMULAIRE ET INITIALISATION ====== */
-
-    // Platform selection
-    platformOptions.forEach(option => {
-        option.addEventListener('click', () => {
-            platformOptions.forEach(opt => opt.classList.remove('active'));
-            option.classList.add('active');
-            currentPlatform = option.dataset.platform;
-            
-            // Mise à jour de la liste des services
-            populateServices(currentPlatform);
-        });
+// Platform selection
+Array.from(platformOptions).forEach(option => {
+    option.addEventListener('click', () => {
+        Array.from(platformOptions).forEach(opt => opt.classList.remove('active'));
+        option.classList.add('active');
+        currentPlatform = option.dataset.platform || currentPlatform;
+        console.log('[UI] Platform sélectionnée:', currentPlatform);
+        populateServices(currentPlatform);
     });
+});
 
-    // Sélection d'un service
+// Service change
+if (serviceEl) {
     serviceEl.addEventListener('change', () => {
         const serviceName = serviceEl.value;
-        if (serviceName) {
-            updateFormFields(serviceName);
-        } else {
-            // Réinitialiser l'affichage si l'option par défaut est sélectionnée
-            quantityField.style.display = 'flex';
-            commentsField.style.display = 'none';
-            subOptionField.style.display = 'none';
-            qualityField.style.display = 'flex';
-            remarkField.style.display = 'none';
-            updatePrice();
-        }
+        console.log('[UI] Service sélectionné:', serviceName);
+        updateFormFields(serviceName);
     });
-    
-    // Sélection d'une sous-option
-    subOptionEl.addEventListener('change', updatePrice);
-    
-    // Changement de Quantité ou de Qualité
-    quantityEl.addEventListener('input', updatePrice);
-    qualityEl.addEventListener('change', updatePrice);
+}
 
-    // quick order button scrolls to form and focuses link
+// Suboption change
+if (subOptionEl) subOptionEl.addEventListener('change', () => { console.log('[UI] SubOption sélectionnée:', subOptionEl.value); updatePrice(); });
+
+// Inputs change
+if (quantityEl) quantityEl.addEventListener('input', updatePrice);
+if (qualityEl) qualityEl.addEventListener('change', updatePrice);
+if (commentsEl) commentsEl.addEventListener('input', () => {
+    const commentsText = (commentsEl.value || '').trim();
+    const count = commentsText ? commentsText.split('\n').filter(line => line.trim() !== '').length : 0;
+    if (commentCountEl) commentCountEl.textContent = count.toLocaleString('fr-FR');
+    updatePrice();
+});
+
+// Quick order
+if (quickOrderBtn) {
     quickOrderBtn.addEventListener('click', () => {
-        document.getElementById('link').focus();
-        window.scrollTo({ top: document.getElementById('orderCard').offsetTop - 100, behavior: 'smooth' });
+        if (linkEl) linkEl.focus();
+        const orderCard = document.getElementById('orderCard');
+        if (orderCard) window.scrollTo({ top: orderCard.offsetTop - 100, behavior: 'smooth' });
     });
+}
 
-    // reset form
+// Reset form
+if (resetFormBtn) {
     resetFormBtn.addEventListener('click', () => {
-        if (confirm('Êtes-vous sûr de vouloir réinitialiser le formulaire ?')) {
-            populateServices(currentPlatform);
-            quantityEl.value = 1000;
-            commentsEl.value = '';
-            commentsEl.dispatchEvent(new Event('input'));
-            qualityEl.value = 'medium'; // Valeur par défaut
-            linkEl.value = '';
-            updatePrice();
-            showToast('Formulaire réinitialisé', 'success');
-        }
+        if (!confirm('Êtes-vous sûr de vouloir réinitialiser le formulaire ?')) return;
+        populateServices(currentPlatform);
+        if (quantityEl) quantityEl.value = 1000;
+        if (commentsEl) commentsEl.value = '';
+        if (commentsEl) commentsEl.dispatchEvent(new Event('input'));
+        if (qualityEl) qualityEl.value = 'medium';
+        if (linkEl) linkEl.value = '';
+        updatePrice();
+        showToast('Formulaire réinitialisé', 'success');
     });
-    
-    // submit order
+}
+
+/* ====== SUBMIT FORM ====== */
+if (orderForm) {
     orderForm.addEventListener('submit', async function(e){
         e.preventDefault();
+        console.log('[FORM] Soumission commande déclenchée.');
 
-        const service = serviceEl.value;
+        const service = serviceEl ? serviceEl.value : '';
         const serviceData = getSelectedServiceData();
-        const isCommentService = service.includes('Commentaires personnalisés');
-        
+        const isCommentService = service && service.includes('Commentaires personnalisés');
+
         let quantity, link, qualityLabel, finalService;
         let baseQuantity = 0;
 
         if (!service) {
             showToast('Veuillez sélectionner un service.', 'error');
-            serviceEl.focus();
+            serviceEl && serviceEl.focus();
             return;
         }
 
-        link = linkEl.value.trim();
-        if (!link){
+        link = linkEl ? (linkEl.value || '').trim() : '';
+        if (!link) {
             showToast('Veuillez entrer un lien / identifiant valide.', 'error');
-            linkEl.focus();
+            linkEl && linkEl.focus();
             return;
         }
 
         if (isCommentService) {
-            // Pour les commentaires : Quantité = nombre de lignes
-            baseQuantity = commentsEl.value.trim() ? commentsEl.value.split('\n').filter(line => line.trim() !== '').length : 0;
+            baseQuantity = commentsEl && commentsEl.value.trim() ? commentsEl.value.split('\n').filter(line => line.trim() !== '').length : 0;
             quantity = baseQuantity;
             if (quantity === 0) {
-                 showToast('Veuillez entrer au moins un commentaire par ligne.', 'error');
-                 commentsEl.focus();
-                 return;
+                showToast('Veuillez entrer au moins un commentaire par ligne.', 'error');
+                commentsEl && commentsEl.focus();
+                return;
             }
             finalService = service;
-            qualityLabel = qualityEl.value === 'high' ? 'Haute' : 'Standard';
-
-        } else if (serviceData.options) {
-            // Pour les services avec sous-options (Réactions, Vues précédentes...)
-            finalService = service + ' - ' + subOptionEl.value;
-            quantity = 1; // La quantité est implicite dans le nom de la sous-option
-            baseQuantity = quantity;
-            if (!subOptionEl.value) {
+            qualityLabel = (qualityEl && qualityEl.value === 'high') ? 'Haute' : 'Standard';
+        } else if (serviceData && serviceData.options) {
+            if (!subOptionEl || !subOptionEl.value) {
                 showToast('Veuillez sélectionner une option de service.', 'error');
-                subOptionEl.focus();
+                subOptionEl && subOptionEl.focus();
                 return;
             }
-            qualityLabel = 'N/A'; // La qualité est souvent fixée par l'option elle-même
-            
+            finalService = service + ' - ' + subOptionEl.value;
+            quantity = 1;
+            baseQuantity = 1;
+            qualityLabel = 'N/A';
         } else {
-            // Pour les services classiques (Followers, Likes, Vues...)
-            quantity = Number(quantityEl.value);
+            quantity = Number(quantityEl ? quantityEl.value : 0) || 0;
             baseQuantity = quantity;
-            if (!quantity || quantity < 1){
+            if (!quantity || quantity < 1) {
                 showToast('Veuillez entrer une quantité valide (> 0).', 'error');
-                quantityEl.focus();
+                quantityEl && quantityEl.focus();
                 return;
             }
             finalService = service;
-            qualityLabel = qualityEl.value === 'high' ? 'Haute' : 'Standard';
+            qualityLabel = (qualityEl && qualityEl.value === 'high') ? 'Haute' : 'Standard';
         }
 
-        const price = calculatePrice();
-        if (price <= 0) {
+        // calcul prix sécurisé
+        let price;
+        try {
+            price = calculatePrice();
+        } catch (err) {
+            console.error('[FORM] Erreur calculatePrice():', err);
+            showToast('Erreur interne: impossible de calculer le prix', 'error');
+            return;
+        }
+        console.log('[FORM] Prix calculé =', price);
+
+        if (!price || price <= 0) {
             showToast('Le prix calculé est nul. Veuillez vérifier la quantité ou le service.', 'error');
             return;
         }
 
-        // Afficher l'indicateur de chargement
-        submitText.style.display = 'none';
-        submitSpinner.style.display = 'inline-block';
-        submitBtn.disabled = true;
+        // UI loading
+        if (submitText) submitText.style.display = 'none';
+        if (submitSpinner) submitSpinner.style.display = 'inline-block';
+        if (submitBtn) submitBtn.disabled = true;
 
         try {
-            // Simple balance check
-            if (price > userBalance){
-                if(!confirm('Le prix est ' + formatFCFA(price) + ' mais votre solde est ' + formatFCFA(userBalance) + '. Continuer et créer la commande (paiement différé) ?')) {
-                    submitText.style.display = 'inline-block';
-                    submitSpinner.style.display = 'none';
-                    submitBtn.disabled = false;
+            // balance check
+            if (price > userBalance) {
+                const confirmProceed = confirm('Le prix est ' + formatFCFA(price) + ' mais votre solde est ' + formatFCFA(userBalance) + '. Continuer et créer la commande (paiement différé) ?');
+                if (!confirmProceed) {
+                    if (submitText) submitText.style.display = 'inline-block';
+                    if (submitSpinner) submitSpinner.style.display = 'none';
+                    if (submitBtn) submitBtn.disabled = false;
                     return;
                 }
             } else {
-                // Débiter le solde de l'utilisateur
+                // débiter
                 const newBalance = userBalance - price;
+                console.log('[FORM] Débit du solde ->', newBalance);
                 await updateUserBalance(newBalance);
             }
 
@@ -2126,118 +2235,123 @@
                 date: todayStr()
             };
 
-            // Envoyer la commande au backend
-            await sendOrderToBackend(order);
-            
-            // Ajouter la commande à l'historique local
+            console.log('[FORM] Envoi commande au backend:', order);
+            const resp = await sendOrderToBackend(order); // peut throw
+            console.log('[FORM] backend réponse:', resp);
+
             addOrder(order);
 
-            // réinitialiser les champs spécifiques à la commande
-            linkEl.value = '';
-            if (isCommentService) {
+            // reset inputs
+            if (linkEl) linkEl.value = '';
+            if (isCommentService && commentsEl) {
                 commentsEl.value = '';
-                commentsEl.dispatchEvent(new Event('input')); // Pour mettre à jour le count et le prix
-            } else {
+                commentsEl.dispatchEvent(new Event('input'));
+            } else if (quantityEl) {
                 quantityEl.value = 1000;
             }
-            qualityEl.value = 'medium';
-            serviceEl.value = ''; // Réinitialiser le service pour forcer l'utilisateur à resélectionner
-            serviceEl.dispatchEvent(new Event('change')); // Déclenche la mise à jour des champs/prix
-
-            // feedback utilisateur
-            showToast(`Commande créée : ${order.id} — Prix: ${formatFCFA(order.price)}`);
-
-        } catch (error) {
-            console.error("Erreur lors de la création de la commande:", error);
-            showToast("Erreur lors de la création de la commande", "error");
-        } finally {
-            // Réactiver le bouton
-            submitText.style.display = 'inline-block';
-            submitSpinner.style.display = 'none';
-            submitBtn.disabled = false;
-        }
-    });
-
-    /* ====== GESTION DES COMMANDES (LocalStorage) ====== */
-    function loadOrders(){
-        const raw = localStorage.getItem('mdl_orders_v1');
-        if (!raw) return [];
-        try { return JSON.parse(raw) } catch(e) { return [] }
-    }
-    function saveOrders(list){
-        localStorage.setItem('mdl_orders_v1', JSON.stringify(list));
-    }
-    function addOrder(order){
-        const list = loadOrders();
-        list.unshift(order); // add at top
-        saveOrders(list);
-        renderOrders();
-    }
-    function updateOrderCounts() {
-        const orders = loadOrders();
-        let activeCount = 0;
-        let completedCount = 0;
-        
-        orders.forEach(order => {
-            if (order.statusClass === 'processing' || order.statusClass === 'pending') {
-                activeCount++;
-            } else if (order.statusClass === 'completed') {
-                completedCount++;
+            if (qualityEl) qualityEl.value = 'medium';
+            if (serviceEl) {
+                serviceEl.value = '';
+                serviceEl.dispatchEvent(new Event('change'));
             }
-        });
-        
-        activeOrdersEl.textContent = activeCount;
-        completedOrdersEl.textContent = completedCount;
-    }
-    function renderOrders(){
-        const orders = loadOrders();
-        ordersTableBody.innerHTML = '';
-        if (orders.length === 0){
-            const tr = document.createElement('tr');
-            tr.innerHTML = '<td colspan="8" style="text-align:center;color:#888;padding:30px"><i class="fas fa-inbox" style="font-size:2rem;margin-bottom:10px;display:block;opacity:0.5"></i>Aucune commande enregistrée — passez votre première commande !</td>';
-            ordersTableBody.appendChild(tr);
-            return;
+
+            showToast(`Commande créée : ${order.id} — Prix: ${formatFCFA(order.price)}`, 'success');
+        } catch (error) {
+            console.error("[FORM] Erreur lors de la création de la commande:", error);
+            showToast("Erreur lors de la création de la commande: " + (error.message || error), "error");
+        } finally {
+            if (submitText) submitText.style.display = 'inline-block';
+            if (submitSpinner) submitSpinner.style.display = 'none';
+            if (submitBtn) submitBtn.disabled = false;
         }
-
-        orders.forEach(o => {
-            const tr = document.createElement('tr');
-            tr.innerHTML = `
-                <td>${o.id}</td>
-                <td>${o.platform} • ${o.service}</td>
-                <td style="max-width:200px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis" title="${o.link}">${o.link}</td>
-                <td>${o.quantity.toLocaleString('fr-FR')}</td>
-                <td>${o.qualityLabel}</td>
-                <td>${formatFCFA(o.price)}</td>
-                <td><span class="status ${o.statusClass}">${o.statusLabel}</span></td>
-                <td>${o.date}</td>
-            `;
-            ordersTableBody.appendChild(tr);
-        });
-        
-        updateOrderCounts();
-    }
-
-    // Helpers
-    function uid(prefix='MDL'){
-        return prefix + Math.floor(Math.random()*900000 + 100000);
-    }
-    function todayStr(){
-        const now = new Date();
-        return now.toLocaleString('fr-FR', {year:'numeric',month:'2-digit',day:'2-digit',hour:'2-digit',minute:'2-digit'});
-    }
-
-    // Initialiser le dashboard
-    function initializeDashboard() {
-        // Set Facebook as default platform and load services
-        populateServices(currentPlatform);
-        renderOrders();
-        console.log('Dashboard initialisé avec la nouvelle tarification et les services de commentaires.');
-    }
-
-    // DÉMARRAGE DE L'APPLICATION
-    document.addEventListener('DOMContentLoaded', function() {
-        checkAuth();
     });
+}
+
+/* ====== GESTION DES COMMANDES (LocalStorage / affichage) ====== */
+function loadOrders(){
+    const raw = localStorage.getItem('mdl_orders_v1');
+    if (!raw) return [];
+    try { return JSON.parse(raw); } catch(e) { console.warn('[LOCAL] parse orders error', e); return []; }
+}
+function saveOrders(list){
+    try { localStorage.setItem('mdl_orders_v1', JSON.stringify(list)); } catch(e) { console.error('[LOCAL] saveOrders erreur:', e); }
+}
+function addOrder(order){
+    const list = loadOrders();
+    list.unshift(order); // add at top
+    saveOrders(list);
+    renderOrders();
+}
+function updateOrderCounts() {
+    const orders = loadOrders();
+    let activeCount = 0;
+    let completedCount = 0;
+
+    orders.forEach(order => {
+        if (order.statusClass === 'processing' || order.statusClass === 'pending') {
+            activeCount++;
+        } else if (order.statusClass === 'completed') {
+            completedCount++;
+        }
+    });
+
+    if (activeOrdersEl) activeOrdersEl.textContent = activeCount;
+    if (completedOrdersEl) completedOrdersEl.textContent = completedCount;
+}
+function renderOrders(){
+    const orders = loadOrders();
+    if (!ordersTableBody) { console.warn('[UI] ordersTableBody manquant'); return; }
+    ordersTableBody.innerHTML = '';
+    if (orders.length === 0){
+        const tr = document.createElement('tr');
+        tr.innerHTML = '<td colspan="8" style="text-align:center;color:#888;padding:30px"><i class="fas fa-inbox" style="font-size:2rem;margin-bottom:10px;display:block;opacity:0.5"></i>Aucune commande enregistrée — passez votre première commande !</td>';
+        ordersTableBody.appendChild(tr);
+        updateOrderCounts();
+        return;
+    }
+
+    orders.forEach(o => {
+        const tr = document.createElement('tr');
+        tr.innerHTML = `
+            <td>${o.id}</td>
+            <td>${o.platform} • ${o.service}</td>
+            <td style="max-width:200px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis" title="${o.link}">${o.link}</td>
+            <td>${(o.quantity || 0).toLocaleString('fr-FR')}</td>
+            <td>${o.qualityLabel}</td>
+            <td>${formatFCFA(o.price)}</td>
+            <td><span class="status ${o.statusClass}">${o.statusLabel}</span></td>
+            <td>${o.date}</td>
+        `;
+        ordersTableBody.appendChild(tr);
+    });
+
+    updateOrderCounts();
+}
+
+/* ====== INITIALISATION DU DASHBOARD ====== */
+function initializeDashboard() {
+    console.log('[INIT] initializeDashboard()');
+    // Set default platform active in UI
+    const defaultPlatformEl = document.querySelector(`.platform-option[data-platform="${currentPlatform}"]`);
+    if (defaultPlatformEl) {
+        Array.from(document.querySelectorAll('.platform-option')).forEach(el => el.classList.remove('active'));
+        defaultPlatformEl.classList.add('active');
+    }
+
+    populateServices(currentPlatform);
+    renderOrders();
+    console.log('[INIT] Dashboard initialisé.');
+}
+
+/* ====== BOOT ====== */
+document.addEventListener('DOMContentLoaded', function() {
+    console.log('[BOOT] DOMContentLoaded - démarrage des checks.');
+    // Démarrer auth check (si firebase présent)
+    try { checkAuth(); } catch (e) { console.warn('[BOOT] checkAuth failed:', e); initializeDashboard(); }
+
+    // populate initial si nécessaire (au cas où)
+    try { populateServices(currentPlatform); } catch (e) { console.warn('[BOOT] populateServices init failed:', e); }
+});
 </script>
 </body>
 </html>
