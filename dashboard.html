@@ -11,7 +11,6 @@
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Luckiest+Guy&display=swap" rel="stylesheet">
     <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🚀</text></svg>">
     
-    <!-- Firebase SDK -->
     <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-auth-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-firestore-compat.js"></script>
@@ -1261,8 +1260,10 @@
         measurementId: "G-FJ8QK7KHXM"
     };
 
-    // Initialiser Firebase
-    firebase.initializeApp(firebaseConfig);
+    // Initialiser Firebase (s'assurer que l'initialisation est faite une seule fois)
+    if (!firebase.apps.length) {
+        firebase.initializeApp(firebaseConfig);
+    }
     const auth = firebase.auth();
     const db = firebase.firestore();
 
@@ -1615,7 +1616,11 @@
 // Helpers
 const formatFCFA = (n) => {
     if (n === null || n === undefined || isNaN(Number(n))) return "-- FCFA";
-    return new Intl.NumberFormat('fr-FR').format(Math.ceil(Number(n))) + " FCFA";
+    // Utiliser 'fr-FR' pour le formatage des milliers et le point décimal
+    return new Intl.NumberFormat('fr-FR', {
+        minimumFractionDigits: 0,
+        maximumFractionDigits: 0
+    }).format(Math.ceil(Number(n))) + " FCFA";
 };
 
 function uid(prefix='MDL') {
@@ -1678,14 +1683,7 @@ const logoutBtn = document.getElementById('logoutBtn');
 /* ====== VARIABLES GLOBALES ====== */
 let currentPlatform = 'facebook';
 /* currentUser, userData, userBalance sont initialisés par checkAuth/loadUserData */
-let currentUser = null;
-let userData = null;
-let userBalance = 0;
-
-/* IMPORTANT: on suppose que Firebase a déjà été initialisé AVANT servicesData. */
-/* On récupère auth et db si disponibles (on ne les redéclare pas si présents). */
-const auth = (typeof firebase !== 'undefined' && firebase.auth) ? firebase.auth() : (window.auth || null);
-const db = (typeof firebase !== 'undefined' && firebase.firestore) ? firebase.firestore() : (window.db || null);
+// Déjà déclarés plus haut
 
 console.log('[BOOT] auth present?', !!auth, 'db present?', !!db);
 
@@ -1707,6 +1705,8 @@ function populateSubOptions(options) {
             subOptionEl.appendChild(opt);
         });
         console.log('[UI] Sous-options remplies');
+        // Déclencher le changement pour calculer le prix si une option est sélectionnée
+        subOptionEl.dispatchEvent(new Event('change'));
     } catch (err) {
         console.error('[UI] populateSubOptions erreur:', err);
     }
@@ -1749,7 +1749,7 @@ function populateServices(platform) {
             serviceEl.appendChild(opt);
         });
 
-        // reset UI
+        // reset UI et déclenche la mise à jour des champs pour le cas par défaut (si on sélectionne rien)
         if (quantityField) quantityField.style.display = 'flex';
         if (commentsField) commentsField.style.display = 'none';
         if (subOptionField) subOptionField.style.display = 'none';
@@ -1775,12 +1775,19 @@ function getSelectedServiceData() {
         const serviceInfo = servicesData[platform][serviceName];
         if (!serviceInfo) return null;
 
+        // Si le service a des options et qu'une sous-option est sélectionnée
         if (serviceInfo.options && subOptionName) {
+            // Dans ce cas, on cherche les données de prix (medium/high) dans l'objet de la sous-option
             return serviceInfo.options[subOptionName];
-        } else if (!serviceInfo.options) {
+        } 
+        // Si le service n'a pas de sous-options OU si on n'en a pas sélectionné (mais le service n'en requiert pas)
+        else if (!serviceInfo.options) {
+            // Cas standard, on retourne l'objet serviceInfo lui-même
             return serviceInfo;
         }
-        return null;
+        
+        // Si le service a des options mais aucune n'est sélectionnée, on retourne null pour éviter le calcul du prix
+        return null; 
     } catch (err) {
         console.error('[SERVICES] getSelectedServiceData error:', err);
         return null;
@@ -1789,49 +1796,58 @@ function getSelectedServiceData() {
 
 function updateFormFields(serviceName) {
     try {
+        // Reset à l'état par défaut (quantité visible, commentaire/sous-options/remarques cachés)
+        if (quantityField) quantityField.style.display = 'flex';
+        if (commentsField) commentsField.style.display = 'none';
+        if (subOptionField) subOptionField.style.display = 'none';
+        if (qualityField) qualityField.style.display = 'flex';
+        if (remarkField) remarkField.style.display = 'none';
+        if (serviceRemarkEl) serviceRemarkEl.textContent = '';
+
+
         if (!serviceName) {
-            if (quantityField) quantityField.style.display = 'flex';
-            if (commentsField) commentsField.style.display = 'none';
-            if (subOptionField) subOptionField.style.display = 'none';
-            if (qualityField) qualityField.style.display = 'flex';
-            if (remarkField) remarkField.style.display = 'none';
             updatePrice();
             return;
         }
 
         const serviceInfo = (servicesData && servicesData[currentPlatform] && servicesData[currentPlatform][serviceName]) ? servicesData[currentPlatform][serviceName] : null;
+
+        // Si serviceInfo est null, on arrête après le reset
+        if (!serviceInfo) {
+            updatePrice();
+            return;
+        }
+
         const isCommentService = serviceName.includes('Commentaires personnalisés');
 
-        // Commentaire -> masquer quantité
+        // Gérer les champs Quantité / Commentaires
         if (isCommentService) {
             if (quantityField) quantityField.style.display = 'none';
             if (commentsField) commentsField.style.display = 'flex';
-        } else {
-            if (quantityField) quantityField.style.display = 'flex';
-            if (commentsField) commentsField.style.display = 'none';
-        }
+        } 
 
-        // Sous-options
-        if (serviceInfo && serviceInfo.options) {
+        // Gérer les Sous-options (masque aussi la qualité si options présentes)
+        if (serviceInfo.options) {
             if (subOptionField) subOptionField.style.display = 'flex';
             if (subOptionLabelEl) subOptionLabelEl.textContent = serviceInfo.subOptionLabel || 'Option';
-            populateSubOptions(serviceInfo.options);
+            populateSubOptions(serviceInfo.options); // Remplissage des options et appel de updatePrice par l'événement 'change'
             if (qualityField) qualityField.style.display = 'none';
         } else {
-            if (subOptionField) subOptionField.style.display = 'none';
+            // Assure que la qualité est visible pour les services sans sous-option
             if (qualityField) qualityField.style.display = 'flex';
         }
 
-        // Remarque
-        if (serviceInfo && serviceInfo.remark) {
+        // Gérer la Remarque
+        if (serviceInfo.remark) {
             if (remarkField) remarkField.style.display = 'block';
             if (serviceRemarkEl) serviceRemarkEl.innerHTML = serviceInfo.remark;
-        } else {
-            if (remarkField) remarkField.style.display = 'none';
-            if (serviceRemarkEl) serviceRemarkEl.textContent = '';
         }
 
-        updatePrice();
+        // Si pas de sous-options, on appelle updatePrice ici
+        if (!serviceInfo.options) {
+            updatePrice();
+        }
+        
         console.log('[UI] updateFormFields pour', serviceName);
     } catch (err) {
         console.error('[UI] updateFormFields erreur:', err);
@@ -1848,44 +1864,60 @@ function calculatePrice() {
         const serviceData = getSelectedServiceData();
         if (!serviceData) return 0;
 
-        // Cas commentaires personnalisés
+        // Trouver le prix de base (par 1000 ou prix fixe)
+        let basePricePerUnit;
+        if (serviceData[quality] && typeof serviceData[quality].price === 'number') {
+            basePricePerUnit = serviceData[quality].price;
+        } else if (serviceData.medium && typeof serviceData.medium.price === 'number') {
+            // Fallback sur medium si le prix de la qualité n'est pas trouvé
+            basePricePerUnit = serviceData.medium.price;
+        } else {
+            console.warn('[PRICE] Prix non trouvé pour la qualité/option sélectionnée:', quality, serviceData);
+            return 0;
+        }
+        
+        // --- CAS 1: Commentaires personnalisés (prix par 10 unités) ---
         const isCommentService = service.includes('Commentaires personnalisés');
         if (isCommentService) {
             const commentsText = (commentsEl && commentsEl.value) ? commentsEl.value.trim() : '';
-            const lines = commentsText ? commentsText.split('\n').filter(l => l.trim() !== '') : [];
-            const finalQuantity = lines.length;
-            const priceFor10Units = (serviceData[quality] && serviceData[quality].price) ? serviceData[quality].price : (serviceData.medium ? serviceData.medium.price : 0);
+            const finalQuantity = commentsText ? commentsText.split('\n').filter(l => l.trim() !== '').length : 0;
+            const priceFor10Units = basePricePerUnit; // Le prix stocké est par 10 unités pour les commentaires
             const pricePerUnit = priceFor10Units / 10;
             const total = pricePerUnit * finalQuantity;
             console.log('[PRICE] comments -> qty=', finalQuantity, 'total=', total);
             return total;
         }
-
-        // Services avec medium/high (par 1000)
-        if (serviceData.medium && serviceData.high) {
-            const finalQuantity = Number(quantityEl ? quantityEl.value : 0) || 0;
-            const basePricePer1000 = serviceData[quality] ? serviceData[quality].price : serviceData.medium.price;
-            const total = (basePricePer1000 / 1000) * finalQuantity;
-            console.log('[PRICE] per1000 -> qty=', finalQuantity, 'unitPricePer1000=', basePricePer1000, 'total=', total);
-            return total;
+        
+        // --- CAS 2: Services avec sous-options (prix par 1000 ou prix fixe) ---
+        // S'il y a des sous-options, le prix stocké (basePricePerUnit) est soit un prix fixe pour une unité (ex: 20 vues)
+        // soit un prix par 1000 pour les followers/likes si la sous-option ne contient que medium/high.
+        if (serviceData.options) {
+             // Ici, on est déjà dans une sous-option. On suppose que le prix est par 1000 OU un prix fixe.
+             // On vérifie si c'est un service qui nécessite une quantité (comme followers/likes) ou un prix fixe pour une durée/un nombre défini (vues/réactions/durée).
+             // Pour simplifier, on traite tout ce qui n'est pas un nombre défini comme étant par 1000.
+             const finalQuantity = Number(quantityEl ? quantityEl.value : 0) || 0;
+             if (finalQuantity <= 0 || service.includes('Téléspectateur') || service.includes('Réactions') || service.includes('Vues')) {
+                 // Si c'est un prix fixe par option (comme les options de durée) ou si la quantité est vide/nulle
+                 console.log('[PRICE] option/fixe -> basePrice=', basePricePerUnit);
+                 return basePricePerUnit;
+             } else {
+                 // Si la quantité est utilisée (ex: option de follower avec quantité)
+                 const total = (basePricePerUnit / 1000) * finalQuantity;
+                 console.log('[PRICE] option with quantity -> qty=', finalQuantity, 'basePricePer1000=', basePricePerUnit, 'total=', total);
+                 return total;
+             }
         }
 
-        // Services provenant d'une sous-option (prix fixe probable)
-        if (serviceData.medium && !serviceData.options) {
-            const basePrice = (serviceData.medium && typeof serviceData.medium.price === 'number') ? serviceData.medium.price : (serviceData.price || 0);
-            const optionName = subOptionEl ? (subOptionEl.value || '') : '';
-            if (optionName.match(/\d/) || service.toLowerCase().includes('vues') || service.toLowerCase().includes('réactions') || service.toLowerCase().includes('téléspectateur')) {
-                console.log('[PRICE] option prix fixe ->', basePrice);
-                return basePrice;
-            }
-            const finalQuantity = Number(quantityEl ? quantityEl.value : 0) || 0;
-            const total = (basePrice / 1000) * finalQuantity;
-            console.log('[PRICE] option with quantity -> qty=', finalQuantity, 'basePrice=', basePrice, 'total=', total);
-            return total;
-        }
+        // --- CAS 3: Services standard (prix par 1000) ---
+        // services standard followers, likes, etc.
+        const finalQuantity = Number(quantityEl ? quantityEl.value : 0) || 0;
+        if (finalQuantity <= 0) return 0;
+        
+        const basePricePer1000 = basePricePerUnit; // Le prix stocké est par 1000
+        const total = (basePricePer1000 / 1000) * finalQuantity;
+        console.log('[PRICE] per1000 standard -> qty=', finalQuantity, 'unitPricePer1000=', basePricePer1000, 'total=', total);
+        return total;
 
-        console.warn('[PRICE] Aucun cas applicable trouvé pour serviceData:', serviceData);
-        return 0;
     } catch (err) {
         console.error('[PRICE] calculatePrice erreur:', err);
         return 0;
@@ -1973,21 +2005,21 @@ async function sendOrderToBackend(orderData) {
 function checkAuth() {
     if (!auth || !auth.onAuthStateChanged) {
         console.warn('[AUTH] Firebase auth non disponible, mode dégradé (dev).');
-        // initialise le dashboard en mode local
-        initializeDashboard();
+        // Initialise le dashboard après un court délai pour simuler un chargement
+        setTimeout(initializeDashboard, 500); 
         return;
     }
     auth.onAuthStateChanged(async (user) => {
         if (user) {
             currentUser = user;
             console.log('[AUTH] Utilisateur connecté:', user.uid, user.email);
+            // On s'assure de charger les données utilisateur AVANT d'initialiser le tableau de bord
             try { await loadUserData(); } catch(e) { console.error('[AUTH] erreur loadUserData:', e); }
-            initializeDashboard();
         } else {
             console.log('[AUTH] Pas d’utilisateur connecté. Mode démo/local.');
-            // si tu veux forcer la redirection: window.location.href = 'login.html';
-            initializeDashboard();
         }
+        // Le dashboard est initialisé dans tous les cas pour que l'interface s'affiche.
+        initializeDashboard();
     });
 }
 
@@ -2000,15 +2032,29 @@ async function loadUserData() {
         const userDoc = await db.collection('users').doc(currentUser.uid).get();
         if (userDoc.exists) {
             userData = userDoc.data();
+            
+            // Mise à jour du nom
             const userName = (userData.firstName || '') + ' ' + (userData.lastName || '');
-            if (welcomeUserName) welcomeUserName.textContent = userName ? `Bienvenue, ${userName}` : 'Bienvenue';
+            if (welcomeUserName) {
+                welcomeUserName.textContent = userName ? `Bienvenue, ${userName}` : 'Bienvenue';
+            } else {
+                console.warn('[USER] welcomeUserName element not found.');
+            }
+
+            // Mise à jour du solde
             userBalance = Number(userData.balance) || 0;
+            if (balanceAmountEl) {
+                balanceAmountEl.textContent = formatFCFA(userBalance);
+            } else {
+                console.warn('[USER] balanceAmountEl element not found.');
+            }
+
+            // Initialisation du solde si manquant dans la DB (ne pas bloquer l'affichage)
             if (!userData.hasOwnProperty('balance')) {
-                // essaie d'initialiser, sans bloquer si erreur
                 db.collection('users').doc(currentUser.uid).update({ balance: 0 }).catch(e => console.warn('[USER] init balance failed:', e));
             }
-            if (balanceAmountEl) balanceAmountEl.textContent = formatFCFA(userBalance);
-            console.log('[USER] Données chargées:', userData);
+            
+            console.log('[USER] Données chargées et affichées:', userData);
         } else {
             console.warn('[USER] Document utilisateur non trouvé');
             showToast("Utilisateur non trouvé en base.", "warning");
@@ -2061,7 +2107,10 @@ if (logoutBtn) {
         if (auth && auth.signOut) {
             auth.signOut().then(() => {
                 console.log('[AUTH] Déconnexion réussie.');
+                // Redirection vers la page de connexion après déconnexion
                 // window.location.href = 'login.html';
+                // Pour le test: recharger la page
+                window.location.reload(); 
             }).catch(err => console.error('[AUTH] logout error:', err));
         } else {
             console.warn('[AUTH] logout not available.');
@@ -2072,10 +2121,17 @@ if (logoutBtn) {
 // Platform selection
 Array.from(platformOptions).forEach(option => {
     option.addEventListener('click', () => {
+        // Enlève la classe 'active' de TOUTES les options
         Array.from(platformOptions).forEach(opt => opt.classList.remove('active'));
+        // Ajoute la classe 'active' à l'option cliquée
         option.classList.add('active');
+        
+        // Met à jour la plateforme actuelle
         currentPlatform = option.dataset.platform || currentPlatform;
+        
         console.log('[UI] Platform sélectionnée:', currentPlatform);
+        
+        // Remplissage des services pour la nouvelle plateforme
         populateServices(currentPlatform);
     });
 });
@@ -2090,13 +2146,17 @@ if (serviceEl) {
 }
 
 // Suboption change
-if (subOptionEl) subOptionEl.addEventListener('change', () => { console.log('[UI] SubOption sélectionnée:', subOptionEl.value); updatePrice(); });
+if (subOptionEl) subOptionEl.addEventListener('change', () => { 
+    console.log('[UI] SubOption sélectionnée:', subOptionEl.value); 
+    updatePrice(); 
+});
 
 // Inputs change
 if (quantityEl) quantityEl.addEventListener('input', updatePrice);
 if (qualityEl) qualityEl.addEventListener('change', updatePrice);
 if (commentsEl) commentsEl.addEventListener('input', () => {
     const commentsText = (commentsEl.value || '').trim();
+    // Filtre les lignes vides pour un compte de quantité correct
     const count = commentsText ? commentsText.split('\n').filter(line => line.trim() !== '').length : 0;
     if (commentCountEl) commentCountEl.textContent = count.toLocaleString('fr-FR');
     updatePrice();
@@ -2115,7 +2175,14 @@ if (quickOrderBtn) {
 if (resetFormBtn) {
     resetFormBtn.addEventListener('click', () => {
         if (!confirm('Êtes-vous sûr de vouloir réinitialiser le formulaire ?')) return;
-        populateServices(currentPlatform);
+        // Réinitialise le service à la première option si elle existe, sinon à la valeur vide
+        if (serviceEl.options.length > 1) {
+             serviceEl.selectedIndex = 0; // Sélectionne l'option par défaut "Sélectionnez un service"
+        } else {
+             serviceEl.value = '';
+        }
+        serviceEl.dispatchEvent(new Event('change')); // Déclenche le change pour mettre à jour les champs
+        
         if (quantityEl) quantityEl.value = 1000;
         if (commentsEl) commentsEl.value = '';
         if (commentsEl) commentsEl.dispatchEvent(new Event('input'));
@@ -2161,7 +2228,8 @@ if (orderForm) {
                 return;
             }
             finalService = service;
-            qualityLabel = (qualityEl && qualityEl.value === 'high') ? 'Haute' : 'Standard';
+            // La qualité n'est pas toujours gérée de façon claire pour les commentaires dans les données, mais on la garde pour la trace
+            qualityLabel = (qualityEl && qualityEl.value === 'high') ? 'Haute' : 'Standard'; 
         } else if (serviceData && serviceData.options) {
             if (!subOptionEl || !subOptionEl.value) {
                 showToast('Veuillez sélectionner une option de service.', 'error');
@@ -2169,9 +2237,12 @@ if (orderForm) {
                 return;
             }
             finalService = service + ' - ' + subOptionEl.value;
-            quantity = 1;
-            baseQuantity = 1;
-            qualityLabel = 'N/A';
+            // Pour les services à option, on prend 1 comme quantité pour le suivi si l'option est un prix fixe
+            // Si le service est un "Téléspectateur en direct" ou autre option de durée/prix fixe, la quantité n'est pas pertinente, on la met à 1 ou on prend la valeur du champ quantité si elle est pertinente.
+            // Pour être sûr, on prend la valeur du champ quantité si elle est visible, sinon 1.
+            baseQuantity = Number(quantityEl ? quantityEl.value : 1) || 1;
+            quantity = baseQuantity;
+            qualityLabel = 'N/A'; // N/A car la qualité est gérée par l'option sélectionnée dans le subOptionData.
         } else {
             quantity = Number(quantityEl ? quantityEl.value : 0) || 0;
             baseQuantity = quantity;
@@ -2206,20 +2277,24 @@ if (orderForm) {
         if (submitBtn) submitBtn.disabled = true;
 
         try {
-            // balance check
-            if (price > userBalance) {
-                const confirmProceed = confirm('Le prix est ' + formatFCFA(price) + ' mais votre solde est ' + formatFCFA(userBalance) + '. Continuer et créer la commande (paiement différé) ?');
-                if (!confirmProceed) {
-                    if (submitText) submitText.style.display = 'inline-block';
-                    if (submitSpinner) submitSpinner.style.display = 'none';
-                    if (submitBtn) submitBtn.disabled = false;
-                    return;
+            // balance check (désactivé si currentUser est null pour le mode démo/local)
+            if (currentUser) {
+                if (price > userBalance) {
+                    const confirmProceed = confirm('Le prix est ' + formatFCFA(price) + ' mais votre solde est ' + formatFCFA(userBalance) + '. Continuer et créer la commande (paiement différé) ?');
+                    if (!confirmProceed) {
+                        if (submitText) submitText.style.display = 'inline-block';
+                        if (submitSpinner) submitSpinner.style.display = 'none';
+                        if (submitBtn) submitBtn.disabled = false;
+                        return;
+                    }
+                } else {
+                    // débiter
+                    const newBalance = userBalance - price;
+                    console.log('[FORM] Débit du solde ->', newBalance);
+                    await updateUserBalance(newBalance);
                 }
             } else {
-                // débiter
-                const newBalance = userBalance - price;
-                console.log('[FORM] Débit du solde ->', newBalance);
-                await updateUserBalance(newBalance);
+                 console.log('[FORM] Mode démo: pas de débit Firebase.');
             }
 
             const order = {
@@ -2251,7 +2326,8 @@ if (orderForm) {
             }
             if (qualityEl) qualityEl.value = 'medium';
             if (serviceEl) {
-                serviceEl.value = '';
+                // Réinitialiser la sélection pour forcer l'état initial des champs
+                serviceEl.value = ''; 
                 serviceEl.dispatchEvent(new Event('change'));
             }
 
@@ -2331,26 +2407,36 @@ function renderOrders(){
 /* ====== INITIALISATION DU DASHBOARD ====== */
 function initializeDashboard() {
     console.log('[INIT] initializeDashboard()');
-    // Set default platform active in UI
+    
+    // 1. Assurer que la plateforme par défaut est visuellement active
     const defaultPlatformEl = document.querySelector(`.platform-option[data-platform="${currentPlatform}"]`);
     if (defaultPlatformEl) {
+        // Enlève l'active sur tout puis l'ajoute sur celui par défaut
         Array.from(document.querySelectorAll('.platform-option')).forEach(el => el.classList.remove('active'));
         defaultPlatformEl.classList.add('active');
     }
-
+    
+    // 2. Remplir les services pour la plateforme par défaut et mettre à jour le formulaire
+    // Cela résout le problème des services non affichés
     populateServices(currentPlatform);
+    
+    // 3. Afficher les commandes précédentes
     renderOrders();
+    
     console.log('[INIT] Dashboard initialisé.');
 }
 
 /* ====== BOOT ====== */
 document.addEventListener('DOMContentLoaded', function() {
     console.log('[BOOT] DOMContentLoaded - démarrage des checks.');
-    // Démarrer auth check (si firebase présent)
-    try { checkAuth(); } catch (e) { console.warn('[BOOT] checkAuth failed:', e); initializeDashboard(); }
-
-    // populate initial si nécessaire (au cas où)
-    try { populateServices(currentPlatform); } catch (e) { console.warn('[BOOT] populateServices init failed:', e); }
+    // Démarrer auth check, qui appellera initializeDashboard() à la fin
+    try { 
+        checkAuth(); 
+    } catch (e) { 
+        console.warn('[BOOT] checkAuth failed:', e); 
+        // Fallback immédiat si Firebase échoue
+        initializeDashboard(); 
+    }
 });
 </script>
 </body>
