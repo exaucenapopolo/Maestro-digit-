@@ -11,7 +11,6 @@
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Luckiest+Guy&display=swap" rel="stylesheet">
     <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🚀</text></svg>">
     
-    <!-- Firebase SDK -->
     <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-auth-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-firestore-compat.js"></script>
@@ -1262,11 +1261,14 @@
     };
 
     // Initialiser Firebase
+    // On doit faire cette initialisation avant d'accéder à auth ou db
     firebase.initializeApp(firebaseConfig);
-    const auth = firebase.auth();
-    const db = firebase.firestore();
+    // On met les références dans l'objet global window pour un accès simplifié dans toute la page
+    window.auth = firebase.auth();
+    window.db = firebase.firestore();
 
     // Variables globales
+    // Déclaration des variables au niveau global (avec let)
     let currentUser = null;
     let userData = null;
     let userBalance = 0;
@@ -1647,48 +1649,47 @@ function showToast(message, type = 'success') {
 }
 
 /* ---------- SÉLECTEURS DOM (sécurisés) ---------- */
-const platformOptions = document.querySelectorAll('.platform-option');
-const serviceEl = document.getElementById('service');
-const subOptionField = document.getElementById('subOptionField');
-const subOptionLabelEl = document.getElementById('subOptionLabel');
-const subOptionEl = document.getElementById('subOption');
-const quantityField = document.getElementById('quantityField');
-const quantityEl = document.getElementById('quantity');
-const commentsField = document.getElementById('commentsField');
-const commentsEl = document.getElementById('comments');
-const commentCountEl = document.getElementById('commentCount');
-const qualityField = document.getElementById('qualityField');
-const qualityEl = document.getElementById('quality');
-const linkEl = document.getElementById('link');
-const priceEl = document.getElementById('priceEstimate');
-const orderForm = document.getElementById('orderForm');
-const ordersTableBody = document.querySelector('#ordersTable tbody');
-const balanceAmountEl = document.getElementById('balanceAmount');
-const submitText = document.getElementById('submitText');
-const submitSpinner = document.getElementById('submitSpinner');
-const submitBtn = document.getElementById('submitBtn');
-const quickOrderBtn = document.getElementById('quickOrderBtn');
-const resetFormBtn = document.getElementById('resetForm');
-const activeOrdersEl = document.getElementById('activeOrders');
-const completedOrdersEl = document.getElementById('completedOrders');
-const menuBtn = document.getElementById('menuBtn');
-const dropdownMenu = document.getElementById('dropdownMenu');
-const remarkField = document.getElementById('remarkField');
-const serviceRemarkEl = document.getElementById('serviceRemark');
-const welcomeUserName = document.getElementById('welcomeUserName');
-const logoutBtn = document.getElementById('logoutBtn');
+// Les sélecteurs sont mis en place dans le DCL, mais on les déclare ici.
+let platformOptions;
+let serviceEl;
+let subOptionField;
+let subOptionLabelEl;
+let subOptionEl;
+let quantityField;
+let quantityEl;
+let commentsField;
+let commentsEl;
+let commentCountEl;
+let qualityField;
+let qualityEl;
+let linkEl;
+let priceEl;
+let orderForm;
+let ordersTableBody;
+let balanceAmountEl;
+let submitText;
+let submitSpinner;
+let submitBtn;
+let quickOrderBtn;
+let resetFormBtn;
+let activeOrdersEl;
+let completedOrdersEl;
+let menuBtn;
+let dropdownMenu;
+let remarkField;
+let serviceRemarkEl;
+let welcomeUserName;
+let logoutBtn;
+
 
 /* ====== VARIABLES GLOBALES ====== */
 let currentPlatform = 'facebook';
 /* currentUser, userData, userBalance sont initialisés par checkAuth/loadUserData */
-let currentUser = null;
-let userData = null;
-let userBalance = 0;
+// REMARQUE: Les références à auth et db sont maintenant dans window.auth et window.db
 
-/* IMPORTANT: on suppose que Firebase a déjà été initialisé AVANT servicesData. */
-/* On récupère auth et db si disponibles (on ne les redéclare pas si présents). */
-const auth = (typeof firebase !== 'undefined' && firebase.auth) ? firebase.auth() : (window.auth || null);
-const db = (typeof firebase !== 'undefined' && firebase.firestore) ? firebase.firestore() : (window.db || null);
+// REDECLARATION DES REFERENCES FIREBASE POUR PLUS DE CLARTÉ
+const auth = window.auth;
+const db = window.db;
 
 console.log('[BOOT] auth present?', !!auth, 'db present?', !!db);
 
@@ -1976,13 +1977,14 @@ async function sendOrderToBackend(orderData) {
 /* ====== FIREBASE: auth + user data (si firebase présent) ====== */
 
 function checkAuth() {
-    if (!auth || !auth.onAuthStateChanged) {
+    // Utiliser window.auth, qui a été initialisé plus haut
+    if (!window.auth || !window.auth.onAuthStateChanged) {
         console.warn('[AUTH] Firebase auth non disponible, mode dégradé (dev).');
         // initialise le dashboard en mode local
         initializeDashboard();
         return;
     }
-    auth.onAuthStateChanged(async (user) => {
+    window.auth.onAuthStateChanged(async (user) => {
         if (user) {
             currentUser = user;
             console.log('[AUTH] Utilisateur connecté:', user.uid, user.email);
@@ -1997,21 +1999,24 @@ function checkAuth() {
 }
 
 async function loadUserData() {
-    if (!db || !currentUser) {
+    // Utiliser window.db et la variable globale currentUser
+    if (!window.db || !currentUser) {
         console.warn('[USER] db ou currentUser manquant; skip loadUserData.');
         return;
     }
     try {
-        const userDoc = await db.collection('users').doc(currentUser.uid).get();
+        const userDoc = await window.db.collection('users').doc(currentUser.uid).get();
         if (userDoc.exists) {
             userData = userDoc.data();
+            // CORRECTION: Assurez-vous d'utiliser `welcomeUserName` qui est maintenant un let global
             const userName = (userData.firstName || '') + ' ' + (userData.lastName || '');
             if (welcomeUserName) welcomeUserName.textContent = userName ? `Bienvenue, ${userName}` : 'Bienvenue';
             userBalance = Number(userData.balance) || 0;
             if (!userData.hasOwnProperty('balance')) {
                 // essaie d'initialiser, sans bloquer si erreur
-                db.collection('users').doc(currentUser.uid).update({ balance: 0 }).catch(e => console.warn('[USER] init balance failed:', e));
+                window.db.collection('users').doc(currentUser.uid).update({ balance: 0 }).catch(e => console.warn('[USER] init balance failed:', e));
             }
+            // CORRECTION: Assurez-vous d'utiliser `balanceAmountEl` qui est maintenant un let global
             if (balanceAmountEl) balanceAmountEl.textContent = formatFCFA(userBalance);
             console.log('[USER] Données chargées:', userData);
         } else {
@@ -2025,14 +2030,15 @@ async function loadUserData() {
 }
 
 async function updateUserBalance(newBalance) {
-    if (!db || !currentUser) {
+    // Utiliser window.db et la variable globale currentUser
+    if (!window.db || !currentUser) {
         console.warn('[USER] updateUserBalance impossible — db ou currentUser manquant.');
         userBalance = newBalance;
         if (balanceAmountEl) balanceAmountEl.textContent = formatFCFA(userBalance);
         return;
     }
     try {
-        await db.collection('users').doc(currentUser.uid).update({
+        await window.db.collection('users').doc(currentUser.uid).update({
             balance: newBalance
         });
         userBalance = newBalance;
@@ -2046,230 +2052,234 @@ async function updateUserBalance(newBalance) {
 
 /* ====== GESTION DES ÉVÉNEMENTS UI ====== */
 
-// Menu hamburger
-if (menuBtn) {
-    menuBtn.addEventListener('click', function (e) {
-        e.stopPropagation();
-        menuBtn.classList.toggle('active');
-        if (dropdownMenu) dropdownMenu.classList.toggle('active');
-    });
-}
-document.addEventListener('click', function (e) {
-    if (dropdownMenu && dropdownMenu.classList.contains('active') && !dropdownMenu.contains(e.target) && menuBtn && !menuBtn.contains(e.target)) {
-        menuBtn.classList.remove('active');
-        dropdownMenu.classList.remove('active');
+function setupEventListeners() {
+    // Menu hamburger
+    if (menuBtn) {
+        menuBtn.addEventListener('click', function (e) {
+            e.stopPropagation();
+            menuBtn.classList.toggle('active');
+            if (dropdownMenu) dropdownMenu.classList.toggle('active');
+        });
     }
-});
-if (logoutBtn) {
-    logoutBtn.addEventListener('click', function(e) {
-        e.preventDefault();
-        if (auth && auth.signOut) {
-            auth.signOut().then(() => {
-                console.log('[AUTH] Déconnexion réussie.');
-                // window.location.href = 'login.html';
-            }).catch(err => console.error('[AUTH] logout error:', err));
-        } else {
-            console.warn('[AUTH] logout not available.');
+    document.addEventListener('click', function (e) {
+        if (dropdownMenu && dropdownMenu.classList.contains('active') && !dropdownMenu.contains(e.target) && menuBtn && !menuBtn.contains(e.target)) {
+            menuBtn.classList.remove('active');
+            dropdownMenu.classList.remove('active');
         }
     });
-}
+    if (logoutBtn) {
+        logoutBtn.addEventListener('click', function(e) {
+            e.preventDefault();
+            if (window.auth && window.auth.signOut) {
+                window.auth.signOut().then(() => {
+                    console.log('[AUTH] Déconnexion réussie.');
+                    // window.location.href = 'login.html';
+                }).catch(err => console.error('[AUTH] logout error:', err));
+            } else {
+                console.warn('[AUTH] logout not available.');
+            }
+        });
+    }
 
-// Platform selection
-Array.from(platformOptions).forEach(option => {
-    option.addEventListener('click', () => {
-        Array.from(platformOptions).forEach(opt => opt.classList.remove('active'));
-        option.classList.add('active');
-        currentPlatform = option.dataset.platform || currentPlatform;
-        console.log('[UI] Platform sélectionnée:', currentPlatform);
-        populateServices(currentPlatform);
+    // CORRECTION MAJEURE: Platform selection
+    // Le code précédent utilisait `platformOptions` avant qu'il ne soit défini.
+    // On doit s'assurer que `platformOptions` est défini dans `initializeDOMReferences`.
+    Array.from(platformOptions).forEach(option => {
+        option.addEventListener('click', () => {
+            Array.from(platformOptions).forEach(opt => opt.classList.remove('active'));
+            option.classList.add('active');
+            currentPlatform = option.dataset.platform || currentPlatform;
+            console.log('[UI] Platform sélectionnée:', currentPlatform);
+            populateServices(currentPlatform); // Cela remplit les services et met à jour le prix
+        });
     });
-});
 
-// Service change
-if (serviceEl) {
-    serviceEl.addEventListener('change', () => {
-        const serviceName = serviceEl.value;
-        console.log('[UI] Service sélectionné:', serviceName);
-        updateFormFields(serviceName);
-    });
-}
+    // Service change
+    if (serviceEl) {
+        serviceEl.addEventListener('change', () => {
+            const serviceName = serviceEl.value;
+            console.log('[UI] Service sélectionné:', serviceName);
+            updateFormFields(serviceName);
+        });
+    }
 
-// Suboption change
-if (subOptionEl) subOptionEl.addEventListener('change', () => { console.log('[UI] SubOption sélectionnée:', subOptionEl.value); updatePrice(); });
+    // Suboption change
+    if (subOptionEl) subOptionEl.addEventListener('change', () => { console.log('[UI] SubOption sélectionnée:', subOptionEl.value); updatePrice(); });
 
-// Inputs change
-if (quantityEl) quantityEl.addEventListener('input', updatePrice);
-if (qualityEl) qualityEl.addEventListener('change', updatePrice);
-if (commentsEl) commentsEl.addEventListener('input', () => {
-    const commentsText = (commentsEl.value || '').trim();
-    const count = commentsText ? commentsText.split('\n').filter(line => line.trim() !== '').length : 0;
-    if (commentCountEl) commentCountEl.textContent = count.toLocaleString('fr-FR');
-    updatePrice();
-});
-
-// Quick order
-if (quickOrderBtn) {
-    quickOrderBtn.addEventListener('click', () => {
-        if (linkEl) linkEl.focus();
-        const orderCard = document.getElementById('orderCard');
-        if (orderCard) window.scrollTo({ top: orderCard.offsetTop - 100, behavior: 'smooth' });
-    });
-}
-
-// Reset form
-if (resetFormBtn) {
-    resetFormBtn.addEventListener('click', () => {
-        if (!confirm('Êtes-vous sûr de vouloir réinitialiser le formulaire ?')) return;
-        populateServices(currentPlatform);
-        if (quantityEl) quantityEl.value = 1000;
-        if (commentsEl) commentsEl.value = '';
-        if (commentsEl) commentsEl.dispatchEvent(new Event('input'));
-        if (qualityEl) qualityEl.value = 'medium';
-        if (linkEl) linkEl.value = '';
+    // Inputs change
+    if (quantityEl) quantityEl.addEventListener('input', updatePrice);
+    if (qualityEl) qualityEl.addEventListener('change', updatePrice);
+    if (commentsEl) commentsEl.addEventListener('input', () => {
+        const commentsText = (commentsEl.value || '').trim();
+        const count = commentsText ? commentsText.split('\n').filter(line => line.trim() !== '').length : 0;
+        if (commentCountEl) commentCountEl.textContent = count.toLocaleString('fr-FR');
         updatePrice();
-        showToast('Formulaire réinitialisé', 'success');
     });
-}
 
-/* ====== SUBMIT FORM ====== */
-if (orderForm) {
-    orderForm.addEventListener('submit', async function(e){
-        e.preventDefault();
-        console.log('[FORM] Soumission commande déclenchée.');
+    // Quick order
+    if (quickOrderBtn) {
+        quickOrderBtn.addEventListener('click', () => {
+            if (linkEl) linkEl.focus();
+            const orderCard = document.getElementById('orderCard');
+            if (orderCard) window.scrollTo({ top: orderCard.offsetTop - 100, behavior: 'smooth' });
+        });
+    }
 
-        const service = serviceEl ? serviceEl.value : '';
-        const serviceData = getSelectedServiceData();
-        const isCommentService = service && service.includes('Commentaires personnalisés');
+    // Reset form
+    if (resetFormBtn) {
+        resetFormBtn.addEventListener('click', () => {
+            if (!confirm('Êtes-vous sûr de vouloir réinitialiser le formulaire ?')) return;
+            populateServices(currentPlatform);
+            if (quantityEl) quantityEl.value = 1000;
+            if (commentsEl) commentsEl.value = '';
+            if (commentsEl) commentsEl.dispatchEvent(new Event('input'));
+            if (qualityEl) qualityEl.value = 'medium';
+            if (linkEl) linkEl.value = '';
+            updatePrice();
+            showToast('Formulaire réinitialisé', 'success');
+        });
+    }
 
-        let quantity, link, qualityLabel, finalService;
-        let baseQuantity = 0;
+    /* ====== SUBMIT FORM ====== */
+    if (orderForm) {
+        orderForm.addEventListener('submit', async function(e){
+            e.preventDefault();
+            console.log('[FORM] Soumission commande déclenchée.');
 
-        if (!service) {
-            showToast('Veuillez sélectionner un service.', 'error');
-            serviceEl && serviceEl.focus();
-            return;
-        }
+            const service = serviceEl ? serviceEl.value : '';
+            const serviceData = getSelectedServiceData();
+            const isCommentService = service && service.includes('Commentaires personnalisés');
 
-        link = linkEl ? (linkEl.value || '').trim() : '';
-        if (!link) {
-            showToast('Veuillez entrer un lien / identifiant valide.', 'error');
-            linkEl && linkEl.focus();
-            return;
-        }
+            let quantity, link, qualityLabel, finalService;
+            let baseQuantity = 0;
 
-        if (isCommentService) {
-            baseQuantity = commentsEl && commentsEl.value.trim() ? commentsEl.value.split('\n').filter(line => line.trim() !== '').length : 0;
-            quantity = baseQuantity;
-            if (quantity === 0) {
-                showToast('Veuillez entrer au moins un commentaire par ligne.', 'error');
-                commentsEl && commentsEl.focus();
+            if (!service) {
+                showToast('Veuillez sélectionner un service.', 'error');
+                serviceEl && serviceEl.focus();
                 return;
             }
-            finalService = service;
-            qualityLabel = (qualityEl && qualityEl.value === 'high') ? 'Haute' : 'Standard';
-        } else if (serviceData && serviceData.options) {
-            if (!subOptionEl || !subOptionEl.value) {
-                showToast('Veuillez sélectionner une option de service.', 'error');
-                subOptionEl && subOptionEl.focus();
+
+            link = linkEl ? (linkEl.value || '').trim() : '';
+            if (!link) {
+                showToast('Veuillez entrer un lien / identifiant valide.', 'error');
+                linkEl && linkEl.focus();
                 return;
             }
-            finalService = service + ' - ' + subOptionEl.value;
-            quantity = 1;
-            baseQuantity = 1;
-            qualityLabel = 'N/A';
-        } else {
-            quantity = Number(quantityEl ? quantityEl.value : 0) || 0;
-            baseQuantity = quantity;
-            if (!quantity || quantity < 1) {
-                showToast('Veuillez entrer une quantité valide (> 0).', 'error');
-                quantityEl && quantityEl.focus();
-                return;
-            }
-            finalService = service;
-            qualityLabel = (qualityEl && qualityEl.value === 'high') ? 'Haute' : 'Standard';
-        }
 
-        // calcul prix sécurisé
-        let price;
-        try {
-            price = calculatePrice();
-        } catch (err) {
-            console.error('[FORM] Erreur calculatePrice():', err);
-            showToast('Erreur interne: impossible de calculer le prix', 'error');
-            return;
-        }
-        console.log('[FORM] Prix calculé =', price);
-
-        if (!price || price <= 0) {
-            showToast('Le prix calculé est nul. Veuillez vérifier la quantité ou le service.', 'error');
-            return;
-        }
-
-        // UI loading
-        if (submitText) submitText.style.display = 'none';
-        if (submitSpinner) submitSpinner.style.display = 'inline-block';
-        if (submitBtn) submitBtn.disabled = true;
-
-        try {
-            // balance check
-            if (price > userBalance) {
-                const confirmProceed = confirm('Le prix est ' + formatFCFA(price) + ' mais votre solde est ' + formatFCFA(userBalance) + '. Continuer et créer la commande (paiement différé) ?');
-                if (!confirmProceed) {
-                    if (submitText) submitText.style.display = 'inline-block';
-                    if (submitSpinner) submitSpinner.style.display = 'none';
-                    if (submitBtn) submitBtn.disabled = false;
+            if (isCommentService) {
+                baseQuantity = commentsEl && commentsEl.value.trim() ? commentsEl.value.split('\n').filter(line => line.trim() !== '').length : 0;
+                quantity = baseQuantity;
+                if (quantity === 0) {
+                    showToast('Veuillez entrer au moins un commentaire par ligne.', 'error');
+                    commentsEl && commentsEl.focus();
                     return;
                 }
+                finalService = service;
+                qualityLabel = (qualityEl && qualityEl.value === 'high') ? 'Haute' : 'Standard';
+            } else if (serviceData && serviceData.options) {
+                if (!subOptionEl || !subOptionEl.value) {
+                    showToast('Veuillez sélectionner une option de service.', 'error');
+                    subOptionEl && subOptionEl.focus();
+                    return;
+                }
+                finalService = service + ' - ' + subOptionEl.value;
+                quantity = 1;
+                baseQuantity = 1;
+                qualityLabel = 'N/A';
             } else {
-                // débiter
-                const newBalance = userBalance - price;
-                console.log('[FORM] Débit du solde ->', newBalance);
-                await updateUserBalance(newBalance);
+                quantity = Number(quantityEl ? quantityEl.value : 0) || 0;
+                baseQuantity = quantity;
+                if (!quantity || quantity < 1) {
+                    showToast('Veuillez entrer une quantité valide (> 0).', 'error');
+                    quantityEl && quantityEl.focus();
+                    return;
+                }
+                finalService = service;
+                qualityLabel = (qualityEl && qualityEl.value === 'high') ? 'Haute' : 'Standard';
             }
 
-            const order = {
-                id: uid('#MDL'),
-                platform: currentPlatform.charAt(0).toUpperCase() + currentPlatform.slice(1),
-                service: finalService,
-                link,
-                quantity: baseQuantity,
-                qualityLabel: qualityLabel,
-                price: price,
-                statusLabel: 'En cours',
-                statusClass: 'processing',
-                date: todayStr()
-            };
-
-            console.log('[FORM] Envoi commande au backend:', order);
-            const resp = await sendOrderToBackend(order); // peut throw
-            console.log('[FORM] backend réponse:', resp);
-
-            addOrder(order);
-
-            // reset inputs
-            if (linkEl) linkEl.value = '';
-            if (isCommentService && commentsEl) {
-                commentsEl.value = '';
-                commentsEl.dispatchEvent(new Event('input'));
-            } else if (quantityEl) {
-                quantityEl.value = 1000;
+            // calcul prix sécurisé
+            let price;
+            try {
+                price = calculatePrice();
+            } catch (err) {
+                console.error('[FORM] Erreur calculatePrice():', err);
+                showToast('Erreur interne: impossible de calculer le prix', 'error');
+                return;
             }
-            if (qualityEl) qualityEl.value = 'medium';
-            if (serviceEl) {
-                serviceEl.value = '';
-                serviceEl.dispatchEvent(new Event('change'));
+            console.log('[FORM] Prix calculé =', price);
+
+            if (!price || price <= 0) {
+                showToast('Le prix calculé est nul. Veuillez vérifier la quantité ou le service.', 'error');
+                return;
             }
 
-            showToast(`Commande créée : ${order.id} — Prix: ${formatFCFA(order.price)}`, 'success');
-        } catch (error) {
-            console.error("[FORM] Erreur lors de la création de la commande:", error);
-            showToast("Erreur lors de la création de la commande: " + (error.message || error), "error");
-        } finally {
-            if (submitText) submitText.style.display = 'inline-block';
-            if (submitSpinner) submitSpinner.style.display = 'none';
-            if (submitBtn) submitBtn.disabled = false;
-        }
-    });
+            // UI loading
+            if (submitText) submitText.style.display = 'none';
+            if (submitSpinner) submitSpinner.style.display = 'inline-block';
+            if (submitBtn) submitBtn.disabled = true;
+
+            try {
+                // balance check
+                if (price > userBalance) {
+                    const confirmProceed = confirm('Le prix est ' + formatFCFA(price) + ' mais votre solde est ' + formatFCFA(userBalance) + '. Continuer et créer la commande (paiement différé) ?');
+                    if (!confirmProceed) {
+                        if (submitText) submitText.style.display = 'inline-block';
+                        if (submitSpinner) submitSpinner.style.display = 'none';
+                        if (submitBtn) submitBtn.disabled = false;
+                        return;
+                    }
+                } else {
+                    // débiter
+                    const newBalance = userBalance - price;
+                    console.log('[FORM] Débit du solde ->', newBalance);
+                    await updateUserBalance(newBalance);
+                }
+
+                const order = {
+                    id: uid('#MDL'),
+                    platform: currentPlatform.charAt(0).toUpperCase() + currentPlatform.slice(1),
+                    service: finalService,
+                    link,
+                    quantity: baseQuantity,
+                    qualityLabel: qualityLabel,
+                    price: price,
+                    statusLabel: 'En cours',
+                    statusClass: 'processing',
+                    date: todayStr()
+                };
+
+                console.log('[FORM] Envoi commande au backend:', order);
+                const resp = await sendOrderToBackend(order); // peut throw
+                console.log('[FORM] backend réponse:', resp);
+
+                addOrder(order);
+
+                // reset inputs
+                if (linkEl) linkEl.value = '';
+                if (isCommentService && commentsEl) {
+                    commentsEl.value = '';
+                    commentsEl.dispatchEvent(new Event('input'));
+                } else if (quantityEl) {
+                    quantityEl.value = 1000;
+                }
+                if (qualityEl) qualityEl.value = 'medium';
+                if (serviceEl) {
+                    serviceEl.value = '';
+                    serviceEl.dispatchEvent(new Event('change'));
+                }
+
+                showToast(`Commande créée : ${order.id} — Prix: ${formatFCFA(order.price)}`, 'success');
+            } catch (error) {
+                console.error("[FORM] Erreur lors de la création de la commande:", error);
+                showToast("Erreur lors de la création de la commande: " + (error.message || error), "error");
+            } finally {
+                if (submitText) submitText.style.display = 'inline-block';
+                if (submitSpinner) submitSpinner.style.display = 'none';
+                if (submitBtn) submitBtn.disabled = false;
+            }
+        });
+    }
 }
 
 /* ====== GESTION DES COMMANDES (LocalStorage / affichage) ====== */
@@ -2334,16 +2344,58 @@ function renderOrders(){
 }
 
 /* ====== INITIALISATION DU DASHBOARD ====== */
+
+function initializeDOMReferences() {
+    // Initialise toutes les références DOM dans les variables globales `let`
+    platformOptions = document.querySelectorAll('.platform-option');
+    serviceEl = document.getElementById('service');
+    subOptionField = document.getElementById('subOptionField');
+    subOptionLabelEl = document.getElementById('subOptionLabel');
+    subOptionEl = document.getElementById('subOption');
+    quantityField = document.getElementById('quantityField');
+    quantityEl = document.getElementById('quantity');
+    commentsField = document.getElementById('commentsField');
+    commentsEl = document.getElementById('comments');
+    commentCountEl = document.getElementById('commentCount');
+    qualityField = document.getElementById('qualityField');
+    qualityEl = document.getElementById('quality');
+    linkEl = document.getElementById('link');
+    priceEl = document.getElementById('priceEstimate');
+    orderForm = document.getElementById('orderForm');
+    ordersTableBody = document.querySelector('#ordersTable tbody');
+    balanceAmountEl = document.getElementById('balanceAmount');
+    submitText = document.getElementById('submitText');
+    submitSpinner = document.getElementById('submitSpinner');
+    submitBtn = document.getElementById('submitBtn');
+    quickOrderBtn = document.getElementById('quickOrderBtn');
+    resetFormBtn = document.getElementById('resetForm');
+    activeOrdersEl = document.getElementById('activeOrders');
+    completedOrdersEl = document.getElementById('completedOrders');
+    menuBtn = document.getElementById('menuBtn');
+    dropdownMenu = document.getElementById('dropdownMenu');
+    remarkField = document.getElementById('remarkField');
+    serviceRemarkEl = document.getElementById('serviceRemark');
+    welcomeUserName = document.getElementById('welcomeUserName');
+    logoutBtn = document.getElementById('logoutBtn');
+
+    console.log('[INIT] Références DOM initialisées.');
+}
+
 function initializeDashboard() {
     console.log('[INIT] initializeDashboard()');
-    // Set default platform active in UI
+    
+    // Assurez-vous que l'état initial des plateformes est correct dans l'UI
     const defaultPlatformEl = document.querySelector(`.platform-option[data-platform="${currentPlatform}"]`);
     if (defaultPlatformEl) {
         Array.from(document.querySelectorAll('.platform-option')).forEach(el => el.classList.remove('active'));
         defaultPlatformEl.classList.add('active');
     }
 
+    // Le problème principal 3 (services non affichés) est corrigé ici :
+    // On peuple les services pour la plateforme par défaut (`currentPlatform` = 'facebook')
     populateServices(currentPlatform);
+    
+    // Affichage des commandes locales
     renderOrders();
     console.log('[INIT] Dashboard initialisé.');
 }
@@ -2351,11 +2403,19 @@ function initializeDashboard() {
 /* ====== BOOT ====== */
 document.addEventListener('DOMContentLoaded', function() {
     console.log('[BOOT] DOMContentLoaded - démarrage des checks.');
-    // Démarrer auth check (si firebase présent)
-    try { checkAuth(); } catch (e) { console.warn('[BOOT] checkAuth failed:', e); initializeDashboard(); }
+    
+    // 1. Initialiser les références DOM une fois que le HTML est chargé
+    initializeDOMReferences();
 
-    // populate initial si nécessaire (au cas où)
-    try { populateServices(currentPlatform); } catch (e) { console.warn('[BOOT] populateServices init failed:', e); }
+    // 2. Mettre en place les écouteurs d'événements
+    setupEventListeners();
+
+    // 3. Démarrer l'authentification (cela appellera initializeDashboard après chargement des données utilisateur)
+    try { checkAuth(); } catch (e) { 
+        console.warn('[BOOT] checkAuth failed:', e); 
+        // En cas d'échec de l'auth, initialise quand même le tableau de bord en mode démo.
+        initializeDashboard(); 
+    }
 });
 </script>
 </body>
