@@ -1019,11 +1019,11 @@
 
 <section class="welcome-section">
     <div class="welcome-content">
-        <h1 class="welcome-title" id="welcomeUserName">Bienvenue, Utilisateur</h1>
+        <h1 class="welcome-title" id="welcomeUserName">Chargement...</h1>
         <p class="welcome-subtitle">Suivez votre tableau de bord et gérez vos services en un seul endroit</p>
         <div class="balance-display">
             <div class="balance-label">Solde disponible</div>
-            <div class="balance-amount" id="balanceAmount">0 FCFA</div>
+            <div class="balance-amount" id="balanceAmount">-- FCFA</div>
         </div>
     </div>
 </section>
@@ -1509,7 +1509,7 @@
         },
         whatsapp: {
             "Abonnés internationaux": {
-                medium: { price: 3030, time: "3 h" },
+                medium: { price: 3030, time: "3h" },
                 high: { price: 4010, time: "2 h" },
                 remark: "Abonnés de pays aléatoires. (min: 100)"
             },
@@ -1981,6 +1981,10 @@ function checkAuth() {
     if (!window.auth || !window.auth.onAuthStateChanged) {
         console.warn('[AUTH] Firebase auth non disponible, mode dégradé (dev).');
         // initialise le dashboard en mode local
+        // Initialiser avec des données de démo
+        currentUser = { uid: 'demo-uid', email: 'demo@madil.com' };
+        userData = { firstName: 'Utilisateur', lastName: 'Demo', balance: 10000 };
+        userBalance = 10000;
         initializeDashboard();
         return;
     }
@@ -1993,6 +1997,12 @@ function checkAuth() {
         } else {
             console.log('[AUTH] Pas d’utilisateur connecté. Mode démo/local.');
             // si tu veux forcer la redirection: window.location.href = 'login.html';
+            // Initialiser avec des données de démo
+            currentUser = null;
+            userData = null;
+            userBalance = 0;
+            if (welcomeUserName) welcomeUserName.textContent = 'Bienvenue !';
+            if (balanceAmountEl) balanceAmountEl.textContent = formatFCFA(0);
             initializeDashboard();
         }
     });
@@ -2008,16 +2018,30 @@ async function loadUserData() {
         const userDoc = await window.db.collection('users').doc(currentUser.uid).get();
         if (userDoc.exists) {
             userData = userDoc.data();
-            // CORRECTION: Assurez-vous d'utiliser `welcomeUserName` qui est maintenant un let global
-            const userName = (userData.firstName || '') + ' ' + (userData.lastName || '');
-            if (welcomeUserName) welcomeUserName.textContent = userName ? `Bienvenue, ${userName}` : 'Bienvenue';
+            
+            // CORRECTION: Extraction et affichage du nom de l'utilisateur
+            const firstName = userData.firstName || '';
+            const lastName = userData.lastName || '';
+            const userName = (firstName + ' ' + lastName).trim();
+            if (welcomeUserName) {
+                welcomeUserName.textContent = userName ? `Bienvenue, ${userName}` : 'Bienvenue !';
+            } else {
+                console.warn('[USER] welcomeUserName element not found.');
+            }
+
+            // CORRECTION: Mise à jour du solde
             userBalance = Number(userData.balance) || 0;
+            if (balanceAmountEl) {
+                balanceAmountEl.textContent = formatFCFA(userBalance);
+            } else {
+                console.warn('[USER] balanceAmountEl element not found.');
+            }
+
             if (!userData.hasOwnProperty('balance')) {
                 // essaie d'initialiser, sans bloquer si erreur
                 window.db.collection('users').doc(currentUser.uid).update({ balance: 0 }).catch(e => console.warn('[USER] init balance failed:', e));
             }
-            // CORRECTION: Assurez-vous d'utiliser `balanceAmountEl` qui est maintenant un let global
-            if (balanceAmountEl) balanceAmountEl.textContent = formatFCFA(userBalance);
+
             console.log('[USER] Données chargées:', userData);
         } else {
             console.warn('[USER] Document utilisateur non trouvé');
@@ -2084,7 +2108,7 @@ function setupEventListeners() {
     // CORRECTION MAJEURE: Platform selection
     // Le code précédent utilisait `platformOptions` avant qu'il ne soit défini.
     // On doit s'assurer que `platformOptions` est défini dans `initializeDOMReferences`.
-    Array.from(platformOptions).forEach(option => {
+    Array.from(platformOptions || []).forEach(option => {
         option.addEventListener('click', () => {
             Array.from(platformOptions).forEach(opt => opt.classList.remove('active'));
             option.classList.add('active');
@@ -2375,6 +2399,7 @@ function initializeDOMReferences() {
     dropdownMenu = document.getElementById('dropdownMenu');
     remarkField = document.getElementById('remarkField');
     serviceRemarkEl = document.getElementById('serviceRemark');
+    // CORRECTION : Ajout de la référence ici
     welcomeUserName = document.getElementById('welcomeUserName');
     logoutBtn = document.getElementById('logoutBtn');
 
@@ -2397,6 +2422,15 @@ function initializeDashboard() {
     
     // Affichage des commandes locales
     renderOrders();
+    
+    // Affichage du nom et du solde initialisé (s'ils n'ont pas été mis à jour par loadUserData en cas de succès)
+    if (welcomeUserName && (!userData || !userData.firstName)) {
+        welcomeUserName.textContent = currentUser ? `Bienvenue, ${currentUser.email.split('@')[0]}` : 'Bienvenue !';
+    }
+    if (balanceAmountEl) {
+        balanceAmountEl.textContent = formatFCFA(userBalance);
+    }
+    
     console.log('[INIT] Dashboard initialisé.');
 }
 
