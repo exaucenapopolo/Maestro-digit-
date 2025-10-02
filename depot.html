@@ -1,0 +1,783 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Déposer des fonds - MADIL</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Luckiest+Guy&display=swap" rel="stylesheet">
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-firestore-compat.js"></script>
+    <style>
+        :root {
+            --primary-orange: #FF7A59;
+            --primary-brown: #8B4513;
+            --primary-blue: #4285F4;
+            --primary-green: #34A853;
+            --cream: #FBE9E7;
+            --white: #FFFFFF;
+            --muted: #9E9E9E;
+            --card-shadow: 0 8px 30px rgba(0,0,0,0.08);
+            --accent-yellow: #FFD64D;
+            --glass: rgba(255,255,255,0.7);
+            --success: #4CAF50;
+            --warning: #FF9800;
+            --error: #F44336;
+            --sidebar-width: 240px;
+            --transition-speed: 0.3s;
+            --border-radius: 14px;
+            --header-height: 70px;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        html, body {
+            height: 100%;
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: "Poppins", sans-serif;
+            background: linear-gradient(180deg, #FFFDF8 0%, var(--cream) 100%);
+            color: #222;
+            line-height: 1.6;
+            overflow-x: hidden;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        /* HEADER STYLES - Identique au dashboard */
+        .main-header {
+            background: linear-gradient(90deg, var(--primary-brown), var(--primary-blue));
+            color: var(--white);
+            padding: 0 28px;
+            height: var(--header-height);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+
+        .logo-container {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .logo-container img {
+            width: 42px;
+            height: 42px;
+            border-radius: 10px;
+            object-fit: cover;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+        }
+
+        .logo-text {
+            font-family: "Luckiest Guy", "Poppins", sans-serif;
+            font-size: 1.5rem;
+            color: var(--accent-yellow);
+            letter-spacing: 0.5px;
+        }
+
+        /* Hamburger Menu */
+        .hamburger-menu {
+            position: relative;
+            display: flex;
+            align-items: center;
+        }
+
+        .menu-btn {
+            background: rgba(255,255,255,0.15);
+            border: none;
+            border-radius: 50%;
+            width: 45px;
+            height: 45px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all var(--transition-speed) ease;
+            backdrop-filter: blur(10px);
+        }
+
+        .menu-btn:hover {
+            background: rgba(255,255,255,0.25);
+            transform: translateY(-2px);
+        }
+
+        .menu-btn span {
+            display: block;
+            width: 20px;
+            height: 2px;
+            background: var(--white);
+            margin: 2px 0;
+            transition: all var(--transition-speed) ease;
+        }
+
+        .menu-btn.active span:nth-child(1) {
+            transform: rotate(45deg) translate(5px, 5px);
+        }
+
+        .menu-btn.active span:nth-child(2) {
+            opacity: 0;
+        }
+
+        .menu-btn.active span:nth-child(3) {
+            transform: rotate(-45deg) translate(5px, -5px);
+        }
+
+        .dropdown-menu {
+            position: absolute;
+            top: 100%;
+            right: 0;
+            background: var(--white);
+            border-radius: var(--border-radius);
+            box-shadow: var(--card-shadow);
+            width: 280px;
+            padding: 10px 0;
+            z-index: 1001;
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(-10px);
+            transition: all var(--transition-speed) ease;
+        }
+
+        .dropdown-menu.active {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(10px);
+        }
+
+        .dropdown-menu ul {
+            list-style: none;
+        }
+
+        .dropdown-menu li {
+            padding: 0;
+            margin: 0;
+        }
+
+        .dropdown-menu a {
+            display: flex;
+            align-items: center;
+            padding: 12px 20px;
+            color: var(--primary-brown);
+            text-decoration: none;
+            transition: all var(--transition-speed) ease;
+            border-left: 3px solid transparent;
+        }
+
+        .dropdown-menu a:hover {
+            background: rgba(66, 133, 244, 0.1);
+            border-left-color: var(--primary-blue);
+            padding-left: 25px;
+        }
+
+        .dropdown-menu i {
+            width: 24px;
+            margin-right: 12px;
+            color: var(--primary-blue);
+        }
+
+        .menu-divider {
+            height: 1px;
+            background: #eee;
+            margin: 8px 0;
+        }
+
+        /* MAIN CONTENT */
+        .main {
+            padding: 40px 28px;
+            margin-top: var(--header-height);
+            flex-grow: 1;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+        }
+
+        /* Payment Container - Style cohérent avec le dashboard */
+        .payment-container {
+            background: var(--white);
+            border-radius: var(--border-radius);
+            box-shadow: var(--card-shadow);
+            width: 100%;
+            max-width: 480px;
+            padding: 35px;
+            position: relative;
+            transition: all var(--transition-speed) ease;
+        }
+
+        .payment-container:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+        }
+
+        .payment-container:before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 5px;
+            height: 100%;
+            background: linear-gradient(to bottom, var(--primary-orange), var(--primary-blue));
+            opacity: 0;
+            transition: opacity var(--transition-speed) ease;
+        }
+
+        .payment-container:hover:before {
+            opacity: 1;
+        }
+
+        .payment-header {
+            text-align: center;
+            margin-bottom: 28px;
+        }
+
+        .payment-header h2 {
+            font-size: 1.8rem;
+            color: var(--primary-brown);
+            margin-bottom: 10px;
+            font-weight: 700;
+        }
+
+        .payment-header p {
+            color: var(--muted);
+            font-size: 1rem;
+        }
+
+        /* Form Styles */
+        .payment-form {
+            display: grid;
+            gap: 20px;
+        }
+
+        .field {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        label {
+            font-size: .9rem;
+            color: var(--primary-brown);
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        label i {
+            font-size: 0.8rem;
+            color: var(--muted);
+        }
+
+        input[type="number"], input[type="text"] {
+            padding: 14px 16px;
+            border-radius: 10px;
+            border: 1px solid #E8E8E8;
+            font-size: 1rem;
+            font-family: 'Poppins', sans-serif;
+            transition: border-color .15s, box-shadow .15s;
+            background: #fff;
+            width: 100%;
+        }
+
+        input:focus {
+            outline: none;
+            border-color: var(--primary-blue);
+            box-shadow: 0 6px 18px rgba(66,133,244,0.12);
+        }
+
+        .amount-help {
+            font-size: 0.8rem;
+            color: var(--muted);
+            margin-top: -5px;
+        }
+
+        /* Payment Info Box */
+        .payment-info {
+            background: rgba(66, 133, 244, 0.08);
+            padding: 20px;
+            border-radius: 10px;
+            margin: 15px 0;
+            border-left: 4px solid var(--primary-blue);
+        }
+
+        .payment-info h3 {
+            color: var(--primary-blue);
+            margin-bottom: 8px;
+            font-size: 1.1rem;
+        }
+
+        .payment-info p {
+            color: var(--muted);
+            font-size: 0.9rem;
+            line-height: 1.5;
+        }
+
+        /* Buttons */
+        .btn {
+            padding: 16px;
+            border-radius: 10px;
+            border: none;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all var(--transition-speed) ease;
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            font-family: 'Poppins', sans-serif;
+            text-decoration: none;
+            width: 100%;
+            font-size: 1.1rem;
+        }
+
+        .btn-primary {
+            background: linear-gradient(90deg, var(--primary-blue), #1a56db);
+            color: #fff;
+            box-shadow: 0 8px 20px rgba(26,86,219,0.18);
+        }
+
+        .btn-primary:hover:not(:disabled) {
+            background: linear-gradient(90deg, #1a56db, var(--primary-blue));
+            transform: translateY(-2px);
+            box-shadow: 0 12px 25px rgba(26,86,219,0.25);
+        }
+
+        .btn-secondary {
+            background: #fff;
+            border: 1px solid #eee;
+            color: var(--primary-brown);
+        }
+
+        .btn-secondary:hover {
+            background: #f9f9f9;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 15px rgba(0,0,0,0.1);
+        }
+
+        .btn:disabled {
+            background: var(--muted);
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+
+        /* Alternative Payment */
+        .alternative-payment {
+            text-align: center;
+            margin-top: 25px;
+            padding-top: 20px;
+            border-top: 1px dashed #eee;
+        }
+
+        .alternative-payment p {
+            color: var(--muted);
+            font-size: 0.95rem;
+            margin-bottom: 15px;
+        }
+
+        /* Messages */
+        .error-message {
+            color: var(--error);
+            font-size: 0.9rem;
+            margin-top: 10px;
+            text-align: center;
+            padding: 10px;
+            border-radius: 8px;
+            background: rgba(244, 67, 54, 0.1);
+            display: none;
+        }
+
+        .success-message {
+            color: var(--success);
+            font-size: 0.9rem;
+            margin-top: 10px;
+            text-align: center;
+            padding: 10px;
+            border-radius: 8px;
+            background: rgba(76, 175, 80, 0.1);
+            display: none;
+        }
+
+        /* Loading States */
+        .loader {
+            display: none;
+            width: 20px;
+            height: 20px;
+            border: 3px solid rgba(255,255,255,0.3);
+            border-radius: 50%;
+            border-top-color: #fff;
+            animation: spin 1s ease-in-out infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        .form-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(255, 255, 255, 0.8);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            border-radius: var(--border-radius);
+            z-index: 10;
+        }
+
+        .form-overlay .spinner {
+            width: 40px;
+            height: 40px;
+            border: 4px solid rgba(0, 0, 0, 0.1);
+            border-radius: 50%;
+            border-top-color: var(--primary-blue);
+            animation: spin 1s ease-in-out infinite;
+        }
+
+        /* Footer */
+        .footer {
+            background: linear-gradient(90deg, var(--primary-brown), var(--primary-blue));
+            color: white;
+            padding: 20px 28px;
+            text-align: center;
+            margin-top: auto;
+        }
+
+        .footer-bottom {
+            opacity: 0.8;
+            font-size: 0.9rem;
+        }
+
+        .social-boost-link {
+            color: var(--accent-yellow);
+            text-decoration: none;
+            font-weight: 600;
+            transition: all var(--transition-speed) ease;
+        }
+
+        .social-boost-link:hover {
+            color: var(--primary-orange);
+            text-decoration: underline;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .main {
+                padding: 30px 20px;
+            }
+            
+            .payment-container {
+                padding: 25px;
+            }
+            
+            .payment-header h2 {
+                font-size: 1.5rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .main {
+                padding: 20px 15px;
+            }
+            
+            .payment-container {
+                padding: 20px;
+            }
+            
+            .main-header {
+                padding: 0 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- HEADER IDENTIQUE AU DASHBOARD -->
+    <header class="main-header">
+        <div class="logo-container">
+            <img src="https://ui-avatars.com/api/?name=MADIL&background=FF7A59&color=fff" alt="logo MADIL">
+            <div class="logo-text">MADIL</div>
+        </div>
+        
+        <div class="hamburger-menu">
+            <button class="menu-btn" id="menuBtn">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+            
+            <div class="dropdown-menu" id="dropdownMenu">
+                <ul>
+                    <li><a href="Dashboard.html"><i class="fas fa-home"></i> Tableau de bord</a></li>
+                    <li><a href="#"><i class="fas fa-user-circle"></i> Mon profil</a></li>
+                    <li><a href="#"><i class="fas fa-wallet"></i> Portefeuille</a></li>
+                    <li><a href="#"><i class="fas fa-history"></i> Historique</a></li>
+                    
+                    <div class="menu-divider"></div>
+                    
+                    <li><a href="#"><i class="fas fa-cog"></i> Paramètres</a></li>
+                    <li><a href="#"><i class="fas fa-question-circle"></i> Aide & Support</a></li>
+                    
+                    <div class="menu-divider"></div>
+                    
+                    <li><a href="#" id="logoutBtn"><i class="fas fa-sign-out-alt"></i> Déconnexion</a></li>
+                </ul>
+            </div>
+        </div>
+    </header>
+
+    <!-- MAIN CONTENT -->
+    <main class="main">
+        <div class="payment-container">
+            <div class="payment-header">
+                <h2><i class="fas fa-wallet"></i> Déposer des fonds</h2>
+                <p>Rechargez votre compte MADIL pour commander nos services</p>
+            </div>
+            
+            <div class="payment-info">
+                <h3><i class="fas fa-info-circle"></i> Informations importantes</h3>
+                <p>Le montant minimum de dépôt est de <strong>100 FCFA</strong>. Les fonds seront crédités immédiatement sur votre compte après confirmation du paiement.</p>
+            </div>
+
+            <form class="payment-form" id="paymentForm">
+                <div class="form-overlay" id="formOverlay">
+                    <div class="spinner"></div>
+                </div>
+                
+                <div class="field">
+                    <label for="amount"><i class="fas fa-money-bill-wave"></i> Montant (en FCFA)</label>
+                    <input type="number" id="amount" name="amount" value="1000" min="100" required 
+                           aria-required="true" aria-describedby="amountHelp">
+                    <div class="amount-help" id="amountHelp">Montant minimum: 100 FCFA</div>
+                </div>
+
+                <div class="field">
+                    <label for="description"><i class="fas fa-file-alt"></i> Description</label>
+                    <input type="text" id="description" name="description" value="Rechargement de compte MADIL" required 
+                           aria-required="true">
+                </div>
+
+                <button type="submit" class="btn btn-primary" id="submitBtn">
+                    <div class="loader" id="submitLoader"></div>
+                    <span id="submitText">Payer maintenant</span>
+                </button>
+                
+                <div class="error-message" id="errorMessage" role="alert" aria-live="assertive"></div>
+                <div class="success-message" id="successMessage" role="alert" aria-live="assertive"></div>
+            </form>
+
+            <div class="alternative-payment">
+                <p>Vous n'êtes pas au Cameroun ? Utilisez un autre moyen de paiement :</p>
+                <button type="button" class="btn btn-secondary" onclick="window.location.href='payment-methods.html'">
+                    <i class="fas fa-credit-card"></i> Autres moyens de paiement
+                </button>
+            </div>
+        </div>
+    </main>
+
+    <!-- FOOTER -->
+    <footer class="footer">
+        <div class="footer-bottom">
+            <p>&copy; 2025 MADIL. Tous droits réservés. | Site propulsé par <a href="https://social-boost-horizon-new-sbh.vercel.app/" class="social-boost-link">Social Boost Horizon</a></p>
+        </div>
+    </footer>
+
+    <script>
+        // Configuration Firebase
+        const firebaseConfig = {
+            apiKey: "AIzaSyCQpfXddMLX3AbWp-cw0Y8z7QCdG6quuT0",
+            authDomain: "madil-be5be.firebaseapp.com",
+            projectId: "madil-be5be",
+            storageBucket: "madil-be5be.firebasestorage.app",
+            messagingSenderId: "2892375937",
+            appId: "1:2892375937:web:ab00dfbedac2ff8a8aaa80",
+            measurementId: "G-FJ8QK7KHXM"
+        };
+
+        // Initialiser Firebase
+        firebase.initializeApp(firebaseConfig);
+        const auth = firebase.auth();
+        const db = firebase.firestore();
+
+        // Variables globales
+        let currentUser = null;
+
+        // Fonctions d'affichage/masquage du loader
+        function toggleLoader(show) {
+            const loader = document.getElementById('submitLoader');
+            const submitText = document.getElementById('submitText');
+            const submitBtn = document.getElementById('submitBtn');
+            const formOverlay = document.getElementById('formOverlay');
+            
+            if (show) {
+                loader.style.display = 'block';
+                submitText.textContent = 'Traitement en cours...';
+                submitBtn.disabled = true;
+                formOverlay.style.display = 'flex';
+            } else {
+                loader.style.display = 'none';
+                submitText.textContent = 'Payer maintenant';
+                submitBtn.disabled = false;
+                formOverlay.style.display = 'none';
+            }
+        }
+
+        // Fonction de gestion des réponses API
+        async function handleApiResponse(response) {
+            const rawText = await response.text();
+
+            if (!response.ok) {
+                let errorData;
+                try {
+                    errorData = JSON.parse(rawText);
+                } catch (e) {
+                    throw new Error(`Erreur ${response.status}: ${rawText || response.statusText}`);
+                }
+                
+                const errorMessage = errorData.error || errorData.message || JSON.stringify(errorData);
+                throw new Error(`Erreur ${response.status}: ${errorMessage}`);
+            }
+            
+            try {
+                return JSON.parse(rawText);
+            } catch (e) {
+                throw new Error(`Erreur: Réponse du serveur inattendue: ${rawText}`);
+            }
+        }
+
+        // Vérification de l'authentification
+        auth.onAuthStateChanged(user => {
+            if (!user) {
+                window.location.href = 'login.html';
+                return;
+            }
+            
+            currentUser = user;
+            
+            // Configuration du menu hamburger
+            const menuBtn = document.getElementById('menuBtn');
+            const dropdownMenu = document.getElementById('dropdownMenu');
+            
+            menuBtn.addEventListener('click', function(e) {
+                e.stopPropagation();
+                menuBtn.classList.toggle('active');
+                dropdownMenu.classList.toggle('active');
+            });
+
+            // Fermer le menu en cliquant à l'extérieur
+            document.addEventListener('click', function(e) {
+                if (dropdownMenu.classList.contains('active') && !dropdownMenu.contains(e.target) && !menuBtn.contains(e.target)) {
+                    menuBtn.classList.remove('active');
+                    dropdownMenu.classList.remove('active');
+                }
+            });
+
+            // Déconnexion
+            document.getElementById('logoutBtn').addEventListener('click', function(e) {
+                e.preventDefault();
+                auth.signOut().then(() => {
+                    window.location.href = 'login.html';
+                });
+            });
+
+            // Gestion du formulaire de paiement
+            document.getElementById('paymentForm').addEventListener('submit', async e => {
+                e.preventDefault();
+                
+                const errorMessage = document.getElementById('errorMessage');
+                const successMessage = document.getElementById('successMessage');
+                
+                errorMessage.style.display = 'none';
+                successMessage.style.display = 'none';
+                
+                toggleLoader(true);
+                
+                try {
+                    // Récupération et validation du montant
+                    const amountInput = document.getElementById('amount').value;
+                    const amountValue = parseFloat(amountInput);
+                    
+                    if (isNaN(amountValue)) {
+                        throw new Error('Veuillez entrer un montant valide');
+                    }
+                    
+                    const amount = Math.round(amountValue);
+                    
+                    if (amount < 100) {
+                        throw new Error('Le montant doit être d\'au moins 100 FCFA');
+                    }
+                    
+                    const description = document.getElementById('description').value.trim();
+                    
+                    // URL de redirection après paiement
+                    const fapshiRedirectUrl = `${window.location.origin}/success.html`;
+                    
+                    console.log("Préparation de l'appel API Fapshi:");
+                    console.log("Montant:", amount);
+                    console.log("Description:", description);
+                    console.log("URL de redirection:", fapshiRedirectUrl);
+                    console.log("UID utilisateur:", currentUser.uid);
+
+                    // Appel à l'API backend
+                    const response = await fetch(
+                        'https://social-boost-horizon-new-sbh.vercel.app/api/create-fapshi-checkout',
+                        {
+                            method: 'POST',
+                            headers: { 
+                                'Content-Type': 'application/json',
+                                'Authorization': `Bearer ${await currentUser.getIdToken()}`
+                            },
+                            body: JSON.stringify({ 
+                                amount, 
+                                currency: 'XAF', 
+                                description, 
+                                redirectUrl: fapshiRedirectUrl,
+                                externalId: currentUser.uid
+                            })
+                        }
+                    );
+                    
+                    console.log("Réponse HTTP reçue:", response.status);
+
+                    // Gestion de la réponse
+                    const data = await handleApiResponse(response);
+                    
+                    console.log("Données de réponse:", data);
+
+                    if (data.checkoutUrl) {
+                        console.log("Redirection vers:", data.checkoutUrl);
+                        window.location.href = data.checkoutUrl;
+                    } else {
+                        throw new Error('URL de paiement non reçue. Veuillez réessayer.');
+                    }
+                    
+                } catch (err) {
+                    console.error('Erreur lors du paiement:', err);
+                    errorMessage.textContent = 'Erreur: ' + (err.message || 'Une erreur est survenue lors du traitement de votre paiement. Veuillez vérifier votre connexion et réessayer.');
+                    errorMessage.style.display = 'block';
+                    toggleLoader(false);
+                }
+            });
+        });
+    </script>
+</body>
+</html>
