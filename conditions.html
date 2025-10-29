@@ -1,0 +1,830 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content="Conditions d'utilisation de MADIL - Services de marketing digital">
+    <meta name="keywords" content="conditions d'utilisation, termes de service, MADIL, CGU">
+    <title>Conditions d'Utilisation - MADIL</title>
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Luckiest+Guy&display=swap" rel="stylesheet">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🚀</text></svg>">
+    
+    <style>
+        :root {
+            --primary-orange: #FF7A59;
+            --primary-brown: #8B4513;
+            --primary-blue: #4285F4;
+            --primary-green: #34A853;
+            --cream: #FBE9E7;
+            --white: #FFFFFF;
+            --muted: #9E9E9E;
+            --card-shadow: 0 8px 30px rgba(0,0,0,0.08);
+            --accent-yellow: #FFD64D;
+            --glass: rgba(255,255,255,0.7);
+            --success: #4CAF50;
+            --warning: #FF9800;
+            --error: #F44336;
+            --sidebar-width: 240px;
+            --transition-speed: 0.3s;
+            --border-radius: 14px;
+            --header-height: 70px;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        html, body {
+            height: 100%;
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: "Poppins", sans-serif;
+            background: linear-gradient(180deg, #FFFDF8 0%, var(--cream) 100%);
+            color: #222;
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        /* HEADER */
+        .main-header {
+            background: linear-gradient(90deg, var(--primary-brown), var(--primary-blue));
+            color: var(--white);
+            padding: 0 28px;
+            height: var(--header-height);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+
+        .logo-container {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .logo-container img {
+            width: 42px;
+            height: 42px;
+            border-radius: 10px;
+            object-fit: cover;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+        }
+
+        .logo-text {
+            font-family: "Luckiest Guy", "Poppins", sans-serif;
+            font-size: 1.5rem;
+            color: var(--accent-yellow);
+            letter-spacing: 0.5px;
+        }
+
+        /* MAIN CONTENT */
+        .main {
+            padding: 120px 28px 60px;
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        .section-title {
+            font-size: 1.8rem;
+            color: var(--primary-brown);
+            margin-bottom: 28px;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            position: relative;
+            padding-bottom: 10px;
+        }
+
+        .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 60px;
+            height: 4px;
+            background: linear-gradient(90deg, var(--primary-orange), var(--primary-blue));
+            border-radius: 2px;
+        }
+
+        .card {
+            background: var(--white);
+            border-radius: var(--border-radius);
+            padding: 28px;
+            box-shadow: var(--card-shadow);
+            transition: all var(--transition-speed) ease;
+            position: relative;
+            overflow: hidden;
+            margin-bottom: 30px;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+        }
+
+        .card:before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 5px;
+            height: 100%;
+            background: linear-gradient(to bottom, var(--primary-orange), var(--primary-blue));
+            opacity: 0;
+            transition: opacity var(--transition-speed) ease;
+        }
+
+        .card:hover:before {
+            opacity: 1;
+        }
+
+        .terms-section {
+            margin-bottom: 40px;
+        }
+
+        .terms-section h2 {
+            color: var(--primary-brown);
+            margin-bottom: 15px;
+            font-size: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .terms-section h3 {
+            color: var(--primary-blue);
+            margin: 20px 0 10px;
+            font-size: 1.2rem;
+        }
+
+        .terms-section p, .terms-section ul {
+            margin-bottom: 15px;
+            color: #444;
+        }
+
+        .terms-section ul {
+            padding-left: 20px;
+        }
+
+        .terms-section li {
+            margin-bottom: 8px;
+        }
+
+        .warning-box {
+            background: rgba(255, 152, 0, 0.1);
+            border-left: 4px solid var(--warning);
+            padding: 20px;
+            border-radius: 8px;
+            margin: 20px 0;
+        }
+
+        .info-box {
+            background: rgba(66, 133, 244, 0.08);
+            border-left: 4px solid var(--primary-blue);
+            padding: 20px;
+            border-radius: 8px;
+            margin: 20px 0;
+        }
+
+        .last-updated {
+            background: rgba(66, 133, 244, 0.08);
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            border-left: 4px solid var(--primary-blue);
+        }
+
+        .contact-info {
+            background: rgba(255, 122, 89, 0.08);
+            padding: 20px;
+            border-radius: 10px;
+            margin-top: 30px;
+        }
+
+        .contact-info h3 {
+            color: var(--primary-brown);
+            margin-bottom: 15px;
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 12px 20px;
+            border-radius: 10px;
+            border: none;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all var(--transition-speed) ease;
+            text-decoration: none;
+            font-family: 'Poppins', sans-serif;
+            margin-top: 10px;
+        }
+
+        .btn-primary {
+            background: linear-gradient(90deg, var(--primary-blue), #1a56db);
+            color: #fff;
+            box-shadow: 0 8px 20px rgba(26,86,219,0.18);
+        }
+
+        .btn-primary:hover {
+            background: linear-gradient(90deg, #1a56db, var(--primary-blue));
+            transform: translateY(-2px);
+            box-shadow: 0 12px 25px rgba(26,86,219,0.25);
+        }
+
+        .table-container {
+            overflow-x: auto;
+            margin: 20px 0;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background: var(--white);
+            border-radius: var(--border-radius);
+            overflow: hidden;
+            box-shadow: var(--card-shadow);
+        }
+
+        table th {
+            background: #E8F0FE;
+            padding: 16px;
+            text-align: left;
+            color: var(--primary-blue);
+            font-weight: 600;
+            border-bottom: 2px solid #d2e3fc;
+        }
+
+        table td, table th {
+            padding: 14px 16px;
+            border-bottom: 1px solid #F2F2F2;
+        }
+
+        table tr:last-child td {
+            border-bottom: none;
+        }
+
+        /* Footer */
+        .footer {
+            background: linear-gradient(90deg, var(--primary-brown), var(--primary-blue));
+            color: white;
+            padding: 40px 28px;
+            margin-top: 60px;
+        }
+
+        .footer-content {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 40px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .footer-logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 15px;
+        }
+
+        .footer-logo img {
+            width: 40px;
+            height: 40px;
+            border-radius: 8px;
+        }
+
+        .footer-logo-text {
+            font-family: "Luckiest Guy", "Poppins", sans-serif;
+            font-size: 1.5rem;
+            color: var(--accent-yellow);
+        }
+
+        .footer-description {
+            opacity: 0.8;
+            line-height: 1.6;
+            margin-bottom: 20px;
+        }
+
+        .footer-heading {
+            font-size: 1.2rem;
+            margin-bottom: 20px;
+            color: var(--accent-yellow);
+            position: relative;
+            padding-bottom: 10px;
+        }
+
+        .footer-heading::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 30px;
+            height: 3px;
+            background: var(--primary-orange);
+            border-radius: 2px;
+        }
+
+        .footer-links {
+            list-style: none;
+        }
+
+        .footer-links li {
+            margin-bottom: 12px;
+        }
+
+        .footer-links a {
+            color: rgba(255,255,255,0.8);
+            text-decoration: none;
+            transition: all var(--transition-speed) ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .footer-links a:hover {
+            color: var(--accent-yellow);
+            transform: translateX(5px);
+        }
+
+        .social-links {
+            display: flex;
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .social-links a {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.1);
+            color: white;
+            transition: all var(--transition-speed) ease;
+        }
+
+        .social-links a:hover {
+            background: var(--primary-orange);
+            transform: translateY(-3px);
+        }
+
+        .footer-bottom {
+            text-align: center;
+            margin-top: 40px;
+            padding-top: 20px;
+            border-top: 1px solid rgba(255,255,255,0.1);
+            opacity: 0.7;
+            font-size: 0.9rem;
+        }
+
+        /* Responsive design */
+        @media (max-width: 768px) {
+            .main-header {
+                padding: 0 20px;
+            }
+            
+            .main {
+                padding: 100px 20px 40px;
+            }
+            
+            .footer-content {
+                grid-template-columns: 1fr;
+                gap: 30px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .main-header {
+                padding: 15px;
+            }
+            
+            .main {
+                padding: 90px 15px 30px;
+            }
+            
+            .card {
+                padding: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<header class="main-header">
+    <div class="logo-container">
+        <img src="https://raw.githubusercontent.com/exaucenapopolo/Maestro-digit-/refs/heads/main/IMG_8985.jpeg" alt="logo MADIL">
+        <div class="logo-text">MADIL</div>
+    </div>
+</header>
+
+<main class="main">
+    <div class="card">
+        <h1 class="section-title">
+            <i class="fas fa-file-contract"></i> Conditions d'Utilisation
+        </h1>
+        
+        <div class="last-updated">
+            <i class="fas fa-info-circle"></i> <strong>Dernière mise à jour :</strong> 1er Janvier 2025
+        </div>
+        
+        <div class="warning-box">
+            <i class="fas fa-exclamation-triangle"></i> <strong>Attention :</strong> En utilisant nos services, vous acceptez pleinement et sans réserve les présentes conditions d'utilisation. Veuillez les lire attentivement.
+        </div>
+        
+        <div class="terms-section">
+            <h2><i class="fas fa-gavel"></i> 1. Acceptation des Conditions</h2>
+            <p>
+                En accédant et en utilisant les services de MADIL ("nous", "notre", "nos"), vous acceptez d'être lié par ces conditions d'utilisation, 
+                toutes les lois et réglementations applicables, et vous convenez que vous êtes responsable du respect des lois locales applicables.
+            </p>
+            <p>
+                Si vous n'acceptez pas l'une de ces conditions, il vous est interdit d'utiliser ou d'accéder à nos services.
+            </p>
+        </div>
+        
+        <div class="terms-section">
+            <h2><i class="fas fa-sync-alt"></i> 2. Modifications des Conditions</h2>
+            <p>
+                MADIL se réserve le droit, à sa seule discrétion, de modifier ou de remplacer ces conditions d'utilisation à tout moment. 
+                Les modifications prendront effet dès leur publication sur notre site.
+            </p>
+            <p>
+                Il est de votre responsabilité de consulter régulièrement ces conditions d'utilisation pour prendre connaissance des éventuelles modifications. 
+                Votre utilisation continue de nos services après la publication de modifications constitue votre acceptation de ces modifications.
+            </p>
+        </div>
+        
+        <div class="terms-section">
+            <h2><i class="fas fa-rocket"></i> 3. Description des Services</h2>
+            <p>
+                MADIL fournit des services de croissance sur les réseaux sociaux, incluant mais sans s'y limiter :
+            </p>
+            <ul>
+                <li>Augmentation d'abonnés/followers sur diverses plateformes</li>
+                <li>Augmentation de likes, vues, commentaires et autres interactions</li>
+                <li>Services d'engagement social et de marketing digital</li>
+                <li>Conseils et stratégies de croissance en ligne</li>
+            </ul>
+            
+            <div class="info-box">
+                <i class="fas fa-lightbulb"></i> <strong>Note importante :</strong> Nos services sont conçus pour renforcer votre présence en ligne. 
+                Nous nous engageons à fournir des services de qualité tout en respectant les conditions d'utilisation des plateformes sociales.
+            </div>
+        </div>
+        
+        <div class="terms-section">
+            <h2><i class="fas fa-user-plus"></i> 4. Inscription et Compte Utilisateur</h2>
+            
+            <h3>4.1. Éligibilité</h3>
+            <p>Pour utiliser nos services, vous devez :</p>
+            <ul>
+                <li>Être âgé d'au moins 16 ans</li>
+                <li>Avoir la capacité légale de conclure des contrats</li>
+                <li>Fournir des informations exactes et complètes lors de l'inscription</li>
+            </ul>
+            
+            <h3>4.2. Sécurité du Compte</h3>
+            <p>
+                Vous êtes responsable de :
+            </p>
+            <ul>
+                <li>Maintenir la confidentialité de vos identifiants de connexion</li>
+                <li>Toutes les activités qui se produisent sous votre compte</li>
+                <li>Nous informer immédiatement de toute utilisation non autorisée de votre compte</li>
+            </ul>
+            
+            <h3>4.3. Suspension et Résiliation</h3>
+            <p>
+                MADIL se réserve le droit de suspendre ou de résilier votre compte à tout moment, sans préavis, pour quelque raison que ce soit, 
+                y compris en cas de violation des présentes conditions d'utilisation.
+            </p>
+        </div>
+        
+        <div class="terms-section">
+            <h2><i class="fas fa-check-circle"></i> 5. Utilisation Acceptable</h2>
+            
+            <h3>5.1. Vous Vous Engagez À :</h3>
+            <ul>
+                <li>Utiliser nos services uniquement à des fins légales</li>
+                <li>Respecter toutes les lois et réglementations applicables</li>
+                <li>Respecter les droits de propriété intellectuelle d'autrui</li>
+                <li>Fournir des informations exactes et véridiques</li>
+            </ul>
+            
+            <h3>5.2. Vous Vous Engagez À Ne Pas :</h3>
+            <ul>
+                <li>Utiliser nos services pour des activités illégales ou frauduleuses</li>
+                <li>Tenter de contourner les mesures de sécurité de notre plateforme</li>
+                <li>Utiliser des robots, spiders ou autres moyens automatisés pour accéder à nos services</li>
+                <li>Interférer avec le bon fonctionnement de nos services</li>
+                <li>Partager du contenu diffamatoire, obscène ou offensant</li>
+                <li>Violer les conditions d'utilisation des plateformes sociales cibles</li>
+            </ul>
+            
+            <div class="warning-box">
+                <i class="fas fa-ban"></i> <strong>Interdiction stricte :</strong> Toute tentative de manipulation frauduleuse des plateformes sociales 
+                ou utilisation de nos services à des fins malveillantes entraînera la résiliation immédiate de votre compte et pourra faire l'objet 
+                de poursuites judiciaires.
+            </div>
+        </div>
+        
+        <div class="terms-section">
+            <h2><i class="fas fa-shopping-cart"></i> 6. Commandes et Paiements</h2>
+            
+            <h3>6.1. Processus de Commande</h3>
+            <p>
+                Les commandes sont passées via notre plateforme en ligne. En passant une commande, vous vous engagez à :
+            </p>
+            <ul>
+                <li>Fournir des informations complètes et exactes</li>
+                <li>Respecter les délais de traitement indiqués</li>
+                <li>Comprendre que certains services peuvent nécessiter des délais de livraison spécifiques</li>
+            </ul>
+            
+            <h3>6.2. Paiements</h3>
+            <p>
+                Tous les prix sont indiqués en FCFA et sont sujets à modification sans préavis. Les paiements doivent être effectués intégralement 
+                avant le début du traitement de votre commande.
+            </p>
+            
+            <h3>6.3. Politique de Remboursement</h3>
+            <p>
+                Les remboursements sont traités au cas par cas selon les conditions suivantes :
+            </p>
+            <ul>
+                <li><strong>Remboursement complet :</strong> Si le service n'a pas commencé et que la commande est annulée dans les 24 heures</li>
+                <li><strong>Remboursement partiel :</strong> Si le service a partiellement échoué (évalué au cas par cas)</li>
+                <li><strong>Aucun remboursement :</strong> Si le service a été complètement livré ou en cas de violation de nos conditions</li>
+            </ul>
+        </div>
+        
+        <div class="terms-section">
+            <h2><i class="fas fa-shield-alt"></i> 7. Garanties et Limitations</h2>
+            
+            <h3>7.1. Garanties de Service</h3>
+            <p>
+                MADIL s'engage à fournir des services de qualité dans les délais indiqués. Cependant, nous ne pouvons garantir :
+            </p>
+            <ul>
+                <li>Des résultats spécifiques en termes de croissance ou d'engagement</li>
+                <li>L'absence totale de perte d'abonnés ou d'interactions après livraison</li>
+                <li>La compatibilité avec toutes les politiques des plateformes sociales</li>
+            </ul>
+            
+            <h3>7.2. Limitations de Responsabilité</h3>
+            <p>
+                Dans la mesure maximale permise par la loi, MADIL ne sera pas responsable des :
+            </p>
+            <ul>
+                <li>Pertes de données ou de contenu</li>
+                <li>Pertes de revenus ou d'opportunités commerciales</li>
+                <li>Dommages indirects, spéciaux ou consécutifs</li>
+                <li>Actions des plateformes sociales tierces (suspension de compte, etc.)</li>
+            </ul>
+            
+            <div class="info-box">
+                <i class="fas fa-balance-scale"></i> <strong>Responsabilité maximale :</strong> La responsabilité totale de MADIL envers vous pour 
+                toutes les réclamations découlant de ou liées à ces conditions ou à l'utilisation des services ne dépassera pas le montant 
+                que vous avez payé à MADIL au cours des six derniers mois.
+            </div>
+        </div>
+        
+        <div class="terms-section">
+            <h2><i class="fas fa-copyright"></i> 8. Propriété Intellectuelle</h2>
+            <p>
+                Tous les droits de propriété intellectuelle relatifs à nos services, y compris mais sans s'y limiter le code source, les designs, 
+                les graphiques, les logos et le contenu, sont la propriété exclusive de MADIL ou de ses concédants de licence.
+            </p>
+            <p>
+                Vous vous engagez à ne pas copier, modifier, distribuer, vendre ou louer aucune partie de nos services sans notre autorisation écrite préalable.
+            </p>
+        </div>
+        
+        <div class="terms-section">
+            <h2><i class="fas fa-exclamation-triangle"></i> 9. Avertissements Importants</h2>
+            
+            <h3>9.1. Conformité aux Plateformes Sociales</h3>
+            <p>
+                L'utilisation de nos services peut être contraire aux conditions d'utilisation de certaines plateformes sociales. 
+                Il est de votre responsabilité de :
+            </p>
+            <ul>
+                <li>Vérifier la conformité de nos services avec les conditions des plateformes que vous utilisez</li>
+                <li>Comprendre les risques potentiels pour vos comptes sociaux</li>
+                <li>Prendre des décisions éclairées concernant l'utilisation de nos services</li>
+            </ul>
+            
+            <h3>9.2. Résultats Variables</h3>
+            <p>
+                Les résultats de nos services peuvent varier en fonction de nombreux facteurs, notamment :
+            </p>
+            <ul>
+                <li>La plateforme sociale cible et ses algorithmes</li>
+                <li>La qualité de votre contenu existant</li>
+                <li>Les changements dans les politiques des plateformes</li>
+                <li>Facteurs externes indépendants de notre volonté</li>
+            </ul>
+        </div>
+        
+        <div class="terms-section">
+            <h2><i class="fas fa-ban"></i> 10. Résiliation</h2>
+            <p>
+                MADIL peut résilier ou suspendre votre accès à nos services immédiatement, sans préavis ni responsabilité, pour quelque raison que ce soit, 
+                y compris si vous enfreignez les présentes conditions d'utilisation.
+            </p>
+            <p>
+                Lors de la résiliation, votre droit d'utiliser nos services cessera immédiatement. 
+                Les dispositions des conditions qui, de par leur nature, doivent survivre à la résiliation, survivront à la résiliation.
+            </p>
+        </div>
+        
+        <div class="terms-section">
+            <h2><i class="fas fa-globe"></i> 11. Loi Applicable et Règlement des Litiges</h2>
+            
+            <h3>11.1. Loi Applicable</h3>
+            <p>
+                Les présentes conditions sont régies et interprétées conformément aux lois de la République Française, 
+                sans égard aux principes de conflits de lois.
+            </p>
+            
+            <h3>11.2. Règlement des Litiges</h3>
+            <p>
+                En cas de litige, vous vous engagez à contacter MADIL en premier lieu pour tenter de résoudre le litige de manière informelle. 
+                Si le litige ne peut être résolu de manière informelle, il sera soumis à la compétence exclusive des tribunaux de Paris, France.
+            </p>
+            
+            <h3>11.3. Médiation</h3>
+            <p>
+                Avant toute action en justice, les parties s'engagent à recourir à une procédure de médiation conventionnelle 
+                auprès d'un médiateur agréé. Les frais de médiation sont partagés également entre les parties.
+            </p>
+        </div>
+        
+        <div class="terms-section">
+            <h2><i class="fas fa-file-signature"></i> 12. Dispositions Générales</h2>
+            
+            <h3>12.1. Intégralité de l'Accord</h3>
+            <p>
+                Les présentes conditions constituent l'intégralité de l'accord entre vous et MADIL concernant l'utilisation de nos services 
+                et remplacent tous les accords antérieurs ou contemporains.
+            </p>
+            
+            <h3>12.2. Divisibilité</h3>
+            <p>
+                Si une disposition de ces conditions est jugée invalide ou inapplicable, cette disposition sera limitée ou éliminée 
+                dans la mesure minimale nécessaire, et les autres dispositions resteront pleinement en vigueur.
+            </p>
+            
+            <h3>12.3. Non-Renonciation</h3>
+            <p>
+                Le fait que MADIL n'applique pas une disposition de ces conditions ne constitue pas une renonciation à cette disposition.
+            </p>
+            
+            <h3>12.4. Cession</h3>
+            <p>
+                Vous ne pouvez pas céder ou transférer ces conditions sans l'autorisation écrite préalable de MADIL. 
+                MADIL peut céder ces conditions sans restriction.
+            </p>
+        </div>
+        
+        <div class="terms-section">
+            <h2><i class="fas fa-table"></i> 13. Tableau des Tarifs et Services</h2>
+            
+            <div class="table-container">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Plateforme</th>
+                            <th>Service</th>
+                            <th>Quantité Min.</th>
+                            <th>Prix (FCFA)</th>
+                            <th>Délai Moyen</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Instagram</td>
+                            <td>Followers</td>
+                            <td>100</td>
+                            <td>2,250 - 3,650</td>
+                            <td>10-20 min</td>
+                        </tr>
+                        <tr>
+                            <td>Facebook</td>
+                            <td>J'aime (page)</td>
+                            <td>100</td>
+                            <td>2,200 - 2,800</td>
+                            <td>2-3 h</td>
+                        </tr>
+                        <tr>
+                            <td>TikTok</td>
+                            <td>Followers</td>
+                            <td>100</td>
+                            <td>1,990 - 3,500</td>
+                            <td>1-2 h</td>
+                        </tr>
+                        <tr>
+                            <td>YouTube</td>
+                            <td>Abonnés</td>
+                            <td>50</td>
+                            <td>18,315 - 20,060</td>
+                            <td>15-24 h</td>
+                        </tr>
+                        <tr>
+                            <td>Télégramme</td>
+                            <td>Membres</td>
+                            <td>500</td>
+                            <td>1,200 - 2,250</td>
+                            <td>3 h</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <p class="muted" style="font-size: 0.9rem; color: var(--muted);">
+                <i class="fas fa-info-circle"></i> Les prix indiqués sont pour 1000 unités sauf indication contraire. 
+                Les délais et prix sont sujets à changement sans préavis.
+            </p>
+        </div>
+        
+        <div class="contact-info">
+            <h3><i class="fas fa-envelope"></i> Contact et Support</h3>
+            <p>Pour toute question concernant ces conditions d'utilisation, veuillez nous contacter :</p>
+            <p><strong>Email :</strong> legal@madil.com</p>
+            <p><strong>Adresse :</strong> Service Juridique MADIL, 123 Avenue du Digital, 75001 Paris, France</p>
+            <p><strong>Heures de support :</strong> Lundi - Vendredi, 9h00 - 18h00</p>
+            
+            <a href="mailto:legal@madil.com" class="btn btn-primary">
+                <i class="fas fa-paper-plane"></i> Contacter le Service Juridique
+            </a>
+        </div>
+        
+        <div class="info-box" style="margin-top: 30px;">
+            <i class="fas fa-handshake"></i> <strong>Acceptation :</strong> En utilisant nos services, vous reconnaissez avoir lu, compris et accepté l'intégralité de ces conditions d'utilisation. 
+            Ces conditions constituent un accord juridiquement contraignant entre vous et MADIL.
+        </div>
+    </div>
+</main>
+
+<footer class="footer">
+    <div class="footer-content">
+        <div class="footer-about">
+            <div class="footer-logo">
+                <img src="https://raw.githubusercontent.com/exaucenapopolo/Maestro-digit-/refs/heads/main/IMG_8985.jpeg" alt="logo MADIL">
+                <div class="footer-logo-text">MADIL BOOST</div>
+            </div>
+            <p class="footer-description">
+                Nous fournissons des services de marketing digital de qualité pour booster votre présence en ligne et atteindre vos objectifs.
+            </p>
+            <div class="social-links">
+                <a href="#"><i class="fab fa-facebook-f"></i></a>
+                <a href="#"><i class="fab fa-instagram"></i></a>
+                <a href="#"><i class="fab fa-tiktok"></i></a>
+                <a href="#"><i class="fab fa-youtube"></i></a>
+            </div>
+        </div>
+
+        <div class="footer-links-container">
+            <h3 class="footer-heading">Liens Rapides</h3>
+            <ul class="footer-links">
+                <li><a href="dashboard.html"><i class="fas fa-chevron-right"></i> Tableau de bord</a></li>
+                <li><a href="services.html"><i class="fas fa-chevron-right"></i> Services</a></li>
+                <li><a href="pricing.html"><i class="fas fa-chevron-right"></i> Tarifs</a></li>
+                <li><a href="about.html"><i class="fas fa-chevron-right"></i> À propos</a></li>
+                <li><a href="contact.html"><i class="fas fa-chevron-right"></i> Contact</a></li>
+            </ul>
+        </div>
+
+        <div class="footer-links-container">
+            <h3 class="footer-heading">Support</h3>
+            <ul class="footer-links">
+                <li><a href="help-center.html"><i class="fas fa-chevron-right"></i> Centre d'aide</a></li>
+                <li><a href="faq.html"><i class="fas fa-chevron-right"></i> FAQ</a></li>
+                <li><a href="contact.html"><i class="fas fa-chevron-right"></i> Contact</a></li>
+                <li><a href="privacy-policy.html"><i class="fas fa-chevron-right"></i> Politique de confidentialité</a></li>
+                <li><a href="terms.html"><i class="fas fa-chevron-right"></i> Conditions d'utilisation</a></li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="footer-bottom">
+        <p>&copy; 2025 MADIL BOOST - Tous droits réservés</p>
+    </div>
+</footer>
+
+</body>
+</html>
